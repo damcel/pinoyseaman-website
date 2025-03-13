@@ -1,0 +1,1087 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.logo {
+    margin: 0;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.logo-span {
+    color: #FB2323;
+    font-weight: 600;
+    font-size: 25px;
+}
+
+header {
+    background-color: #101327;
+    color: #fff;
+    padding: 13px 100px;
+    display: flex;
+    justify-content: center;
+}
+
+.main-nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.4px;
+    position: relative;
+    padding: 10px 15px; 
+    border-radius: 5px; 
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+    transform: translateX(-50%);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
+    background-color: #2a2b36; 
+}
+
+
+.nav-links a.active {
+    background-color: #2a2b36; 
+    font-weight: bold;
+}
+
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    gap: 13px;
+}
+
+.signup-btn {
+    padding: 13px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 5px;
+    letter-spacing: 0.4px;
+    border: 2px solid #E11D1D; /* Red border */
+    background-color: transparent; 
+    color: #E11D1D; /* Red text */; 
+}
+
+.login-btn {
+    padding: 13px 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 5px;
+    letter-spacing: 0.4px;
+    color: #fff;
+    background-color: transparent; 
+}
+
+.signup-btn:hover{
+    background-color: #E11D1D; 
+    color: white;
+}
+
+.login-btn:hover{
+    background-color: #2a2b36; 
+}
+
+/* Burger Menu */
+.burger-menu {
+    display: none;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+/*------------------------------- bg image of form and motto ------------------------------------*/
+
+/* Ensuring Full Responsiveness */
+.bg-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    background-color: #767575;
+}
+
+/* Form Container */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* User Input Fields */
+.user-card {
+    display: flex;
+    gap: 2px;
+}
+
+/* Responsive Fields */
+.input-fname,
+.input-lname,
+.input-no,
+.input-brt,
+.input-email,
+.input-pws,
+.birth-card {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    flex: 1;
+}
+
+.checkbox-container {
+    padding: 5px;
+    flex: 1;
+    font-size: 13px;
+    display: flex;
+    align-items: first baseline;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+.input-group select,
+.input-group input {
+    flex: 1;
+    max-width: 150px;
+    text-align: center;
+}
+
+.top-section {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    width: 80%;
+    max-width: 1200px;
+    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+    align-items: center;
+}
+
+/* Motto Styling */
+.motto {
+    font-size: 50px;
+    width: 400px;
+    font-weight: 900;
+    line-height: 90px;
+    color: #fff;
+}
+
+.motto-container {
+    display: block;
+    align-self: center;
+    flex: 1;
+    max-width: 500px;
+}
+
+/* Create Button */
+.btn-create {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Headings */
+div h1 {
+    line-height: 40px;
+    text-align: center;
+    border-bottom: 2px solid #a2a2a2;
+    font-size: 25px;
+    margin: 0 0 10px 0;
+}
+
+/* Form Inputs */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, select {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Create Account Button */
+.create-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 200px;
+    height: 40px;
+    font-size: 15px;
+}
+
+/* Label Styling */
+label {
+    color: #3c3c3c;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    margin-top: 2px;
+}
+
+/*------ container for stats --------*/
+.stats-container {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    border-radius: 7px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 250px;
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    border: 1px solid rgba(202, 202, 202, 0.4);
+}
+
+.stat-card .icon-title {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Align icon and text vertically */
+    gap: 10px; /* Space between icon and text */
+}   
+
+.stat-card i {
+    font-size: 24px; /* Icon size */
+    color: #4f4e4e; /* Icon color */
+}
+
+.stat-card h3 {
+    margin: 0;
+    font-weight: bold;
+    color: #343F52;
+}
+
+.stat-card p {
+    color: #666;
+    margin: 5px 0 0 0;
+}
+
+/*----------------------- Company container -------------------------*/
+
+.company-title-card{
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    background-color: rgb(255, 255, 255);
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.statistics h2{
+    color: #343F52;
+    text-align: center;
+    font-size: 40px;
+    padding-top: 20px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.company-title-card h2{
+    color: #343F52;
+    line-height: 40px;
+    text-align: center;
+    font-size: 40px;
+    margin: 0 0 10px 0;
+    font-weight: 500;
+}
+
+.company-container {
+    display: flex;
+    gap: 25px;
+    overflow: hidden;
+    justify-content: center;
+    padding: 15px;
+    flex-wrap: wrap;
+    background-color: rgb(255, 255, 255);
+}
+
+.company-card {
+    background-color: #f0f0f0;
+    border: 1px solid #dcdbdb;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+}
+
+.card img {
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.company-card-content {
+    padding: 15px;
+}
+
+.company-card-content p{
+    text-align: left;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.employer-profile-container{
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    background-color: #3a3a3a;
+}
+
+/*------------------------ urgent jobs--------------------------*/
+.job-section, .statics-section, .ads-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    text-align: center;
+    flex-wrap: wrap;
+}
+/* Job Section Container */
+.urg-job-main-container {
+    max-width: 900px;
+    width: 100%;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Flexbox Layout */
+.urgent-jobs-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
+}
+
+/* Left: Company Image */
+.company-jobs-img {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    background-color: #3a3a3a;
+}
+
+.company-jobs-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.company-jobs-content {
+    flex-grow: 1;
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    justify-content: space-between;
+    text-align: left; 
+}
+
+.company-jobs-content > * {
+    text-align: left; 
+}
+
+.company-jobs-content h2 {
+    margin: 2px 0;
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.company-jobs-content h3{
+    margin: 2px 0;
+    font-weight: 500;
+    font-size: 18px;
+    color: #4E4D4D;
+}
+
+.tags {
+    background-color: #a8d1ff;
+    color: #316ec9;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Right: Apply Button */
+.company-jobs-btn {
+    margin-left: auto;
+    padding-left: 20px; /* Add space between job content and button */
+}
+
+.jobs-btn{
+    background-color: #fff;
+    border: 2px solid red;
+    color: red;
+    padding: 10px 35px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.company-info{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.job-section a{
+    margin-top: 65px;
+    font-size: 18px;
+    color: rgb(46, 46, 46);
+    text-decoration: none;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+}
+
+.job-section a:hover {
+    text-decoration: underline;
+}
+
+.company-title-card p{
+    max-width: 600px;
+    width: 100%;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 2rem;
+    align-self: center;
+}
+/*------------------------- urgent jobs END --------------------*/
+
+/*--------------------------- job ads ----------------------*/
+.ads-container {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.ads-card {
+    background-color: #fff;
+    border-radius: 7px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: 100px;
+    width: 250px;
+}
+/*------------------------- job ads END --------------------*/
+
+/*------------------------- Jobs_search --------------------*/
+.job-main{
+    max-width: 1200px;
+    margin: 0 auto; /* Centering */
+    padding: 0 20px; /* Small padding for smaller screens */
+
+}
+.job-nav-links {
+    display: flex;
+    list-style: none;
+    padding: 25px 20px 25px;
+    gap: 10px;
+    margin-left: 55px;
+}
+
+.job-nav-links a {
+    text-decoration: none;
+    color: #374151;
+    font-size: 14px;
+    position: relative;
+    padding-bottom: 5px; /* Space for the underline */
+}
+
+/* Create the underline effect */
+.job-nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #E11D1D; /* Red underline */
+    transition: width 0.3s ease-in-out;
+}
+
+/* Show underline on hover */
+.job-nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Icon styling */
+.job-nav-links i {
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.home i{
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/*------------------------- Jobs_search END --------------------*/
+
+/*---------------Search container ---------------------*/
+.search-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; /* Allow items to stack on smaller screens */
+}
+
+.search-select {
+    color: #6b6a6a;
+    flex: 1;
+    padding: 10px 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 180px; /* Prevents it from being too small */
+    max-width: 400px; /* Keeps it balanced */
+}
+
+.search-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e53935; 
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap; 
+    gap: 5px;
+}
+
+/*------------------------- search container END --------------------*/
+
+/*------------------------- job card start --------------------*/
+.job-card-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.job-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 1000px;
+    width: 100%;
+    background-color: #fdfafa;
+    font-family: Arial, sans-serif;
+    flex-wrap: wrap;
+    gap: 15px; /* Prevents elements from cramping */
+
+}
+
+.card-title h3{
+    padding: 40px 0 15px 85px;
+    color: #2E2E2E;
+    font-size: 15px;
+}
+
+/* Job image */
+.job-image {
+    width: 150px;
+    height: 120px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* Job info container */
+.job-info {
+    flex-grow: 1;
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch; 
+    justify-content: space-between; /* Pushes elements apart */
+
+}
+
+/* Job title should be aligned separately */
+.job-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Job details should be in a row */
+.job-details {
+    display: flex;
+    gap: 10px; /* Space between items */
+    flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+/* Styling for job descriptions */
+.job-description {
+    font-size: 14px;
+    color: #555;
+    display: flex;
+    align-items: center; /* Align icon and text */
+    gap: 5px; /* Space between icon and text */
+}
+
+.company-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    background-color: #d6eaff; /* Background color */
+    color: #187bcd; /* Text color */
+    padding: 8px 12px; /* Adjust padding for proper fit */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 14px;
+    width: fit-content; /* Ensures background only wraps content */
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.company-link i {
+    margin-right: 5px; /* Space between icon and text */
+}
+
+.apply-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Stack date & button */
+    justify-content: space-between; /* Pushes elements apart */
+    align-items: flex-end; /* Align to the right */
+    height: 100%; /* Ensures it takes full height */
+    gap: 2px; /* Reduce space between date and apply button */
+}
+
+/* Date styling */
+.date-posted {
+    margin: 0;
+    font-size: 12px;
+    color: #999;
+}
+
+
+/* Apply button */
+.apply-button {
+    border: 1px solid red;
+    color: red;
+    background: none;
+    padding: 13px 13px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight:600;
+    letter-spacing: 1px;
+    width: fit-content;
+}
+
+.apply-button:hover {
+    background: red;
+    color: white;
+}
+
+/*------------------------- job card END --------------------*/
+
+/*------------------------- pagination --------------------*/
+.section-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
+
+.pagination {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding: 0;
+}
+
+.pagination li {
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    min-width: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Hover effect */
+.pagination li:hover {
+    color: white;
+    background-color: rgb(108, 107, 107);
+}
+
+/*------------------------- pagination END --------------------*/
+
+/*------------------------- footer --------------------*/
+footer {
+    background-color: #1e2125; /* Dark background */
+    color: #ffffff; /* White text */
+    padding: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.brand h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.brand span {
+    color: red; /* Highlighted text */
+}
+
+.brand p {
+    font-size: 14px;
+}
+
+.footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 5px;
+}
+
+.footer-section ul li a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-section ul li a:hover {
+    text-decoration: underline;
+}
+/*------------------------- footer END --------------------*/
+
+/*----------------------------------------- Responsive Design -----------------------------------------------*/
+@media screen and (max-width: 768px) {
+    .main-nav {
+        flex-direction: row;
+        align-items: center;
+        position: relative;
+    }
+
+    .nav-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #101327;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    .nav-links a {
+        padding: 10px;
+        display: block;
+    }
+
+    .buttons {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    .burger-menu {
+        display: block;
+    }
+
+    /* form container */
+    .container{
+        width: 100%;
+        padding: 10px;
+    }
+
+    /* Show menu when active */
+    .user-card {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-group {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .motto-container, .motto{
+        font-size: 35px;
+        line-height: 60px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .create-btn {
+        width: 100%;
+    }
+
+    .stats-container{
+        width: 100%;
+    }
+
+    .urgent-jobs-container{
+        gap: 10px;
+    }
+
+    .stat-card{
+        width: 100%;
+    }
+
+    .job-section, .statics-section, .ads-section{
+        padding: 10px;
+    }
+    
+    .bg-container{
+        padding: 10px;
+    }
+
+    .urg-job-main-container{
+        width: auto;
+    }
+
+    /*------------------- responsive job search -----------------------*/
+    .job-main{
+        padding: 10px;
+    }
+
+    .job-nav-links{
+        align-items: flex-start;
+        padding: 15px 0 15px 0;
+        margin: 0;
+    }
+
+    .job-card {
+        align-items: center;
+        gap: 2px;
+    }
+
+    .job-card-container{
+        padding: 0;
+    }
+
+    .job-info {
+        padding: 10px 0;
+    }
+
+    .card-title h3{
+        text-align: left;
+        padding-left: 3px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .apply-container {
+        gap: 5px;
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .apply-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .search-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-select {
+        width: 100%;
+        max-width: none;
+    }
+
+    .search-button{
+        width: 70%;
+    }
+
+    .company-jobs-content{
+        gap: 10px;
+        margin: 5;
+    }
+    
+    .company-info{
+        gap: 10px;
+    }
+    .company-jobs-btn {
+        width: 100%; /* Make container full width */
+        text-align: left; /* Align button to the left */
+        padding-left: 0; /* Remove extra padding */
+    }
+
+    .jobs-btn {
+        display: flex;
+        justify-content: center;
+        width: 100%; /* Make button full width */
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+    .motto {
+        font-size: 28px;
+        line-height: 50px;
+        width: 100%;
+    }
+
+    .top-section {
+        width: 100%;
+    }
+
+    .container {
+        width: 95%;
+    }
+
+    .input-group input, .input-group select {
+        max-width: 100%;
+    }
+
+    .search-button{
+        width: 100%;
+    }
+
+    .company-card{
+        width: 100%;
+    }
+
+    .company-jobs-content{
+        gap: 10px;
+        margin: 0;
+    }
+
+    .ads-card{
+        width: 100%;
+    }
+
+
+}
+
+

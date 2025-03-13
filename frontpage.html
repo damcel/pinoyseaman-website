@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagination</title>
+    <style>
+        .nav-links {
+    display: flex;
+    gap: 50px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.4px;
+    position: relative;
+    padding: 10px 15px; /* Space for background */
+    border-radius: 5px; /* Rounded corners for the background */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Underline effect on hover */
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 3px;
+    width: 0;
+    height: 2px;
+    background-color: red;
+    transition: width 0.3s ease-in-out;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Background effect on hover */
+.nav-links a:hover {
+    background-color: rgba(255, 0, 0, 0.2); /* Light red background */
+}
+
+/* Active link stays underlined & background stays */
+.nav-links a.active {
+    background-color: rgba(255, 0, 0, 0.5); /* Slightly darker red */
+    font-weight: bold;
+}
+
+.nav-links a.active::after {
+    width: 100%;
+}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul class="nav-links">
+            <li><a href="#" class="nav-item active">Home</a></li>
+            <li><a href="#" class="nav-item">Jobs</a></li>
+            <li><a href="#" class="nav-item">Faqs</a></li>
+            <li><a href="#" class="nav-item">Contact us</a></li>
+        </ul>
+    </nav>
+
+</body>
+</html>

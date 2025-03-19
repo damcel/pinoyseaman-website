@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="nav-left">
+                <h2 class="logo">Pinoy <span class="logo-span">Seaman</span></h2>
+    
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="job_search.html">Jobs</a></li>
+                    <li><a href="#">Faqs</a></li>
+                    <li><a href="#">Contact us</a></li>
+                </ul>
+            </div>
+    
+            <div class="buttons">
+                <button class="login-btn">Login</button>
+                <button class="signup-btn">Sign up</button>
+            </div>
+    
+            <div class="burger-menu" onclick="toggleMenu()">
+                &#9776; 
+            </div>
+        </nav>
+    </header>
+
+    <main class="job-page-main">
+        <section class="job-nav-section">
+            <nav>
+                <ul class="job-nav-links">
+                    <li class="home">
+                        <a href=""><i class="fa-solid fa-house"></i>Home</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-chevron-right"></i>
+                        <a href="">Jobs</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-chevron-right"></i>
+                        <a href="jobs.html">Tanker Vessel</a>
+                    </li>
+                </ul>
+            </nav>
+        </section>
+
+        <section class="job-layout">
+            <!-- Container for all asides -->
+            <section class="aside-container">
+                <!-- Company Information -->
+                <aside class="about-company">
+                    <div class="about-company-img">
+                        <img src="company-image.jpg" alt="Company Image">
+                    </div>
+                    <article class="aside-company-info">
+                        <h3>company name</h3>
+                        <p><i class="fa-solid fa-circle-info"></i>about company</p>
+                        <p><i class="fa-solid fa-envelope"></i><a href="mailto:example@company.com">example@company.com</a></p>
+                        <p><i class="fa-solid fa-compass"></i><a href="">company website</a></p>
+                        <p><i class="fa-solid fa-suitcase"></i>total job post</p>
+                    </article>
+                </aside>
+
+                <!-- Registration Info -->
+                <aside class="register-info">
+                    <h2>Why you should register to PinoySeaman</h2>
+                    <ul>
+                        <li><i class="fa-solid fa-circle-check"></i>It's free (and it always will be!)</li>
+                        <li><i class="fa-solid fa-circle-check"></i>We work with professional employers & manning agents</li>
+                        <li><i class="fa-solid fa-circle-check"></i>Find a better maritime job — faster!</li>
+                        <li><i class="fa-solid fa-circle-check"></i> No ads, scams, or junk mail — we promise</li>
+                    </ul>
+                    <button class="register-btn">Create your account now!</button>
+                </aside>
+
+                <!-- seafarer image -->
+                <aside class="related-jobs">
+                    <h2>From our Filipino Seafarer</h2>
+                    <div class="seaman-img">
+                        <img src="ship-image.jpg" alt="Tanker Vessel">
+                    </div>
+                </aside>
+            </section>
+
+            <!-- Job Details Container -->
+            <section class="job-container">
+                    <!-- First Job Details -->
+                <article class="job-details-container">
+                    <section class="job-heading-container">
+                        <div>
+                            <h1 class="job-type">Electrical Technical Officer - Oil/Chemical Tanker</h1>
+                            <p class="company-name">
+                                <i class="fa-solid fa-building"></i> Ast Shipping Company
+                            </p>
+                        </div>
+                        <div class="joblist-btn-container">
+                            <div>
+                                <button class="quick-apply">Quick Apply</button>
+                            </div>
+                            <div>
+                                <p class="date-posted">date posted</p>
+                                <p class="last-update">date posted</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="job-information">
+                        <dl>
+                            <div class="job-info-row">
+                                <dt><i class="fa-solid fa-user"></i> Rank</dt>
+                                <dd>Electrical Technical Officer</dd>
+                            </div>
+                            <div class="job-info-row">
+                                <dt><i class="fa-solid fa-ship"></i> Vessel type</dt>
+                                <dd>Oil/Chemical Tanker</dd>
+                            </div>
+                            <div class="job-info-row">
+                                <dt><i class="fa-solid fa-clock"></i> Contract Length</dt>
+                                <dd>4 months</dd>
+                            </div>
+                        </dl>
+                    </section>
+
+                    <section class="jobpage-description">
+                        <dd>Requirements</dd>
+                    </section>
+
+                    <section class="jobpage-description">
+                        <dd>Job Description</dd>
+                        <p>date posted</p>
+                    </section>
+                </article>
+
+                <!-- related job list -->
+                <article class="job-details-container">
+                    <h1 class="similar-job-header">Similar jobs</h1>
+
+                    <!-- cards for related job list -->
+                    <section class="related-job-card">
+                        <div class="job-image">
+                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                        </div>
+                        <div class="job-info">
+                            <label class="job-title">Tanker Vessel</label>
+                            
+                            <div class="job-details">
+                                <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                            </div>  
+                            
+                            <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                        </div>
+                        
+                        
+                        <div class="apply-container">
+                            <p class="date-posted">date posted</p>
+                            <button class="apply-button">Details & Apply</button>
+                        </div>
+                    </section>
+
+                    <!-- cards for related job list -->
+                    <section class="related-job-card">
+                        <div class="job-image">
+                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                        </div>
+                        <div class="job-info">
+                            <label class="job-title">Tanker Vessel</label>
+                            
+                            <div class="job-details">
+                                <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                            </div>  
+                            
+                            <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                        </div>
+                        
+                        
+                        <div class="apply-container">
+                            <p class="date-posted">date posted</p>
+                            <button class="apply-button">Details & Apply</button>
+                        </div>
+                    </section>
+
+                    <!-- cards for related job list -->
+                    <section class="related-job-card">
+                        <div class="job-image">
+                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                        </div>
+                        <div class="job-info">
+                            <label class="job-title">Tanker Vessel</label>
+                            
+                            <div class="job-details">
+                                <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                            </div>  
+                            
+                            <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                        </div>
+                        
+                        
+                        <div class="apply-container">
+                            <p class="date-posted">date posted</p>
+                            <button class="apply-button">Details & Apply</button>
+                        </div>
+                    </section>
+
+                    <!-- cards for related job list -->
+                    <section class="related-job-card">
+                        <div class="job-image">
+                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                        </div>
+                        <div class="job-info">
+                            <label class="job-title">Tanker Vessel</label>
+                            
+                            <div class="job-details">
+                                <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                            </div>  
+                            
+                            <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                        </div>
+                        
+                        
+                        <div class="apply-container">
+                            <p class="date-posted">date posted</p>
+                            <button class="apply-button">Details & Apply</button>
+                        </div>
+                    </section>
+
+                    <!-- cards for related job list -->
+                    <section class="related-job-card">
+                        <div class="job-image">
+                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                        </div>
+                        <div class="job-info">
+                            <label class="job-title">Tanker Vessel</label>
+                            
+                            <div class="job-details">
+                                <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                            </div>  
+                            
+                            <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                        </div>
+                        
+                        
+                        <div class="apply-container">
+                            <p class="date-posted">date posted</p>
+                            <button class="apply-button">Details & Apply</button>
+                        </div>
+                    </section>
+                    
+                    <figcaption><a href="full-gallery.html" class="see-more">See more</a></figcaption>
+
+                </article>
+            </section>        
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section brand">
+                <h2>Pinoy<span>Seaman</span></h2>
+                <p>© 2023 pinoyseaman. All rights reserved.</p>
+            </div>
+            <div class="footer-section contact">
+                <h3>Get in Touch</h3>
+                <p>Emilia Str, Makati City</p>
+                <p>filoseaman@gmail.com</p>
+                <p>Phone number: (123) 456 78 90</p>
+            </div>
+            <div class="footer-section links">
+                <h3>Learn More</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+            </div>
+            <div class="footer-section links">
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Advertise</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>   
+    
+</body>
+</html>

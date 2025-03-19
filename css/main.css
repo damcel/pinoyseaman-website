@@ -4,6 +4,16 @@ body {
     font-family: Arial, sans-serif;
 }
 
+h1, p {
+    margin: 0;
+  }
+
+.fa-solid, .fas {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin: 0;
+}
+
 .logo {
     margin: 0;
     color: #fff;
@@ -123,6 +133,7 @@ header {
 .signup-btn:hover{
     background-color: #E11D1D; 
     color: white;
+    border: 2px solid #fdfdfd
 }
 
 .login-btn:hover{
@@ -239,7 +250,7 @@ header {
 }
 
 /* Headings */
-div h1 {
+.header-form h1 {
     line-height: 40px;
     text-align: center;
     border-bottom: 2px solid #a2a2a2;
@@ -549,18 +560,12 @@ label {
 /*------------------------- job ads END --------------------*/
 
 /*------------------------- Jobs_search --------------------*/
-.job-main{
-    max-width: 1200px;
-    margin: 0 auto; /* Centering */
-    padding: 0 20px; /* Small padding for smaller screens */
 
-}
 .job-nav-links {
     display: flex;
     list-style: none;
-    padding: 25px 20px 25px;
-    gap: 10px;
-    margin-left: 55px;
+    padding: 25px 20px 25px 0;
+    gap: 5px;
 }
 
 .job-nav-links a {
@@ -600,6 +605,11 @@ label {
     font-weight: 600;
 }
 
+.job-nav-links a i {
+    margin-right: 5px; /* Adjust spacing as needed */
+}
+
+
 /*------------------------- Jobs_search END --------------------*/
 
 /*---------------Search container ---------------------*/
@@ -621,7 +631,7 @@ label {
     background-color: #fff;
     cursor: pointer;
     min-width: 180px; /* Prevents it from being too small */
-    max-width: 400px; /* Keeps it balanced */
+    max-width: 460px; /* Keeps it balanced */
 }
 
 .search-button {
@@ -662,7 +672,7 @@ label {
     background-color: #fdfafa;
     font-family: Arial, sans-serif;
     flex-wrap: wrap;
-    gap: 15px; /* Prevents elements from cramping */
+    gap: 15px; 
 
 }
 
@@ -672,7 +682,6 @@ label {
     font-size: 15px;
 }
 
-/* Job image */
 .job-image {
     width: 150px;
     height: 120px;
@@ -680,76 +689,67 @@ label {
     object-fit: cover;
 }
 
-/* Job info container */
 .job-info {
     flex-grow: 1;
     padding: 0 15px;
     display: flex;
     flex-direction: column;
     align-self: stretch; 
-    justify-content: space-between; /* Pushes elements apart */
-
+    justify-content: space-between; 
+    flex-wrap: wrap;
 }
 
-/* Job title should be aligned separately */
 .job-title {
     font-size: 18px;
     font-weight: bold;
     margin: 0;
 }
 
-/* Job details should be in a row */
 .job-details {
     display: flex;
-    gap: 10px; /* Space between items */
-    flex-wrap: wrap; /* Ensures responsiveness */
+    gap: 10px; 
+    flex-wrap: wrap; 
 }
 
-/* Styling for job descriptions */
 .job-description {
     font-size: 14px;
     color: #555;
     display: flex;
-    align-items: center; /* Align icon and text */
-    gap: 5px; /* Space between icon and text */
+    gap: 5px; 
 }
 
 .company-link {
     display: inline-flex;
-    align-items: center;
     text-decoration: none;
-    background-color: #d6eaff; /* Background color */
-    color: #187bcd; /* Text color */
-    padding: 8px 12px; /* Adjust padding for proper fit */
-    border-radius: 5px; /* Rounded corners */
+    background-color: #d6eaff; 
+    color: #187bcd; 
+    padding: 8px 12px; 
+    border-radius: 5px; 
     font-size: 14px;
-    width: fit-content; /* Ensures background only wraps content */
-    white-space: nowrap; /* Prevents text from wrapping */
+    width: fit-content; 
+    white-space: nowrap; 
 }
 
 .company-link i {
-    margin-right: 5px; /* Space between icon and text */
+    margin-right: 5px; 
+    padding-bottom: 0;
 }
 
 .apply-container {
-    height: 100%;
     display: flex;
-    flex-direction: column; /* Stack date & button */
-    justify-content: space-between; /* Pushes elements apart */
-    align-items: flex-end; /* Align to the right */
-    height: 100%; /* Ensures it takes full height */
-    gap: 2px; /* Reduce space between date and apply button */
+    flex-direction: column; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+    height: 100%;
 }
 
-/* Date styling */
 .date-posted {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: #999;
+    text-align: end;
 }
 
-
-/* Apply button */
 .apply-button {
     border: 1px solid red;
     color: red;
@@ -798,13 +798,395 @@ label {
     align-items: center;
 }
 
-/* Hover effect */
 .pagination li:hover {
     color: white;
     background-color: rgb(108, 107, 107);
 }
 
 /*------------------------- pagination END --------------------*/
+
+
+/*------------------------- job-page --------------------*/
+.job-page-main {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: auto; 
+    margin-bottom: 150px;
+    padding: 0 20px 20px 20px;
+}
+
+.job-layout {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.aside-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.about-company,
+.register-info,
+.related-jobs {
+    background-color: #F3F3F3;
+    border-radius: 8px;
+    width: 100%; 
+    max-width: 300px;
+    padding: 15px;
+}
+
+.about-company img {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.job-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.job-details-container {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+
+.aside-company-info h3{
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.aside-company-info p, a{
+    color:#4E4D4D;
+    text-decoration: none;
+    margin: 0;
+    padding-bottom: 10px;
+    margin-right: 15px;
+}
+
+.aside-company-info p i {
+    margin-right: 10px; 
+}
+
+.register-info ul {
+    list-style: none;
+    padding: 0; 
+}
+
+.register-info ul li {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Adjust spacing between icon and text */
+}
+
+.register-info h2{
+    text-align: center;
+    color: #374151;
+    font-size: 20px;
+}  
+
+.register-info i{
+    color: #1271D6;
+}
+
+.register-info li {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #6B7280;
+}
+
+.register-btn {
+    display: block;
+    margin: 0 auto;
+    font-size: 15px;
+    padding: 10px 15px 10px 15px;
+    color: white;
+    border-radius: 5px;
+    background-color: red;
+    border: none;
+    cursor: pointer;
+}
+
+.job-heading-container {
+    border-bottom: 1px solid rgb(188, 187, 187);
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 30px;
+}
+
+.job-heading-container h1{
+    margin: 0;
+}
+
+.job-type{
+    font-size: 30px;
+    font-weight: 800;
+    width: 500px;
+}
+
+.company-name{
+    margin-bottom: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #6A6A6A;
+    align-items: center;
+}
+
+
+.quick-apply{
+    border: none;
+    color: white;
+    background: red;
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight:600;
+    letter-spacing: 1px;
+    width: fit-content;
+}
+
+.joblist-btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+
+}
+
+.quick-apply {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.last-update{
+    margin: 0;
+    font-size: 12px;
+    color: rgb(49, 49, 49);
+    text-align: end;
+}
+
+.job-information dl {
+    display: grid;
+    grid-template-columns: minmax(120px, auto) 1fr;
+    gap: 30px 120px;
+    align-items: center;
+    max-width: 100%; 
+    border-bottom: 1px solid rgb(188, 187, 187);
+    padding-bottom: 30px;
+    margin-bottom: 0;
+}
+
+.job-info-row {
+    display: contents; 
+}
+
+dt {
+    display: flex;
+    font-weight: normal;
+    color: #666;
+    white-space: nowrap; 
+    gap: 10px;
+}
+
+dt i {
+    margin-right: 8px;
+}
+
+dd {
+    font-weight: bold;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.jobpage-description{
+    padding-top: 20px;
+    border-bottom: 1px solid rgb(188, 187, 187);
+    padding-bottom: 30px;
+}
+
+.about-company-img{
+    border: 2px solid green;
+    height: 150px;
+    
+}
+
+.related-job-card{
+    display: flex;
+    width: auto;
+    border-bottom: 1px solid rgb(188, 187, 187);
+    padding-top: 40px;
+    padding-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.similar-job-header{
+    margin: 0;
+    margin-bottom: 30px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.seaman-img{
+    border: 2px solid green;
+    height: 230px;
+
+}
+
+figcaption {
+    display: flex;
+    justify-content: flex-end; /* Aligns the link to the right */
+    padding: 10px; /* Adds some spacing */
+}
+
+.see-more {
+    text-decoration: none;
+    color: #1271D6; /* Blue color */
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+    margin-right: 0;
+}
+
+.see-more:hover {
+    color: #0f5db6;
+    text-decoration: underline;
+}
+
+/*------------------------- job-page END --------------------*/
+
+/*------------------------- login-signup --------------------*/
+
+.login-signup-main {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 0 auto; 
+    background: linear-gradient(to top, #b3d9ff 5%, #ffffff 50%);
+}
+
+.login-signup {
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgb(222, 221, 221);
+}
+
+.login-signup h3 {
+    font-size: 25px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.seafarer-box,
+.employer-box {
+    display: flex;
+    align-items: center;
+    width: 360px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Background colors */
+.seafarer-box {
+    background-color: #ddeeff;
+    border-left: 6px solid #0044cc;
+    border-right: 6px solid #0044cc;
+}
+
+.employer-box {
+    background-color: #ffdddd;
+    border-left: 6px solid #E63639;
+    border-right: 6px solid #E63639;
+}
+
+.seafarer-box a{
+    inset: 0; 
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin-left: 50px;
+    color: #0044cc; 
+}
+
+.employer-box a{
+    inset: 0; 
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin-left: 50px;
+    color: #E63639; 
+}
+
+/* Icons */
+.seafarer-box i{
+    margin-right: 10px;
+    font-size: 30px; 
+    color: #0044cc; 
+}
+
+.employer-box i {
+    margin-right: 10px;
+    font-size: 30px; 
+    color: #E63639; 
+}
+
+.seafarer-box:hover {
+    background-color: #cce0ff;
+}
+
+.employer-box:hover {
+    background-color: #ffcccc;
+}
+
+.back{
+    align-self:flex-end;
+    color: #686a6b;
+    margin-left: 5px;
+}
+
+.back:hover{
+    text-decoration: underline;
+}
+
+.start-logo {
+    margin-bottom: 10px; /* Add spacing between logo and form */
+}
+
+.start-logo img {
+    max-width: 150px; /* Adjust as needed */
+    height: auto;
+}
+/*------------------------- login-signup END --------------------*/
 
 /*------------------------- footer --------------------*/
 footer {
@@ -983,6 +1365,7 @@ footer {
 
     .job-info {
         padding: 10px 0;
+        gap: 10px;
     }
 
     .card-title h3{
@@ -1001,7 +1384,6 @@ footer {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        width: 100%;
     }
 
     .apply-button {
@@ -1032,9 +1414,9 @@ footer {
         gap: 10px;
     }
     .company-jobs-btn {
-        width: 100%; /* Make container full width */
-        text-align: left; /* Align button to the left */
-        padding-left: 0; /* Remove extra padding */
+        width: 100%; 
+        text-align: left; 
+        padding-left: 0; 
     }
 
     .jobs-btn {
@@ -1043,6 +1425,53 @@ footer {
         width: 100%; /* Make button full width */
     }
 
+    /*----------------- job search -----------------------------*/
+
+    .job-page-main {
+        padding: 15px;
+    }
+
+    .job-layout {
+        display: flex;
+        flex-direction: column-reverse; /* Moves .job-container above .aside-container */
+    }
+
+    .aside-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        box-sizing: border-box; /* Prevent padding from increasing width */
+    }
+
+    .about-company,
+    .register-info,
+    .related-jobs {
+        width: 100% !important; /* Force full width */
+        max-width: 100% !important; /* Prevent any restriction */
+        box-sizing: border-box; /* Ensure padding does not affect width */
+    }
+
+    .job-heading-container, .joblist-btn-container, .last-update{
+        flex-direction: column;
+        align-items:flex-start;
+        text-align: left;
+        gap: 10px;
+    }
+
+    .job-type {
+        width: auto;
+        font-size: 24px;
+    }
+
+    .quick-apply {
+        width: 100%;
+        text-align: center;
+    }
+
+    .job-information dl {
+        gap: 15px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -1081,6 +1510,9 @@ footer {
         width: 100%;
     }
 
+    .job-page-main {
+        padding: 10px; 
+    }
 
 }
 

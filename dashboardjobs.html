@@ -3,9 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>dashboard jobs</title>
 </head>
 <body>
+    <aside id="sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <button onclick="toggleSidebar()" id="toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul class="ul-links">
+              <li class="menu-title">MENU</li>
+              <li>
+                <a href="dashboardjobs.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-briefcase"></i><span>Jobs</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="userprofile.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Profile</span>
+                </a>
+              </li>
+              
+              <li class="menu-title">ANALYTICS</li>
+              <li>
+                <a href="history.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-business-time"></i><span>History</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="companies.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-building"></i><span>Companies</span>
+                </a>
+              </li>
+                <div id="progress-main-container" class="progress-main-container">
+                    <div class="complete-percentage">
+                        <p>Complete your profile</p>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                        <p id="progress-text">0% Completed</p>
+                        <div class="incomplete-container">
+                            <h3>Incomplete Fields:</h3>
+                            <ul id="missing-fields"></ul>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </nav>
+    </aside>
     
+    <main class="dashboard-container">
+        <section class="header-container">
+            <div class="saved-ctn">
+                <a href="saved-jobs.html" class="saved-btn">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </a>
+            </div>
+            <div class="dropdown-container">
+                <button class="profile-btn" id="dpBtn">DP</button>
+                <!-- Dropdown Menu -->
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="#" class="prfl">Profile Settings</a>
+                    <a href="index.html">Logout</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="job-search-container">
+                <section class="dashboard-search-container">
+                    <select class="search-select">
+                        <option selected>Select job</option>
+                    </select>
+                    <select class="search-select">
+                        <option selected>Select vessel type</option>
+                    </select>
+                    <button class="dashboard-src-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </section>
+                
+                <section class="dashboard-job-container">
+                    <!-- related job list -->
+                    <article class="job-details-container">
+                        <!-- cards for related job list -->
+                        <section class="related-job-card">
+                            <div class="job-info">
+                                <label class="job-title">Tanker Vessel</label>
+                                
+                                <div class="job-details">
+                                    <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                    <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                                </div>  
+                                
+                                <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                            </div>
+                            
+                            
+                            <div class="apply-container">
+                                <button class="bookmark-btn">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                                <button class="apply-button">Details & Apply</button>
+                            </div>
+                        </section>
+                    </article>
+
+                    <!-- related job list -->
+                    <article class="job-details-container">
+                        <!-- cards for related job list -->
+                        <section class="related-job-card">
+                            <div class="job-info">
+                                <label class="job-title">Tanker Vessel</label>
+                                
+                                <div class="job-details">
+                                    <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                    <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                                </div>  
+                                
+                                <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                            </div>
+                            
+                            
+                            <div class="apply-container">
+                                <button class="bookmark-btn">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                                <button class="apply-button">Details & Apply</button>
+                            </div>
+                        </section>
+                    </article>
+
+                    <!-- related job list -->
+                    <article class="job-details-container">
+                        <!-- cards for related job list -->
+                        <section class="related-job-card">
+                            <div class="job-info">
+                                <label class="job-title">Tanker Vessel</label>
+                                
+                                <div class="job-details">
+                                    <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                    <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                                </div>  
+                                
+                                <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                            </div>
+                            
+                            
+                            <div class="apply-container">
+                                <button class="bookmark-btn">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                                <button class="apply-button">Details & Apply</button>
+                            </div>
+                        </section>
+                    </article>
+
+                    <!-- related job list -->
+                    <article class="job-details-container">
+                        <!-- cards for related job list -->
+                        <section class="related-job-card">
+                            <div class="job-info">
+                                <label class="job-title">Tanker Vessel</label>
+                                
+                                <div class="job-details">
+                                    <p class="job-description"><i class="fas fa-ship"></i> Vessel type</p>
+                                    <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                                </div>  
+                                
+                                <a href="#" class="company-link"><i class="fas fa-briefcase"></i> Ast Shipping Company</a>
+                            </div>
+                            
+                            
+                            <div class="apply-container">
+                                <button class="bookmark-btn">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                                <button class="apply-button">Details & Apply</button>
+                            </div>
+                        </section>
+                    </article>
+                </section>
+
+                <section>
+                    <div class="section-pagination"> 
+                        <ul class="pagination">
+                            <li class="page-prev">&lt;</li> <!-- Left Arrow -->
+                            <li class="page-number active">1</li>
+                            <li class="page-number">2</li>
+                            <li class="page-number">3</li>
+                            <li class="page-next">&gt;</li> <!-- Right Arrow -->
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            <div class="currency-date-aside">
+                <aside class="currency-container">
+                    <h3>Currency Exchange Rates</h3>
+                    <div id="currency-list">
+                        
+                    </div>
+                    <div class="currency-pagination">
+                        <button class="page-btn" id="prev-btn">Prev</button>
+                        <button class="page-btn" id="next-btn">Next</button>
+                    </div>
+                </aside>
+                <aside class="calendar-container">
+                    <div class="calendar-header">   
+                        <span id="month-year"></span>
+                        <span id="year"></span>
+                    </div>
+                    <div class="calendar-days" id="calendar"></div>
+                </aside>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="script/sidenav.js"></script>
+    <script src="script/progress-bar.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+    <script src="script/currency-calendar.js"></script>
 </body>
 </html>

@@ -14,23 +14,11 @@ h1, p {
     margin: 0;
 }
 
-.logo {
-    margin: 0;
-    color: #fff;
-    font-size: 25px;
-    font-weight: 600;
-}
-
-.logo-span {
-    color: #FB2323;
-    font-weight: 600;
-    font-size: 25px;
-}
 
 header {
     background-color: #101327;
     color: #fff;
-    padding: 13px 100px;
+    padding: 10px 140px;
     display: flex;
     justify-content: center;
 }
@@ -50,7 +38,7 @@ header {
 
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: 10px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -61,7 +49,8 @@ header {
 }
 
 .nav-links a {
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 500;
     color: #fff;
     text-decoration: none;
     letter-spacing: 0.4px;
@@ -69,6 +58,7 @@ header {
     padding: 10px 15px; 
     border-radius: 5px; 
     transition: all 0.3s ease-in-out;
+    margin: 0;
 }
 
 .nav-links a::after {
@@ -99,6 +89,10 @@ header {
 
 .nav-links a.active::after {
     width: 100%;
+}
+
+.buttons a{
+    margin: 0;
 }
 
 .buttons {
@@ -148,6 +142,40 @@ header {
     cursor: pointer;
 }
 
+.logo-container {
+    display: flex; /* Makes it shrink-wrap around the content */
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Ensures no extra spacing */
+    width: fit-content; /* Makes it wrap around the image */
+    padding: 0;
+    margin: 0;
+}
+
+.logo-link {
+    display: inline-flex; /* Ensures it only wraps around the image */
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+}
+
+.logo-link a {
+    display: flex; /* Makes the link fit the image */
+    align-items: center;
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+    text-decoration: none; /* Ensures no text styling issues */
+}
+
+.logo-link img {
+    display: block; /* Removes extra spacing */
+    width: 180px; /* Adjust this value to your preferred size */
+    height: auto; /* Keeps aspect ratio */
+}
+
+
 /*------------------------------- bg image of form and motto ------------------------------------*/
 
 /* Ensuring Full Responsiveness */
@@ -157,7 +185,10 @@ header {
     flex-direction: column;
     gap: 25px;
     align-items: center;
-    background-color: #767575;
+    background-image: url('../pinoyseaman-logo/HeroImage.png');
+    background-repeat: no-repeat; /* Prevents repetition */
+    background-size: cover; /* Ensures the image covers the entire container */
+    background-position: center; /* Centers the image */
 }
 
 /* Form Container */
@@ -218,7 +249,6 @@ header {
     display: flex;
     justify-content: center;
     gap: 80px;
-    width: 80%;
     max-width: 1200px;
     flex-wrap: wrap; /* Allows wrapping for smaller screens */
     align-items: center;
@@ -226,18 +256,14 @@ header {
 
 /* Motto Styling */
 .motto {
+    text-align: left;
     font-size: 50px;
     width: 400px;
     font-weight: 900;
     line-height: 90px;
     color: #fff;
-}
-
-.motto-container {
-    display: block;
-    align-self: center;
-    flex: 1;
-    max-width: 500px;
+    display: block; /* Makes it take full width */
+    word-wrap: break-word;
 }
 
 /* Create Button */
@@ -282,11 +308,18 @@ input, select {
     width: 200px;
     height: 40px;
     font-size: 15px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.create-btn:hover{
+     background-color: darkred; /* Changes color when hovered */
+    transform: scale(1.05); /* Slightly enlarges the button */
 }
 
 /* Label Styling */
 label {
-    color: #3c3c3c;
+    color: #101327;
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 4px;
@@ -338,6 +371,97 @@ label {
 }
 
 /*----------------------- Company container -------------------------*/
+.next-button {
+    position: absolute;
+    right: -30px; /* Moves button next to the last card */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.slider-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: fit-content; /* Adjust to fit the visible cards */
+    justify-content: center;
+    margin: auto;  /* Ensures horizontal centering */
+}
+
+.company-track {
+    display: flex;
+    gap: 40px;
+    transition: transform 0.3s ease-in-out;
+    width: calc(250px * 4 + 40px * 3); /* Full width of only 4 cards */
+}
+
+.company-card {
+    background-color: #f0f0f0;
+    border: 1px solid #dcdbdb;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+    flex: 0 0 auto; /* Prevent shrinking */
+}
+
+/* Remove margin for last card to avoid extra spacing */
+.company-card:last-child {
+    margin-right: 0;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark background */
+    color: #fff; /* White text */
+    border: none;
+    width: 30px; /* Square width */
+    height: 30px; /* Square height */
+    cursor: pointer;
+    font-size: 18px; /* Adjust icon size */
+    border-radius: 5px; /* Slightly rounded edges */
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
+    z-index: 10; /* Keep buttons above other elements */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#prevBtn {
+    left: -40px; /* Adjust left button position */
+}
+
+#nextBtn {
+    right: -40px; /* Adjust right button position */
+}
+
+/* Hover effect */
+.slider-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1); /* Slight zoom effect */
+}
+
+.company-container {
+    display: flex;
+    overflow: hidden;
+    width: fit-content; /* Dynamically fits exactly 4 cards */
+    margin: 0 auto; /* Centers the container */
+    background-color: rgb(255, 255, 255);
+    padding: 15px;
+}
+
+.company-list {
+    display: flex;
+    overflow: hidden;
+    width: calc(250px * 4 + 20px * 3); /* 4 cards + spacing */
+    justify-content: center;
+}
 
 .company-title-card{
     display: flex;
@@ -366,25 +490,6 @@ label {
     font-weight: 500;
 }
 
-.company-container {
-    display: flex;
-    gap: 25px;
-    overflow: hidden;
-    justify-content: center;
-    padding: 15px;
-    flex-wrap: wrap;
-    background-color: rgb(255, 255, 255);
-}
-
-.company-card {
-    background-color: #f0f0f0;
-    border: 1px solid #dcdbdb;
-    border-radius: 10px 10px 0 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 250px;
-}
-
 .card img {
     width: 100%;
     border-top-left-radius: 10px;
@@ -399,17 +504,28 @@ label {
     text-align: left;
     font-size: 15px;
     font-weight: 500;
+    max-width: 500px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* Show up to 3 lines */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
 }
 
-.employer-profile-container{
-    width: 100%;
+.employer-profile-container {
     border-radius: 10px 10px 0 0;
     height: 150px;
     display: flex;
     align-items: center;
-    background-color: #3a3a3a;
+    justify-content: center;
+    overflow: hidden; /* Prevents any overflow */
 }
 
+.employer-profile-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* Ensures the image fully covers the container */
+}
 /*------------------------ urgent jobs--------------------------*/
 .job-section, .statics-section, .ads-section{
     display: flex;
@@ -421,9 +537,9 @@ label {
 }
 /* Job Section Container */
 .urg-job-main-container {
-    max-width: 900px;
+    max-width: 950px;
     width: 100%;
-    border: 2px solid #ccc;
+    border: 1px solid #dbd9d9;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -435,8 +551,8 @@ label {
     align-items: center;
     justify-content: space-between;
     padding: 15px 20px;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ddd8d8;
+    border-bottom: 1px solid #ddd8d8;
     flex-wrap: wrap;
 }
 
@@ -446,13 +562,13 @@ label {
     height: 100px;
     display: flex;
     align-items: center;
-    background-color: #3a3a3a;
 }
 
 .company-jobs-img img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
+    object-fit: fill;
+    border-radius: 5px;
 }
 
 .company-jobs-content {
@@ -486,7 +602,7 @@ label {
     background-color: #a8d1ff;
     color: #316ec9;
     padding: 4px 10px;
-    border-radius: 6px;
+    border-radius: 5px;
     display: inline-block;
 }
 
@@ -500,11 +616,17 @@ label {
     background-color: #fff;
     border: 2px solid red;
     color: red;
-    padding: 10px 35px;
+    padding: 10px 25px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 500;
     font-size: 18px;
+    transition: all 0.3s ease-in-out; 
+}
+
+.jobs-btn:hover {
+    background-color: red; /* Button turns red on hover */
+    color: white; /* Text turns white for contrast */
 }
 
 .company-info{
@@ -538,15 +660,19 @@ label {
 /*------------------------- urgent jobs END --------------------*/
 
 /*--------------------------- job ads ----------------------*/
+.ads-section {
+    overflow: hidden;
+    background: #fff; /* Optional background */
+    position: relative;
+    white-space: nowrap; /* Prevents wrapping */
+    margin-bottom: 50px;
+}
+
 .ads-container {
     display: flex;
     gap: 50px;
-    justify-content: center;
-    padding-top: 30px;
-    padding-bottom: 40px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
+    animation: scrollAds 20s linear infinite; /* Continuous scrolling */
+    width: max-content; /* Ensure it grows based on content */
 }
 
 .ads-card {
@@ -556,6 +682,13 @@ label {
     padding: 20px;
     height: 100px;
     width: 250px;
+    flex: 0 0 auto;
+}
+
+.ads-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 /*------------------------- job ads END --------------------*/
 
@@ -685,8 +818,18 @@ label {
 .job-image {
     width: 150px;
     height: 120px;
+    overflow: hidden; /* Prevents image from overflowing */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.job-image img {
+    width: 100%; /* Makes the image take the full width of the container */
+    height: 100%; /* Makes the image take the full height of the container */
+    object-fit: fill; /* Ensures the image covers the entire container */
     border-radius: 5px;
-    object-fit: cover;
 }
 
 .job-info {
@@ -761,6 +904,7 @@ label {
     font-weight:600;
     letter-spacing: 1px;
     width: fit-content;
+    transition: all 0.3s ease-in-out;
 }
 
 .apply-button:hover {
@@ -828,8 +972,6 @@ label {
     gap: 20px;
     align-items: center;
 }
-
-.about-company,
 .register-info,
 .related-jobs {
     background-color: #F3F3F3;
@@ -839,12 +981,31 @@ label {
     padding: 15px;
 }
 
-.about-company img {
+.about-company {
+    background-color: #F3F3F3;
+    border-radius: 8px;
     width: 100%;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    max-width: 300px;
+    padding: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+.about-company-img {
+    padding: 0 10px 10px 10px;
+    width: 100%;
+    max-height: 170px; /* Limits the image height */
+    overflow: hidden; /* Prevents the image from overflowing */
+}
+
+.about-company-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 5px; /* Optional: for rounded corners */
+}
 .job-container {
     flex: 1;
     display: flex;
@@ -873,6 +1034,18 @@ label {
     margin: 0;
     padding-bottom: 10px;
     margin-right: 15px;
+}
+
+.btn-create a{
+    color:#d7cfcf;
+    text-decoration: none;
+    margin: 0;
+    padding-bottom: 10px;
+    margin-right: 15px;
+}
+
+.btn-create a:hover{
+    text-decoration: underline; /* Add underline */
 }
 
 .aside-company-info p i {
@@ -907,15 +1080,31 @@ label {
 }
 
 .register-btn {
-    display: block;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center; /* Centers the button */
+}
+
+.register-btn a {
+    display: inline-block;
     font-size: 15px;
-    padding: 10px 15px 10px 15px;
+    padding: 10px 15px;
     color: white;
     border-radius: 5px;
     background-color: red;
     border: none;
     cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    min-width: 120px; /* Prevents button from shrinking too much */
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+    margin: 0;
+}
+
+/* Hover effect */
+.register-btn a:hover {
+    background-color: darkred; /* Changes color when hovered */
+    transform: scale(1.05); /* Slightly enlarges the button */
 }
 
 .job-heading-container {
@@ -943,18 +1132,23 @@ label {
     align-items: center;
 }
 
-
 .quick-apply{
     border: none;
     color: white;
     background: red;
-    padding: 15px 20px;
+    padding: 15px 25px;
     border-radius: 5px;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
     font-weight:600;
     letter-spacing: 1px;
     width: fit-content;
+    transition: all 0.3s ease-in-out;
+}
+
+.quick-apply:hover {
+    background-color: rgb(247, 110, 110); /* Button turns red on hover */
+    color: white; /* Text turns white for contrast */
 }
 
 .joblist-btn-container {
@@ -963,16 +1157,6 @@ label {
     align-items: flex-end;
     justify-content: space-between;
 
-}
-
-.quick-apply {
-    padding: 10px 20px;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
 }
 
 .last-update{
@@ -1022,12 +1206,6 @@ dd {
     padding-bottom: 30px;
 }
 
-.about-company-img{
-    border: 2px solid green;
-    height: 150px;
-    
-}
-
 .related-job-card{
     display: flex;
     width: auto;
@@ -1044,10 +1222,26 @@ dd {
     font-weight: 700;
 }
 
-.seaman-img{
-    border: 2px solid green;
-    height: 230px;
+.seaman-img {
+    height: 200px; /* Set a fixed height */
+    overflow: hidden; /* Prevents image overflow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
 
+.seaman-img img {
+    width: 100%; /* Ensures the image fills the container width */
+    height: 100%; /* Ensures it fills the container height */
+    object-fit: fill; /* Ensures the full image is visible without cropping */
+    border-radius: 5px;
+}
+
+.related-jobs h2{
+    text-align: center;
+    color: #374151;
+    font-size: 20px;
 }
 
 figcaption {
@@ -1119,14 +1313,14 @@ figcaption {
 /* Background colors */
 .seafarer-box {
     background-color: #ddeeff;
-    border-left: 6px solid #0044cc;
-    border-right: 6px solid #0044cc;
+    border-left: 6px solid #507fdc;
+    border-right: 6px solid #507fdc;
 }
 
 .employer-box {
     background-color: #ffdddd;
-    border-left: 6px solid #E63639;
-    border-right: 6px solid #E63639;
+    border-left: 6px solid #e2686a;
+    border-right: 6px solid #e2686a;
 }
 
 .seafarer-box a{
@@ -1185,6 +1379,35 @@ figcaption {
 .start-logo img {
     max-width: 150px; /* Adjust as needed */
     height: auto;
+}
+
+.logo-start-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically (if section has height) */
+    width: 100%; /* Ensures it spans the full width */
+   padding-bottom: 10px;
+}
+
+.logo-start-link img {
+    display: block;
+    width: 180px; /* Adjust as needed */
+    height: auto; /* Maintains aspect ratio */
+}
+
+.logo-start-link a {
+    display: flex; /* Makes the link fit the image */
+    align-items: center;
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+    text-decoration: none; /* Ensures no text styling issues */
+}
+
+.logo-start-link img {
+    display: block; /* Removes extra spacing */
+    width: 200px; /* Adjust this value to your preferred size */
+    height: auto; /* Keeps aspect ratio */
 }
 /*------------------------- login-signup END --------------------*/
 
@@ -1317,6 +1540,7 @@ footer {
 
     .create-btn {
         width: 100%;
+        margin-bottom: 10px;
     }
 
     .stats-container{
@@ -1476,12 +1700,16 @@ footer {
 
 @media screen and (max-width: 480px) {
     .motto {
-        font-size: 28px;
-        line-height: 50px;
-        width: 100%;
+        width: fit-content;
+    }
+    
+    .motto-container {
+        min-height: auto; /* Let it adapt naturally */
     }
 
-    .top-section {
+    .company-jobs-content, .top-section{
+        gap: 10px;
+        margin: 0;
         width: 100%;
     }
 
@@ -1501,11 +1729,6 @@ footer {
         width: 100%;
     }
 
-    .company-jobs-content{
-        gap: 10px;
-        margin: 0;
-    }
-
     .ads-card{
         width: 100%;
     }
@@ -1516,4 +1739,12 @@ footer {
 
 }
 
+@keyframes scrollAds {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%); /* Move by half since we duplicate */
+    }
+}
 

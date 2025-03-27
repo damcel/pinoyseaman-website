@@ -3,239 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Document</title>
-
     <style>
-        /* Layout for job section */
-        .job-layout {
-            display: flex;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 20px auto;
-            flex-wrap: wrap; /* Allow items to wrap */
-            align-items: flex-start;
-        }
+/* education styling */
+.education-section {
+    margin: 20px;
+}
 
-        /* Job Container to stack job details */
-        .job-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
-        /* Job Details */
-        .job-details {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            min-width: 600px;
-        }
+.education-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
 
-        /* Aside Container */
-        .aside-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-            width: 300px;
-        }
+.education-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
 
-        /* Styling for each aside */
-        .company-info,
-        .register-info,
-        .similar-jobs {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
-        }
+.education-table thead {
+    background-color: #f5f5f5;
+}
 
-        .company-info img {
-            width: 100%;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
+.education-table th,
+.education-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    word-wrap: break-word;
+}
 
-        .company-info h2 {
-            font-size: 18px;
-            font-weight: bold;
-        }
+/* Attachment Cell Styling */
+.attachment-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
-        .company-info ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 10px;
-            color: #666;
-        }
+.attachment-content span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px; /* Set a max width to prevent overflow */
+}
 
-        .company-info ul li {
-            margin-bottom: 5px;
-        }
+.attachment-icons {
+    display: flex;
+    gap: 5px;
+}
 
-        /* Responsive: Move aside below job-container */
-        @media (max-width: 900px) {
-            .job-layout {
-                flex-direction: column;
-                align-items: center;
-            }
+/* Add Document Button */
+.add-document {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border: 1px solid red;
+    background: transparent;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    display: block;
+    width: max-content;
+}
 
-            .job-container {
-                width: 100%;
-                max-width: 600px;
-            }
+.add-document:hover {
+    background: red;
+    color: white;
+}
 
-            .job-details {
-                width: 100%;
-                min-width: unset;
-            }
+/* Responsive Design */
 
-            .aside-container {
-                width: 100%;
-                max-width: 400px;
-                order: 1; /* Moves below job-container */
-            }
-        }
+/* Tablet View */
+@media (max-width: 768px) {
+    .education-table th,
+    .education-table td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .attachment-content {
+        flex-direction: column;
+        align-items: flex-start;
+
+    }
+
+    .attachment-content span{
+        width: 100%;
+    }
+
+    .add-document {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Mobile View */
+@media (max-width: 480px) {
+    .education-table thead {
+        display: none;
+    }
+
+    .education-table tr {
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .education-table td {
+        padding: 8px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+    }
+
+    /* Add labels for mobile */
+    .education-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .attachment-icons {
+        margin-top: 5px;
+    }
+}
+
     </style>
 </head>
 <body>
-
-    <main class="job-page-main">
-        <section class="job-layout">
-            <!-- Container for all asides -->
-            <div class="aside-container">
-                <!-- Company Information -->
-                <aside class="company-info">
-                    <img src="company-image.jpg" alt="Company Image">
-                    <h2>Company Name</h2>
-                    <ul>
-                        <li>About company</li>
-                        <li>Email</li>
-                        <li>Website</li>
-                        <li>Job post total number</li>
-                    </ul>
-                </aside>
-
-                <!-- Registration Info -->
-                <aside class="register-info">
-                    <h2>Why you should register to PinoySeaman</h2>
-                    <ul>
-                        <li>✔️ It's free (and it always will be!)</li>
-                        <li>✔️ We work with professional employers & manning agents</li>
-                        <li>✔️ Find a better maritime job — faster!</li>
-                        <li>✔️ No ads, scams, or junk mail — we promise</li>
-                    </ul>
-                    <button class="register-btn">Create your account now!</button>
-                </aside>
-
-                <!-- Similar Jobs -->
-                <aside class="similar-jobs">
-                    <h2>Similar Jobs</h2>
-                    <div class="job-item">
-                        <img src="ship-image.jpg" alt="Tanker Vessel">
-                        <div class="job-info">
-                            <h3>Tanker Vessel</h3>
-                            <p>📌 Rank: <strong>Officer</strong></p>
-                            <p>🚢 Vessel type: <strong>Oil/Chemical</strong></p>
-                            <p>📅 Contract Length: <strong>4 months</strong></p>
-                            <button class="register-btn">Details & Apply</button>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-
-            <!-- Job Details Container -->
-            <section class="job-container">
-                <!-- First Job Details -->
-                <article class="job-details">
-                    <section class="job-heading-container">
-                        <div>
-                            <h1 class="job-type">Electrical Technical Officer - Oil/Chemical Tanker</h1>
-                            <p class="company-name">
-                                <i class="fa-solid fa-building"></i> Ast Shipping Company
-                            </p>
-                        </div>
-                        <div class="joblist-btn-container">
-                            <div>
-                                <button class="quick-apply">Quick Apply</button>
+    <section class="education-section">
+        <h2>Education</h2>
+        <div class="education-container">
+            <table class="education-table">
+                <thead>
+                    <tr>
+                        <th>School</th>
+                        <th>Field of Study</th>
+                        <th>Educational Level</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Attachment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="School">University of Batangas</td>
+                        <td data-label="Field of Study">Information Technology</td>
+                        <td data-label="Educational Level">Bachelor's Degree</td>
+                        <td data-label="Start Date">2020</td>
+                        <td data-label="End Date">2024</td>
+                        <td class="attachment-cell" data-label="Attachment">
+                            <div class="attachment-content">
+                                <span>taengbinasateasdasda</span>
+                                <div class="attachment-icons">
+                                    <a href="#"><i class="fa-solid fa-cloud-arrow-down"></i></a>
+                                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                                </div>
                             </div>
-                            <div>
-                                <p class="date-posted">date posted</p>
-                                <p class="last-update">date posted</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="job-information">
-                        <dl>
-                            <div class="job-info-row">
-                                <dt><i class="fa-solid fa-user"></i> Rank</dt>
-                                <dd>Electrical Technical Officer</dd>
-                            </div>
-                            <div class="job-info-row">
-                                <dt><i class="fa-solid fa-ship"></i> Vessel type</dt>
-                                <dd>Oil/Chemical Tanker</dd>
-                            </div>
-                            <div class="job-info-row">
-                                <dt><i class="fa-solid fa-clock"></i> Contract Length</dt>
-                                <dd>4 months</dd>
-                            </div>
-                        </dl>
-                    </section>
-
-                    <section class="jobpage-description">
-                        <dd>Requirements</dd>
-                    </section>
-
-                    <section class="jobpage-description">
-                        <dd>Job Description</dd>
-                        <p>date posted</p>
-                    </section>
-                </article>
-
-                <!-- Second Job Details -->
-                <article class="job-details">
-                    <header class="job-header">
-                        <div>
-                            <h1>Chief Engineer - Cargo Ship</h1>
-                            <p class="company-name">
-                                <i class="fa-solid fa-building"></i> Global Marine Corp
-                            </p>
-                        </div>
-                        <button class="quick-apply">Quick Apply</button>
-                    </header>
-
-                    <p class="posted-date">Posted Date <br> <span>Last updated date</span></p>
-
-                    <section class="job-info">
-                        <dl>
-                            <dt><i class="fa-solid fa-user"></i> Rank</dt>
-                            <dd>Chief Engineer</dd>
-
-                            <dt><i class="fa-solid fa-ship"></i> Vessel type</dt>
-                            <dd>Cargo Ship</dd>
-
-                            <dt><i class="fa-solid fa-clock"></i> Contract Length</dt>
-                            <dd>6 months</dd>
-                        </dl>
-                    </section>
-
-                    <hr>
-
-                    <section class="job-description">
-                        <h2>Requirements</h2>
-                        <p>Job Description</p>
-                        <p>Chief Engineer $ 6000 | 6 month(s) | Vessel type Cargo | Global shipping line.</p>
-                    </section>
-                </article>
-            </section>
-
-        </section>
-    </main>
-
+                        </td>
+                    </tr>
+                </tbody>                
+            </table>            
+            <button class="add-document">+ Add Document</button>
+        </div>
+    </section>
+    
 </body>
 </html>

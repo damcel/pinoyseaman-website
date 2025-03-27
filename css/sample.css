@@ -1,0 +1,790 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root{
+  --base-clr: #FEFEFE;
+  --mainbg-clr:#F2F5FA;
+  --line-clr: #DAE3F8;
+  --hover-clr: #3788E5;
+  --text-clr: #0B1C33;
+  --accent-clr: #5e63ff;
+  --secondary-text-clr: #504E4E;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container{
+    background-color: var(--mainbg-clr);;
+}
+
+.dashboard-container p{
+    color: var(--secondary-text-clr);
+    margin-top: 5px;
+}
+
+html{
+  font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5rem;
+}
+
+body{
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--base-clr);
+  color: var(--text-clr);
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+/*--------------------------- for sidebar -----------------------------*/
+#sidebar{
+  box-sizing: border-box;
+  height: 100vh;
+  width: 250px;
+  padding: 10px 1em;
+  background-color: var(--base-clr);
+  border-right: 1px solid var(--line-clr);
+  position: sticky;
+  top: 0;
+  align-self: start;
+  transition: 300ms ease-in-out;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+#sidebar ul{
+	list-style: none;
+  margin-top: 10px;
+  }
+
+#sidebar.close{
+  padding: 5px;
+  width: 60px;
+}
+
+.rotate svg:last-child{
+  rotate: 180deg;
+}
+
+#toggle-btn{
+  margin-left: auto;
+  padding: 1em;
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: .5em;
+  background: none;
+  cursor: pointer;
+
+  svg{
+    transition: rotate 150ms ease;
+  }
+}
+
+#toggle-btn:hover{
+  background-color: var(--hover-clr);
+}
+
+.menu-title {
+	font-size: 18px;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: #0B1C33;
+	margin-top: 30px; /* Adjust as needed */
+  margin-bottom: 15px;
+  }
+
+  /* Add line (divider) below specific menu items */
+.sidebar-nav ul li.separator {
+	border-bottom: 2px solid var(--line-clr);
+	padding-bottom: 10px; /* Space before the line */
+	margin-bottom: 10px; /* Space after the line */
+  }
+
+.sidebar-nav ul li a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	color: #333;
+	padding: 10px 15px;
+	border-radius: 5px;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.hidden {
+    display: none;
+}
+
+.sidebar-header {
+  height: 50px;
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: space-between; /* Keep space between logo and button */
+}
+
+.logo-link a{
+  height: fit-content;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+}
+
+.logo-container img{
+  width: 100%;
+}
+
+.sidebar-collapsed .logo-container {
+  opacity: 0; /* Hide logo */
+  width: 0; /* Collapse the space */
+  overflow: hidden;
+}
+
+/* Reset styles for all sidebar links */
+.ul-links a {
+  border-radius: .5em;
+  padding: .85em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+/* Apply hover effect ONLY to Jobs, Profile, History, and Companies */
+.ul-links li a[href="index.html"], 
+.ul-links li a[href="dashboard.html"], 
+.ul-links li a[href="history.html"], 
+.ul-links li a[href="companies.html"] {
+  transition: background-color 0.3s ease;
+  margin-bottom: 3px;
+}
+
+.ul-links li a[href="index.html"]:hover, 
+.ul-links li a[href="dashboard.html"]:hover, 
+.ul-links li a[href="history.html"]:hover, 
+.ul-links li a[href="companies.html"]:hover {
+  background-color: var(--hover-clr);
+  color: #FEFEFE;
+}
+
+aside .sidebar-nav ul li a.active {
+  background-color: var(--hover-clr);
+  color: #FEFEFE;
+  font-weight: bold; /* Optional: Make it bold */
+  margin-bottom: 3px;
+}
+/*--------------------------- sidebar end -----------------------------*/
+
+/*--------------------------- progress bar -----------------------------*/
+
+.progress-container {
+  width: 100%;
+  background-color: #eee;
+  border-radius: 5px;
+  height: 10px;
+}
+
+.progress-container p{
+  font-size: 13px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #007bff;
+  border-radius: 5px;
+  transition: width 0.5s ease-in-out;
+  margin-bottom: 10px;
+}
+
+.complete-percentage p{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.incomplete-container h3{
+  font-size: 14px;
+  font-weight: 500;
+}
+/*--------------------------- progress bar end -----------------------------*/
+
+/*--------------------------- for saved job and profile -----------------------------*/
+.header-container{
+  background-color: var(--base-clr);
+	display: flex;
+  justify-content: flex-end; /* Aligns everything to the right */
+  padding: 15px 60px 15px 0;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+	border-bottom: 2px solid var(--line-clr);
+}
+
+.profile-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  background-color: #D9D9D9;
+  color: black;
+  position: relative;
+}
+
+/* Dropdown Styles */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;  
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  width: 150px;
+  z-index: 1000;
+  padding: 5px 10px 5px 10px;
+}
+
+.dropdown a {
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  display: block;
+  font-size: 15px;
+}
+
+.prfl{
+  border-bottom: 1px solid var(--line-clr);
+}
+
+.dropdown a:hover {
+  background: #f0f0f0;
+}
+
+.show {
+  display: flex;
+}
+
+.saved-btn {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  font-size: 20px;
+  text-decoration: none; /* Removes underline from link */
+  transition: background-color 0.3s ease;
+  color: #000000;
+}
+
+.saved-btn:hover {
+  background-color: #E8E8E8;
+}
+
+
+/*--------------------------- sidebar end -----------------------------*/
+
+/*--------------------------- profile set up -----------------------------*/
+
+.profile-setup-container{
+    margin: min(60px, 7%);
+	  margin-top: min(30px, 7%);
+    padding: 30px;
+    background-color: var(--base-clr);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.tabs {
+    display: flex;
+    padding-bottom: 5px;
+}
+
+.tabs ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.tabs li {
+  display: flex;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 500;
+  align-items: center; /* Aligns icon and text */
+  color: #4A4A4A;
+}
+
+.tabs a {
+    text-decoration: none;
+    color: #9e9e9e;
+    position: relative;
+    display: inline-block;
+    font-size: 13px;
+}
+
+.tabs .active a {
+    color: red;
+    font-weight: bold;
+}
+
+.tabs .active a::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: red;
+    bottom: -6px;
+    left: 0;
+}
+
+.profile-section, .education-section{
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tabs-container{
+  padding: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+  font-size: 16px;
+  font-weight: bold;
+  flex-wrap: wrap;
+}
+
+.profile-header i {
+  color: #666;
+}
+
+.profile-header a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.profile-header span {
+  font-size: 14px;
+  color: #666;
+}
+
+.profile-container {
+display: flex;
+align-items: flex-start; /* Align items to the top */
+gap: 15px;
+flex-wrap: wrap;
+margin-top: 15px;
+}
+
+.profile-picture {
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 150px;
+border-right: 1px solid #e0e0e0;
+}
+
+.upload-box {
+width: 120px;
+height: 120px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+border: 2px dashed #ccc;
+border-radius: 10px;
+background-color: #f7f7f7;
+cursor: pointer;
+}
+
+.upload-box p {
+font-size: 12px;
+color: #666;
+margin-top: 5px;
+}
+
+.profile-details {
+flex-grow: 1;
+display: flex;
+gap: 30px;
+flex-wrap: wrap;
+position: relative; /* Needed for positioning the button */
+padding-right: 40px; /* Space for the button */
+}
+
+.details-section {
+flex: 1;
+}
+
+.details-section h4 {
+margin-bottom: 10px;
+}
+
+.details-section p {
+margin: 5px 0;
+color: #555;
+font-size: 14px;
+}
+
+/*--------------- education styling ---------------------*/
+
+.header-info {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #404142;
+}
+
+.education-container, .seamans-book-container, 
+.passport-container, .visa-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.table-content {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table-content thead {
+  background-color: #f5f5f5;
+}
+
+.table-content th,
+.table-content td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+}
+
+.table-content th{
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.table-content td {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* Attachment Cell Styling */
+.attachment-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.attachment-content span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px; /* Set a max width to prevent overflow */
+}
+
+.attachment-icons{
+  display: flex;
+  gap: 10px;
+}
+
+.attachment-icons .fa-cloud-arrow-down{
+  color: #D12727;
+}
+
+.attachment-icons .fa-pen-to-square{
+  color: #666262;
+}
+
+/* Add Document Button */
+.add-document, .add-work-exp-btn, .add-cv-btn, .land-exp-btn{
+  margin-top: 15px;
+  padding: 10px 15px;
+  border: 1px solid red;
+  background: transparent;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  display: block;
+  width: max-content;
+}
+
+.add-document:hover, .add-work-exp-btn:hover,
+.add-cv-btn:hover, .land-exp-btn:hover {
+  background: red;
+  color: white;
+}
+
+/*--------------------------- profile setup end -----------------------------*/
+
+/* Container */
+.experience-container, .compe-cert-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.box-container {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Experience Box */
+.experience-box, .competency-box, 
+.certificate-box, .mertis-box {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  position: relative; /* Needed for absolute positioning of the edit icon */
+}
+
+.experience-content, .competency-content, 
+.certificate-content, .merits-content {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  padding-right: 40px; /* Space for the edit icon */
+  padding-bottom: 10px;
+}
+
+/* Edit Icon in Top Right with Gap */
+.edit-icon, .edit-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.edit-icon:hover, .edit-btn:hover {
+  color: black;
+}
+
+/* Divider */
+hr {
+  border-top: 1px solid #ddd;
+  margin: 10px 0 0 0;
+}
+
+/*--------------------------- history job-list -----------------------------*/
+
+.job-count {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.job-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 15px;
+}
+
+.job-history-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.job-history-card h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.job-history-card p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 3px;
+}
+
+.viewed-btn {
+  background-color: #e0efff;
+  color: #007bff;
+  font-size: 14px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.viewed-btn i {
+  margin-left: 5px;
+}
+
+/*--------------------------- history job-list end -----------------------------*/
+/*----------------------------------- responsive ---------------------------------- */
+@media(max-width: 800px){
+  body{
+    grid-template-columns: 1fr;
+  }
+  main{
+    padding: 10px;
+  }
+  .container{
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .header-container{
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px 5px 0px 0;
+  
+  }
+  
+  .related-job-card{
+    gap: 10px;
+  }
+
+  #sidebar{
+    height: 60px;
+    width: 100%;
+    border-right: none;
+    border-top: 1px solid var(--line-clr);
+    padding: 0;
+    position: fixed;
+    top: unset;
+    bottom: 0;
+
+    > ul{
+      padding: 0;
+      display: grid;
+      grid-auto-columns: 60px;
+      grid-auto-flow: column;
+      align-items: center;
+      overflow-x: scroll;
+    }
+    ul li{
+      height: 100%;
+    }
+    ul a, ul .dropdown-btn{
+      width: 60px;
+      height: 60px;
+      padding: 0;
+      border-radius: 0;
+      justify-content: center;
+    }
+
+    ul li .sub-menu.show{
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      box-sizing: border-box;
+      height: 60px;
+      width: 100%;
+      background-color: var(--hover-clr);
+      border-top: 1px solid var(--line-clr);
+      display: flex;
+      justify-content: center;
+
+      > div{
+        overflow-x: auto;
+      }
+      li{
+        display: inline-flex;
+      }
+      a{
+        box-sizing: border-box;
+        padding: 1em;
+        width: auto;
+        justify-content: center;
+      }
+    }
+  }
+  
+}
+
+
+/* Tablet View */
+@media (max-width: 768px) {
+  .table-content th,
+  .table-content td {
+      padding: 10px;
+      font-size: 14px;
+  }
+
+  .attachment-content {
+      flex-direction: column;
+      align-items: flex-start;
+
+  }
+
+  .attachment-content span{
+      width: 100%;
+  }
+
+  .add-document {
+      width: 100%;
+      text-align: center;
+  }
+}
+
+/* Mobile View */
+@media (max-width: 480px) {
+  .table-content thead {
+      display: none;
+  }
+
+  .table-content tr {
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      background-color: #f9f9f9;
+  }
+
+  .table-content td {
+      padding: 8px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+  }
+
+  /* Add labels for mobile */
+  .table-content td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 5px;
+  }
+
+  .attachment-icons {
+      margin-top: 5px;
+  }
+}

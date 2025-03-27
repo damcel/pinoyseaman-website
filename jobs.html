@@ -11,8 +11,11 @@
     <header>
         <nav class="main-nav">
             <div class="nav-left">
-                <h2 class="logo">Pinoy <span class="logo-span">Seaman</span></h2>
-    
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="job_search.html">Jobs</a></li>
@@ -37,11 +40,11 @@
             <nav>
                 <ul class="job-nav-links">
                     <li class="home">
-                        <a href=""><i class="fa-solid fa-house"></i>Home</a>
+                        <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
                     </li>
                     <li>
                         <i class="fas fa-chevron-right"></i>
-                        <a href="">Jobs</a>
+                        <a href="job_search.html">Jobs</a>
                     </li>
                     <li>
                         <i class="fas fa-chevron-right"></i>
@@ -57,7 +60,7 @@
                 <!-- Company Information -->
                 <aside class="about-company">
                     <div class="about-company-img">
-                        <img src="company-image.jpg" alt="Company Image">
+                        <img src="company-logo/marsa.jpg" alt="Company Image">
                     </div>
                     <article class="aside-company-info">
                         <h3>company name</h3>
@@ -77,14 +80,16 @@
                         <li><i class="fa-solid fa-circle-check"></i>Find a better maritime job — faster!</li>
                         <li><i class="fa-solid fa-circle-check"></i> No ads, scams, or junk mail — we promise</li>
                     </ul>
-                    <button class="register-btn">Create your account now!</button>
+                    <div class="register-btn">
+                        <a href="start.html">Create your account now</a>
+                    </div>
                 </aside>
 
                 <!-- seafarer image -->
                 <aside class="related-jobs">
                     <h2>From our Filipino Seafarer</h2>
                     <div class="seaman-img">
-                        <img src="ship-image.jpg" alt="Tanker Vessel">
+                        <img src="marino/75.jpg" alt="Tanker Vessel">
                     </div>
                 </aside>
             </section>
@@ -102,11 +107,11 @@
                         </div>
                         <div class="joblist-btn-container">
                             <div>
-                                <button class="quick-apply">Quick Apply</button>
+                                <button class="quick-apply" onclick="redirectToDashboard()">Quick Apply</button>
                             </div>
                             <div>
                                 <p class="date-posted">date posted</p>
-                                <p class="last-update">date posted</p>
+                                <p class="last-update">last update</p>
                             </div>
                         </div>
                     </section>
@@ -145,7 +150,7 @@
                     <!-- cards for related job list -->
                     <section class="related-job-card">
                         <div class="job-image">
-                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                            <img src="company-logo/german.jpg" alt="Job Image">
                         </div>
                         <div class="job-info">
                             <label class="job-title">Tanker Vessel</label>
@@ -169,7 +174,7 @@
                     <!-- cards for related job list -->
                     <section class="related-job-card">
                         <div class="job-image">
-                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                            <img src="company-logo/german.jpg" alt="Job Image">
                         </div>
                         <div class="job-info">
                             <label class="job-title">Tanker Vessel</label>
@@ -193,7 +198,7 @@
                     <!-- cards for related job list -->
                     <section class="related-job-card">
                         <div class="job-image">
-                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                            <img src="company-logo/german.jpg" alt="Job Image">
                         </div>
                         <div class="job-info">
                             <label class="job-title">Tanker Vessel</label>
@@ -217,7 +222,7 @@
                     <!-- cards for related job list -->
                     <section class="related-job-card">
                         <div class="job-image">
-                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                            <img src="company-logo/german.jpg" alt="Job Image">
                         </div>
                         <div class="job-info">
                             <label class="job-title">Tanker Vessel</label>
@@ -241,7 +246,7 @@
                     <!-- cards for related job list -->
                     <section class="related-job-card">
                         <div class="job-image">
-                            <img src="https://via.placeholder.com/100" alt="Job Image">
+                            <img src="company-logo/german.jpg" alt="Job Image">
                         </div>
                         <div class="job-info">
                             <label class="job-title">Tanker Vessel</label>
@@ -298,5 +303,10 @@
         </div>
     </footer>   
     
+    <script>
+        function redirectToDashboard() {
+            window.location.href = 'dashboardjobs.html';
+        }
+    </script>
 </body>
 </html>

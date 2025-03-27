@@ -11,8 +11,11 @@
     <header>
         <nav class="main-nav">
             <div class="nav-left">
-                <h2 class="logo">Pinoy <span class="logo-span">Seaman</span></h2>
-    
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="job_search.html">Jobs</a></li>
@@ -22,8 +25,8 @@
             </div>
     
             <div class="buttons">
-                <button class="login-btn">Login</button>
-                <button class="signup-btn">Sign up</button>
+                <a href="start.html" class="login-btn">Login</a>
+                <a href="start.html" class="signup-btn">Sign up</a>
             </div>
     
             <!-- Burger Menu Button -->
@@ -38,12 +41,9 @@
     <section class="bg-container">
         <div class="top-section">
             <section>
-                <div class="motto-container">
-                    <figcaption class="motto">TRABAHONG SEAMAN, ISANG CLICK NALANG</figcaption>
-                </div>
+                <figcaption class="motto">TRABAHONG SEAMAN, ISANG CLICK NALANG</figcaption>
             </section>
-            <section>
-                <div class="container">
+            <section class="container">
                     <div class="header-form">
                         <h1>Registration Form</h1>
                     </div>
@@ -106,8 +106,7 @@
                                 <p>Already have an account? <a href="#">Log in</a></p>
                             </div>
                         </form>
-                    </div>
-                </div>
+                    </div>  
             </section>
         </div>
     </section>
@@ -122,21 +121,21 @@
                     <i class="fa-solid fa-user"></i>
                     <h3>Registered User</h3>
                 </div>
-                <p>Total: 0</p>
+                <p>Total: 127222</p>
             </div>
             <div class="stat-card">
                 <div class="icon-title">
                     <i class="fa-solid fa-building"></i>
                     <h3>Registered Company</h3>
                 </div>
-                <p>Total: 0</p>
+                <p>Total: 249</p>
             </div>
             <div class="stat-card">
                 <div class="icon-title">
                     <i class="fa-solid fa-briefcase"></i>
                     <h3>Job Posted</h3>
                 </div>
-                <p>Total: 0</p>
+                <p>Total: 100</p>
             </div>
         </div>
     </section>
@@ -144,50 +143,101 @@
     <section>
         <div class="company-title-card">
             <h2>Companies</h2>
-            <p>Join us connect with top talent effortlessly. Post jobs, find skilled crew members, 
-                and streamline your hiring process. all in one place!
+            <p>
+                Join us and connect with top talent effortlessly. Post jobs, 
+                find skilled crew members, and streamline your hiring process. 
+                all in one place!
             </p>
         </div>
-        <div class="company-container">
-            <div class="company-card">
-                <div class="employer-profile-container">
-                    <img src="your-image.png" alt="Deck Department">
-                </div>
-                <div class="company-card-content">
-                    <h3><strong>Deck Department</strong></h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    
+        <div class="slider-wrapper">
+            <button id="prevBtn" class="slider-btn">&#10094;</button>
+    
+            <div class="company-container">
+                <div class="company-track">
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/wil.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-content">
+                            <h3><strong>Deck Department</strong></h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
+                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
+                                 aliquam magni?</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/wil.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-content">
+                            <h3><strong>Deck Department</strong></h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
+                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
+                                 aliquam magni?</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/wil.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-content">
+                            <h3><strong>Deck Department</strong></h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
+                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
+                                 aliquam magni?</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/wil.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-content">
+                            <h3><strong>Deck Department</strong></h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, 
+                                accusamus. Possimus, aliquam incidunt eaque delectus aperiam atque neque nemo laudantium aspernatur quos 
+                                reprehenderit tempore, eum consectetur et expedita deserunt culpa?</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/wil.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-content">
+                            <h3><strong>Deck Department</strong></h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
+                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
+                                 aliquam magni?</p>
+                        </div>
+                    </div>
+
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/marsa.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-content">
+                            <h3><strong>Deck Department</strong></h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
+                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
+                                 aliquam magni?</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <div class="company-card">
-                <div class="employer-profile-container">
-                    <img src="your-image.png" alt="Deck Department">
-                </div>
-                <div class="company-card-content">
-                    <h3><strong>Deck Department</strong></h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-            </div>
-            <div class="company-card">
-                <div class="employer-profile-container">
-                    <img src="your-image.png" alt="Deck Department">
-                </div>
-                <div class="company-card-content">
-                    <h3><strong>Deck Department</strong></h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-            </div>
-            <div class="company-card">
-                <div class="employer-profile-container">
-                    <img src="your-image.png" alt="Deck Department">
-                </div>
-                <div class="company-card-content">
-                    <h3><strong>Deck Department</strong></h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-            </div>
+            <button id="nextBtn" class="slider-btn">&#10095;</button>
         </div>
     </section>
-
+    
     <section class="job-section">
         <div class="company-title-card">
             <h2>Urgent Seaman Job Hiring</h2>
@@ -197,7 +247,7 @@
                 <div class="urgent-jobs-container">
                     <div class="company-info">
                         <div class="company-jobs-img">
-                            <img src="scanmar-logo.png" alt="SCANMAR">
+                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
                         </div>
                         <div class="company-jobs-content">
                             <h2>Tanker Vessel</h2>
@@ -206,7 +256,7 @@
                         </div>
                     </div>
                     <div class="company-jobs-btn">
-                        <button class="jobs-btn">Apply</button>
+                        <button class="jobs-btn">Details & Apply</button>
                     </div>
                 </div>
             </section>
@@ -214,7 +264,7 @@
                 <div class="urgent-jobs-container">
                     <div class="company-info">
                         <div class="company-jobs-img">
-                            <img src="scanmar-logo.png" alt="SCANMAR">
+                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
                         </div>
                         <div class="company-jobs-content">
                             <h2>Tanker Vessel</h2>
@@ -223,7 +273,7 @@
                         </div>
                     </div>
                     <div class="company-jobs-btn">
-                        <button class="jobs-btn">Apply</button>
+                        <button class="jobs-btn">Details & Apply</button>
                     </div>
                 </div>
             </section>
@@ -231,7 +281,7 @@
                 <div class="urgent-jobs-container">
                     <div class="company-info">
                         <div class="company-jobs-img">
-                            <img src="scanmar-logo.png" alt="SCANMAR">
+                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
                         </div>
                         <div class="company-jobs-content">
                             <h2>Tanker Vessel</h2>
@@ -240,7 +290,7 @@
                         </div>
                     </div>
                     <div class="company-jobs-btn">
-                        <button class="jobs-btn">Apply</button>
+                        <button class="jobs-btn">Details & Apply</button>
                     </div>
                 </div>
             </section>
@@ -248,7 +298,7 @@
                 <div class="urgent-jobs-container">
                     <div class="company-info">
                         <div class="company-jobs-img">
-                            <img src="scanmar-logo.png" alt="SCANMAR">
+                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
                         </div>
                         <div class="company-jobs-content">
                             <h2>Tanker Vessel</h2>
@@ -257,7 +307,7 @@
                         </div>
                     </div>
                     <div class="company-jobs-btn">
-                        <button class="jobs-btn">Apply</button>
+                        <button class="jobs-btn">Details & Apply</button>
                     </div>
                 </div>
             </section>
@@ -265,7 +315,7 @@
                 <div class="urgent-jobs-container">
                     <div class="company-info">
                         <div class="company-jobs-img">
-                            <img src="scanmar-logo.png" alt="SCANMAR">
+                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
                         </div>
                         <div class="company-jobs-content">
                             <h2>Tanker Vessel</h2>
@@ -274,28 +324,26 @@
                         </div>
                     </div>
                     <div class="company-jobs-btn">
-                        <button class="jobs-btn">Apply</button>
+                        <button class="jobs-btn">Details & Apply</button>
                     </div>
                 </div>
             </section>
         </div>
-        <a href="">Search all jobs <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="job_search.html">Search all jobs <i class="fa-solid fa-arrow-right"></i></a>
     </section>
 
     <section class="ads-section">
         <div class="ads-container">
-            <div class="ads-card">
-                banner ads image
-            </div>
-            <div class="ads-card">
-                banner ads image
-            </div>
-            <div class="ads-card">
-                banner ads image
-            </div>
-            <div class="ads-card">
-                banner ads image
-            </div>
+            <div class="ads-card"><img src="company-ads/vship_logo.jpg" alt="ads"></div>
+            <div class="ads-card"><img src="company-ads/wallem_logo.jpg" alt="ads"></div>
+            <div class="ads-card"><img src="company-ads/status_big.jpg" alt="ads"></div>
+            <div class="ads-card"><img src="company-ads/marl.jpg" alt="ads"></div>
+    
+            <!-- Duplicate ads for a seamless effect -->
+            <div class="ads-card"><img src="company-ads/vship_logo.jpg" alt="ads"></div>
+            <div class="ads-card"><img src="company-ads/wallem_logo.jpg" alt="ads"></div>
+            <div class="ads-card"><img src="company-ads/status_big.jpg" alt="ads"></div>
+            <div class="ads-card"><img src="company-ads/marl.jpg" alt="ads"></div>
         </div>
     </section>
 
@@ -329,6 +377,8 @@
             </div>
         </div>
     </footer>   
-    <script src="nav-hover-effect.js"></script>
+    <script src="script/company-arrow.js"></script>
+    <script src="script/nav-hover-effect.js"></script>
+    <script src="script/ads-carousel.js"></script>
 </body>
 </html>

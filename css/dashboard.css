@@ -1,0 +1,721 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root{
+  --base-clr: #FEFEFE;
+  --mainbg-clr:#F2F5FA;
+  --line-clr: #DAE3F8;
+  --hover-clr: #3788E5;
+  --text-clr: #0B1C33;
+  --accent-clr: #5e63ff;
+  --secondary-text-clr: #504E4E;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container{
+    background-color: var(--mainbg-clr);;
+}
+
+.dashboard-container p{
+    color: var(--secondary-text-clr);
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+html{
+  font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5rem;
+}
+
+body{
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--base-clr);
+  color: var(--text-clr);
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+/*--------------------------- for sidebar -----------------------------*/
+#sidebar{
+  box-sizing: border-box;
+  height: 100vh;
+  width: 250px;
+  padding: 5px 1em;
+  background-color: var(--base-clr);
+  border-right: 1px solid var(--line-clr);
+  position: sticky;
+  top: 0;
+  align-self: start;
+  transition: 300ms ease-in-out;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+#sidebar ul{
+	list-style: none;
+  margin-top: 10px;
+  }
+
+#sidebar.close{
+  padding: 5px;
+  width: 60px;
+}
+
+.rotate svg:last-child{
+  rotate: 180deg;
+}
+
+#toggle-btn{
+  margin-left: auto;
+  padding: 1em;
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: .5em;
+  background: none;
+  cursor: pointer;
+
+  svg{
+    transition: rotate 150ms ease;
+  }
+}
+#toggle-btn:hover{
+  background-color: var(--hover-clr);
+}
+
+.menu-title {
+	font-size: 18px;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: #0B1C33;
+	margin-top: 30px; /* Adjust as needed */
+  margin-bottom: 15px;
+  }
+
+  /* Add line (divider) below specific menu items */
+.sidebar-nav ul li.separator {
+	border-bottom: 2px solid var(--line-clr);
+	padding-bottom: 10px; /* Space before the line */
+	margin-bottom: 10px; /* Space after the line */
+  }
+
+.sidebar-nav ul li a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	color: #333;
+	padding: 10px 15px;
+	border-radius: 5px;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.hidden {
+    display: none;
+}
+
+.sidebar-header {
+  height: 50px;
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: space-between; /* Keep space between logo and button */
+}
+
+.logo-link a{
+  height: fit-content;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+}
+
+.logo-container img{
+  width: 100%;
+}
+
+.sidebar-collapsed .logo-container {
+  opacity: 0; /* Hide logo */
+  width: 0; /* Collapse the space */
+  overflow: hidden;
+}
+
+/* Reset styles for all sidebar links */
+.ul-links a {
+  border-radius: .5em;
+  padding: .85em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+/* Apply hover effect ONLY to Jobs, Profile, History, and Companies */
+.ul-links li a[href="index.html"], 
+.ul-links li a[href="dashboard.html"], 
+.ul-links li a[href="history.html"], 
+.ul-links li a[href="companies.html"] {
+  transition: background-color 0.3s ease;
+  margin-bottom: 3px;
+}
+
+.ul-links li a[href="index.html"]:hover, 
+.ul-links li a[href="dashboard.html"]:hover, 
+.ul-links li a[href="history.html"]:hover, 
+.ul-links li a[href="companies.html"]:hover {
+  background-color: var(--hover-clr);
+  color: #FEFEFE;
+}
+
+aside .sidebar-nav ul li a.active {
+  background-color: var(--hover-clr);
+  color: #FEFEFE;
+  font-weight: bold; /* Optional: Make it bold */
+  margin-bottom: 3px;
+}
+/*--------------------------- sidebar end -----------------------------*/
+
+/*--------------------------- progress bar -----------------------------*/
+
+.progress-container {
+  width: 100%;
+  background-color: #eee;
+  border-radius: 5px;
+  height: 10px;
+}
+
+.progress-container p{
+  font-size: 13px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #007bff;
+  border-radius: 5px;
+  transition: width 0.5s ease-in-out;
+  margin-bottom: 10px;
+}
+
+.complete-percentage p{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.incomplete-container h3{
+  font-size: 14px;
+  font-weight: 500;
+}
+/*--------------------------- progress bar end -----------------------------*/
+
+/*--------------------------- for saved job and profile -----------------------------*/
+.header-container{
+  background-color: var(--base-clr);
+	display: flex;
+  justify-content: flex-end; /* Aligns everything to the right */
+  padding: 15px 60px 15px 0;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+	border-bottom: 2px solid var(--line-clr);
+}
+
+.profile-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  background-color: #D9D9D9;
+  color: black;
+  position: relative;
+}
+
+/* Dropdown Styles */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;  
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  width: 150px;
+  z-index: 1000;
+  padding: 5px 10px 5px 10px;
+}
+
+.dropdown a {
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  display: block;
+  font-size: 15px;
+}
+
+.prfl{
+  border-bottom: 1px solid var(--line-clr);
+}
+
+.dropdown a:hover {
+  background: #f0f0f0;
+}
+
+.show {
+  display: flex;
+}
+
+.saved-btn {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  font-size: 20px;
+  text-decoration: none; /* Removes underline from link */
+  transition: background-color 0.3s ease;
+  color: #000000;
+}
+
+.saved-btn:hover {
+  background-color: #E8E8E8;
+}
+
+
+.container{
+  margin: min(60px, 7%);
+	margin-top: min(30px, 7%);
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap; /* Allows wrapping when the screen is too small */
+}
+
+/*--------------------------- sidebar end -----------------------------*/
+
+.job-search-container{
+	flex: 1; 
+  min-width: 50%; 
+	display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-search-container{
+	background-color: var(--base-clr);
+	padding: 8px;
+	display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap; 
+  border-radius: 8px;
+  box-shadow: 0 4px 4px rgba(43, 43, 43, 0.1);
+}
+
+.currency-date-aside{
+	display: flex;
+    flex-direction: column;
+    gap: 20px;
+	width: 100%;
+    max-width: 320px;
+}
+
+.search-select {
+    color: #6b6a6a;
+    flex: 1;
+    padding: 8px 8px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 180px; /* Prevents it from being too small */
+    max-width: 460px; /* Keeps it balanced */
+}
+
+.dashboard-src-btn{
+    background-color: #e53935; 
+    color: #eeeaea;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/*------THis is for job container -------------------*/
+
+.dashboard-job-container{
+	background-color: var(--base-clr);
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.related-job-card{
+	display: flex;
+    border-bottom: 1px solid rgb(188, 187, 187);
+    padding: 15px 10px 20px 10px;
+    flex-wrap: wrap;
+}
+
+.job-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch; 
+    justify-content: space-between; 
+    flex-wrap: wrap;
+	gap: 15px;
+}
+
+.job-title {
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.job-details p{
+	margin: 0;
+}
+.job-details{
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
+.job-description {
+    gap: 8px; /* Adds space between icon and text */
+    font-size: 16px; /* Ensures uniform text size */
+    white-space: nowrap; /* Prevents text wrapping */
+}
+
+.job-description i {
+    font-size: 15px; /* Matches text size */
+}
+
+.company-link {
+    text-decoration: none;
+    background-color: #d6eaff; 
+    color: #187bcd; 
+    padding: 5px 12px; 
+    border-radius: 5px; 
+    font-size: 14px;
+    width: fit-content; 
+    white-space: nowrap; 
+}
+
+.company-link i {
+    margin-right: 5px; 
+    padding-bottom: 0;
+}
+
+.apply-container {
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+}
+
+.apply-button {
+    border: 1px solid red;
+    color: red;
+    background: none;
+    padding: 13px 13px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight:600;
+    letter-spacing: 1px;
+    width: fit-content;
+}
+
+.apply-button:hover {
+    background: red;
+    color: white;
+}
+
+.bookmark-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: end;
+    padding: 0;
+}
+
+.bookmark-btn i {
+    font-size: 18px;
+    color: #999;
+    transition: color 0.3s ease-in-out;
+}
+
+.bookmark-btn .saved {
+    color: rgb(59, 59, 60); 
+}
+
+/* Hover Effect */
+.bookmark-btn:hover i {
+    color: #555; /* Darker color on hover */
+    transform: scale(1.2); /* Slightly enlarge the icon */
+}
+
+
+/* Click Animation */
+.bookmark-btn:active {
+    transform: scale(0.9); /* Slight shrink on click */
+}
+
+
+/*------------------------- Calendar --------------------*/
+
+.calendar-container {
+	background: white;
+	padding: 15px;
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+.calendar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 15px;
+	font-weight: bold;
+}
+.calendar-header span {
+	padding: 10px;
+	border-radius: 8px;
+	background: #eef2ff;
+	color: #3b82f6;
+	font-weight: bold;
+}
+.calendar-days {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 5px;
+	margin-top: 10px;
+	font-size: 13px;
+}
+.day {
+	padding: 5px;
+	text-align: center;
+	border-radius: 50%;
+	cursor: pointer;
+}
+.day:hover {
+	background: #e0e7ff;
+}
+.today {
+	background: #3b82f6;
+	color: white;
+	font-weight: bold;
+}
+
+/*------------------------- currency end --------------------*/
+.currency-container {
+	background: white;
+	padding: 15px;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+.currency-item {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.currency-left {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+.currency-value {
+  text-align: right; 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.currency-icon {
+	width: 40px;
+	height: 40px;
+	background: #c4c3bf;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+}
+
+#currency-list{
+  padding: 10px;
+}
+
+.rate {
+	font-weight: bold;
+}
+
+.change {
+	font-size: 12px;
+	color: green;
+	display: flex;
+	align-items: center;
+}
+
+.down {
+	color: red;
+}
+
+.currency-pagination {
+	display: flex;
+  justify-content: flex-end;
+}
+
+.page-btn {
+	margin: 5px;
+	padding: 5px 10px;
+	border: none;
+	background: #007bff;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.page-btn:disabled {
+	background: #ccc;
+	cursor: not-allowed;
+}
+
+#prev-btn {
+	display: none;
+}
+
+/*------------------------- currency & Calendar end --------------------*/
+
+/*------------------------- pagination --------------------*/
+.section-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
+
+.pagination {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding: 0;
+}
+
+.pagination li {
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    min-width: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination li:hover {
+    color: white;
+    background-color: rgb(108, 107, 107);
+}
+
+
+/*----------------------------------- responsive ---------------------------------- */
+@media(max-width: 800px){
+  body{
+    grid-template-columns: 1fr;
+  }
+  main{
+    padding: 10px;
+  }
+  .container{
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .header-container{
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px 5px 0px 0;
+  
+  }
+  
+  .related-job-card{
+    gap: 10px;
+  }
+
+  #sidebar{
+    height: 60px;
+    width: 100%;
+    border-right: none;
+    border-top: 1px solid var(--line-clr);
+    padding: 0;
+    position: fixed;
+    top: unset;
+    bottom: 0;
+
+    > ul{
+      padding: 0;
+      display: grid;
+      grid-auto-columns: 60px;
+      grid-auto-flow: column;
+      align-items: center;
+      overflow-x: scroll;
+    }
+    ul li{
+      height: 100%;
+    }
+    ul a, ul .dropdown-btn{
+      width: 60px;
+      height: 60px;
+      padding: 0;
+      border-radius: 0;
+      justify-content: center;
+    }
+
+    ul li .sub-menu.show{
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      box-sizing: border-box;
+      height: 60px;
+      width: 100%;
+      background-color: var(--hover-clr);
+      border-top: 1px solid var(--line-clr);
+      display: flex;
+      justify-content: center;
+
+      > div{
+        overflow-x: auto;
+      }
+      li{
+        display: inline-flex;
+      }
+      a{
+        box-sizing: border-box;
+        padding: 1em;
+        width: auto;
+        justify-content: center;
+      }
+    }
+  }
+}

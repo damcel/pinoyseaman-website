@@ -3,29 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Explore Companies</title>
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8fafd;
             margin: 0;
             padding: 20px;
         }
-        .container {
+
+        .company-search-container {
             max-width: 1200px;
             margin: 0 auto;
         }
+
+        .company-search-main-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px; /* Adjust if needed */
+            margin: auto; /* Centers it */
+            flex-direction: column; /* Ensures content stacks properly */
+            align-items: center;
+        }
+
         .search-box {
             display: flex;
             justify-content: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
+
         .search-box input {
-            width: 80%;
+            flex-grow: 1;
+            max-width: 500px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         .search-box button {
             background-color: red;
             color: white;
@@ -33,59 +50,195 @@
             padding: 10px 15px;
             cursor: pointer;
             border-radius: 5px;
-            margin-left: 5px;
         }
-        .companies {
+
+        /* Responsive Grid for Companies */
+        .company-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
+            grid-template-columns: repeat(4, 1fr); /* Exactly 4 columns */
+            gap: 15px; /* Adjust the gap as needed */
+            margin-bottom: 10px;
         }
+
+        .company-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Always 4 columns */
+            gap: 15px;
+            margin-bottom: 10px;
+            width: 100%; /* Ensure it takes full width */
+        }
+
         .company-card {
-            height: 150px;
             background: white;
             border-radius: 10px;
             border: 1px solid #ddd;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .see-more {
-            text-align: right;
-            padding: 10px;
-        }
-        .see-more a {
+            padding: 20px;
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
             text-decoration: none;
-            color: blue;
+            min-width: 250px; /* Adjust as per design */
+            height: auto; /* Ensures it adapts to content */
         }
+
+        .company-card:hover {
+            transform: scale(1.05);
+        }
+
+        .company-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .company-logo {
+            max-width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+            object-fit: fill;
+        }
+
+        .company-name h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1b1a1acc;
+        }
+
+        .company-job-count {
+            background-color: #e0f2fe;
+            color: #007bff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        /* See More Button */
+        .see-more button{
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out; /* Smooth scaling effect */
+        }
+
+        .see-more button {
+            text-decoration: none;
+            color: #2121CE;
+        }
+
+        .see-more button:hover {
+            text-decoration: underline;
+            transform: scale(1.1); /* Grows the text */
+        }
+
+        /* Mobile Responsiveness */
+@media (max-width: 1024px) { 
+    .company-list {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+    }
+}
+
+@media (max-width: 768px) { 
+    .company-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    }
+}
+
+@media (max-width: 480px) { 
+    .company-list {
+        grid-template-columns: 1fr; /* 1 column on mobile */
+    }
+}
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
+    <main>
+        <section class="company-search-container">
             <form class="search-box" role="search">
                 <input type="text" placeholder="Search by company name" aria-label="Search by company name">
-                <button type="submit" aria-label="Search">🔍</button>
+                <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
-        </div>
-    </header>
-    <main>
-        <section class="container">
+        </section>
+        <section class="company-search-main-container">
             <h2>Explore Companies</h2>
-            <section class="companies">
-                <article class="company-card"></article>
-                <article class="company-card"></article>
-                <article class="company-card"></article>
-                <article class="company-card"></article>
-                <article class="company-card"></article>
-                <article class="company-card"></article>
-                <article class="company-card"></article>
-                <article class="company-card"></article>
+            <section class="company-list">
+                <a href="#" class="company-card">
+                    <img src="company-logo/german.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">58 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/marsa.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">42 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/scanmar_big.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">30 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                
             </section>
+            <div class="see-more">
+                <button>See more</button>
+            </div>
         </section>
     </main>
-    <footer class="container">
-        <nav class="see-more">
-            <a href="#">See more</a>
-        </nav>
-    </footer>
+    <script src="script/see-more.js"></script>
 </body>
 </html>

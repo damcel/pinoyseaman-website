@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Saved jobs</title>
+    <title>Profile Settings</title>
 </head>
 <body>
     <aside id="sidebar">
@@ -67,7 +67,7 @@
         </nav>
     </aside>
 
-    <main class="dashboard-container">
+    <main>
         <section class="header-container">
             <div class="saved-ctn">
                 <a href="saved-jobs.html" class="saved-btn">
@@ -83,74 +83,93 @@
                 </div>
             </div>
         </section>
-    <section class="profile-setup-container">
-        <section>
-            <div class="tabs-container">
-                <nav class="tabs">
-                    <ul>
-                        <li class="tab"><i class="fa-regular fa-bookmark"></i><a href="history.html">Applied</a></li>
-                        <li class="tab active"><i class="fa-regular fa-circle-check"></i><a href="saved.html">Saved</a></li>
-                    </ul>
-                </nav>
+
+        <section class="company-search-container">
+            <form class="search-box" role="search">
+                <input type="text" placeholder="Search by company name" aria-label="Search by company name">
+                <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </section>
+
+        <section class="company-search-main-container">
+            <h2>Explore Companies</h2>
+            <section class="company-list">
+                <a href="#" class="company-card">
+                    <img src="company-logo/german.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">58 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/marsa.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">42 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/scanmar_big.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">30 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+
+                <a href="#" class="company-card">
+                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    <div class="company-name">
+                        <h3>Company name</h3>
+                    </div>
+                    <div class="company-job-count">25 Jobs</div>
+                </a>
+                
+            </section>
+            <div class="see-more">
+                <button>See more</button>
             </div>
         </section>
-        <p class="job-count">8 jobs</p>
-        <section class="job-list">
-            <article class="job-history-card">
-                <button class="edit-btn"><i class="fa-regular fa-file-excel"></i></i></button>
-                <h2>Tanker Vessel</h2>
-                <p>Company</p>
-                <p>Address</p>
-                <p>Applied date</p>
-                <button class="viewed-btn">Viewed by employer <i class="fa-solid fa-circle-info"></i></button>
-            </article>
-            <article class="job-history-card">
-                <button class="edit-btn"><i class="fa-regular fa-file-excel"></i></i></button>
-                <h2>Tanker Vessel</h2>
-                <p>Company</p>
-                <p>Address</p>
-                <p>Applied date</p>
-                <button class="viewed-btn">Viewed by employer <i class="fa-solid fa-circle-info"></i></button>
-            </article>
-            <article class="job-history-card">
-                <button class="edit-btn"><i class="fa-regular fa-file-excel"></i></i></button>
-                <h2>Tanker Vessel</h2>
-                <p>Company</p>
-                <p>Address</p>
-                <p>Applied date</p>
-                <button class="viewed-btn">Viewed by employer <i class="fa-solid fa-circle-info"></i></button>
-            </article>
-            <article class="job-history-card">
-                <button class="edit-btn"><i class="fa-regular fa-file-excel"></i></i></button>
-                <h2>Tanker Vessel</h2>
-                <p>Company</p>
-                <p>Address</p>
-                <p>Applied date</p>
-                <button class="viewed-btn">Viewed by employer <i class="fa-solid fa-circle-info"></i></button>
-            </article>
-            <article class="job-history-card">
-                <button class="edit-btn"><i class="fa-regular fa-file-excel"></i></i></button>
-                <h2>Tanker Vessel</h2>
-                <p>Company</p>
-                <p>Address</p>
-                <p>Applied date</p>
-                <button class="viewed-btn">Viewed by employer <i class="fa-solid fa-circle-info"></i></button>
-            </article>
-            <article class="job-history-card">
-                <button class="edit-btn"><i class="fa-regular fa-file-excel"></i></i></button>
-                <h2>Tanker Vessel</h2>
-                <p>Company</p>
-                <p>Address</p>
-                <p>Applied date</p>
-                <button class="viewed-btn">Viewed by employer <i class="fa-solid fa-circle-info"></i></button>
-            </article>
-            </section>
-        </section>  
-    </section>
+    
     </main>
+    <script src="script/see-more.js"></script>
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
-    <script src="script/currency-calendar.js"></script>
+
 </body>
 </html>

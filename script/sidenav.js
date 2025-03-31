@@ -56,11 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Active menu item script
     const links = document.querySelectorAll("aside nav ul li a");
-    const activePage = localStorage.getItem("activeLink");
+    const currentPage = window.location.pathname.split("/").pop(); // Get current page filename
+    const storedPage = localStorage.getItem("activeLink");
 
-    // Apply active class if the stored URL matches the current link
+    // Set active class based on stored page OR current page
     links.forEach(link => {
-        if (link.href === activePage) {
+        const linkPage = link.getAttribute("href").split("/").pop(); // Get filename from href
+
+        if (linkPage === storedPage || linkPage === currentPage) {
             link.classList.add("active");
         }
 
@@ -72,8 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Add 'active' class to the clicked link
             this.classList.add("active");
 
-            // Store the clicked link in localStorage
-            localStorage.setItem("activeLink", this.href);
+            // Store only the filename in localStorage
+            localStorage.setItem("activeLink", linkPage);
         });
     });
 });

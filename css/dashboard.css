@@ -146,30 +146,22 @@ body{
   display: flex;
   align-items: center;
   gap: 1em;
+  color: inherit;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-bottom: 5px;
 }
 
-/* Apply hover effect ONLY to Jobs, Profile, History, and Companies */
-.ul-links li a[href="index.html"], 
-.ul-links li a[href="dashboard.html"], 
-.ul-links li a[href="history.html"], 
-.ul-links li a[href="companies.html"] {
-  transition: background-color 0.3s ease;
-  margin-bottom: 3px;
-}
-
-.ul-links li a[href="index.html"]:hover, 
-.ul-links li a[href="dashboard.html"]:hover, 
-.ul-links li a[href="history.html"]:hover, 
-.ul-links li a[href="companies.html"]:hover {
+/* Apply hover effect to all relevant menu items */
+.ul-links li a:hover {
   background-color: var(--hover-clr);
   color: #FEFEFE;
 }
 
-aside .sidebar-nav ul li a.active {
+/* Active state for the current page */
+.ul-links li a.active {
   background-color: var(--hover-clr);
   color: #FEFEFE;
-  font-weight: bold; /* Optional: Make it bold */
-  margin-bottom: 3px;
+  font-weight: bold;
 }
 /*--------------------------- sidebar end -----------------------------*/
 
@@ -1079,6 +1071,10 @@ margin-left: 5px;
   font-weight: bold;
   margin-bottom: 10px;
   color: #1b1a1acc;
+  white-space: nowrap;       /* Prevent text from wrapping */
+  overflow: hidden;          /* Hide overflowed text */
+  text-overflow: ellipsis;   /* Add "..." at the end */
+  max-width: 200px; 
 }
 
 .company-job-count {
@@ -1116,38 +1112,147 @@ margin-left: 5px;
 /*--------------------------- company lists end-----------------------------*/
 
 .company-profile-container{
-	background-color: var(--base-clr);
 	display: flex;
-  gap: 10px;
-  justify-content: center;
   flex-wrap: wrap; 
-  border-radius: 8px;
-  box-shadow: 0 4px 4px rgba(43, 43, 43, 0.1);
-  border: 1px solid green;
-  height: 300px;
 }
 
-.company-cover{
+.company-cover {
   border-radius: 8px 8px 0 0;
-  background-color: gray;
-  height: 160px;
+  background: linear-gradient(135deg, #004aad, #ce1126); /* Blue to Red gradient */
+  height: calc(130px + 10px);
   width: 100%;
-  padding: 15px 30px 15px 30px;
+  padding: 10px 40px;
 }
 
-.company-profile-box{
-  width: 200px;
-  background-color: #187bcd;
+.company-profile-box {
+  width: 150px;
+  height: 130px;
+  object-fit: contain;
+  background-color: #ffffff; /* White for a clean contrast */
   border-radius: 5px;
   padding: 5px;
-  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
-.company-profile-box img{
+.company-profile-box img {
   width: 100%;
-  height: 150px;
-  object-fit: fill;
+  height: 100%; /* Adjust to fill the box */
+  object-fit: fill; /* Ensures the image fills the space properly */
+  border-radius: 5px;
 }
+
+.company-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.company-name h1 {
+  font-size: 22px;
+  margin: 0;
+  font-weight: bold;
+}
+
+.rating {
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.star-rating {
+  font-weight: bold;
+}
+
+.review-count a {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+.review-count a:hover {
+  text-decoration: underline;
+}
+
+.review-button {
+  background-color: #0057b3;
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.review-button:hover {
+  background-color: #003f80;
+}
+
+.company-info-box {
+  background-color: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.company-info-box h3 {
+  font-size: 18px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.company-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Space between each info item */
+}
+
+.info-item {
+  display: flex;
+  align-items: baseline; /* Align text properly */
+  gap: 20px; /* Space between dt and dd */
+  flex-wrap: wrap;
+}
+
+dt {
+  font-weight: bold;
+  color: #333;
+  min-width: 150px; /* Adjust based on content length */
+}
+
+dd {
+  margin: 0;
+  flex: 1; 
+  min-width: 100px;
+}
+
+.company-description{
+  margin-top: 10px;
+}
+
+.company-description p{
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.company-info-box a {
+  color: #0073e6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.company-info-box a:hover {
+  text-decoration: underline;
+}
+
 
 /*----------------------------------- responsive ---------------------------------- */
 

@@ -54,9 +54,12 @@ body{
   text-wrap: nowrap;
 }
 
+.ul-links{
+  margin-top: 10px;
+}
+
 #sidebar ul{
 	list-style: none;
-  margin-top: 10px;
   }
 
 #sidebar.close{
@@ -89,7 +92,6 @@ body{
 	font-weight: 500;
 	text-transform: uppercase;
 	color: #0B1C33;
-	margin-top: 30px; /* Adjust as needed */
   margin-bottom: 15px;
   }
 
@@ -1253,34 +1255,33 @@ dd {
   text-decoration: underline;
 }
 
-
 /*----------------------------------- responsive ---------------------------------- */
 
-@media(max-width: 800px){
-  body{
+@media(max-width: 800px) {
+  body {
     grid-template-columns: 1fr;
   }
-  main{
+
+  main {
     padding: 10px;
   }
-  .container{
+
+  .container {
     border: none;
     padding: 0;
     margin: 0;
   }
 
-  .header-container{
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px 5px 0px 0;
-  
-  }
-  
-  .related-job-card{
+  .related-job-card {
     gap: 10px;
   }
 
-  #sidebar{
+  /* Remove toggle button when sidebar is collapsed */
+  #toggle-btn, #sidebar.close {
+    display: none;
+  }
+
+  #sidebar {
     height: 60px;
     width: 100%;
     border-right: none;
@@ -1290,26 +1291,46 @@ dd {
     top: unset;
     bottom: 0;
 
-    > ul{
+    > ul {
       padding: 0;
-      display: grid;
-      grid-auto-columns: 60px;
-      grid-auto-flow: column;
+      display: flex;
       align-items: center;
       overflow-x: scroll;
     }
-    ul li{
+
+    ul li {
       height: 100%;
     }
-    ul a, ul .dropdown-btn{
+
+    /* Icons should be visible, and text hidden */
+    ul a,
+    ul .dropdown-btn {
       width: 60px;
       height: 60px;
       padding: 0;
-      border-radius: 0;
+      border-radius: 5px;
       justify-content: center;
     }
 
-    ul li .sub-menu.show{
+    /* Hide text and span in responsive mode */
+    ul li span,
+    ul li:first-child,
+    .dropdown-btn svg:last-child {
+      display: none;
+    }
+
+    /* Hide menu-title in responsive mode */
+    .menu-title {
+      display: none;
+    }
+
+    /* Show only icons in collapsed sidebar */
+    ul li a i {
+      display: block;
+      font-size: 1.5em;  /* Ensure icons are the right size */
+    }
+
+    ul li .sub-menu.show {
       position: fixed;
       bottom: 60px;
       left: 0;
@@ -1321,13 +1342,13 @@ dd {
       display: flex;
       justify-content: center;
 
-      > div{
+      > div {
         overflow-x: auto;
       }
-      li{
+      li {
         display: inline-flex;
       }
-      a{
+      a {
         box-sizing: border-box;
         padding: 1em;
         width: auto;
@@ -1337,12 +1358,49 @@ dd {
   }
 
   .company-list {
-      grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sidebar-header, .complete-percentage,  #progress-main-container  {
+    display: none;
+  }
+
+  #sidebar ul {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+}
+
+@media (max-width: 1024px) {
+  .company-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns per row */
+    gap: 10px; /* Adjust the gap between items as needed */
+  }
+
+  .company-search-main-container{
+    margin: 10px;
+    margin-bottom: 80px;
   }
 }
 
 /* Tablet View */
 @media (max-width: 768px) {
+
+  .profile-setup-container, .profile-section, .education-section, .experience-container, .compe-cert-container, .job-list-container{
+    padding: 5px;
+    margin: 10px;
+    margin-bottom: 80px;
+  }
+
+  .bookmark-btn{
+    align-self: flex-start;
+  }
+
+  .apply-container{
+    gap: 5px;
+  }
   .table-content th,
   .table-content td {
       padding: 10px;
@@ -1365,20 +1423,17 @@ dd {
   }
 
   .company-search-main-container {
-    padding: 20px;
-    margin: 0;
+    padding: 0;
+    margin-bottom: 80px;
 }
 
   .company-list {
       grid-template-columns: repeat(2, 1fr);
   }
 
-  .search-box {
+  .search-box, .search-box input {
       flex-direction: column;
       align-items: center;
-  }
-
-  .search-box input {
       width: 100%;
   }
 
@@ -1397,6 +1452,10 @@ dd {
       bottom: 0;
       right: 0;
       margin-top: 15px;
+  }
+
+  .logo-container img{
+    display: none;
   }
 }
 

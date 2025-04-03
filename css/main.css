@@ -45,6 +45,7 @@ header {
 }
 
 .nav-links li {
+    align-content: center;
     display: inline-block;
 }
 
@@ -55,8 +56,8 @@ header {
     text-decoration: none;
     letter-spacing: 0.4px;
     position: relative;
-    padding: 10px 15px; 
-    border-radius: 5px; 
+    padding: 10px 15px;
+    border-radius: 5px;
     transition: all 0.3s ease-in-out;
     margin: 0;
 }
@@ -134,7 +135,7 @@ header {
     background-color: #2a2b36; 
 }
 
-/* Burger Menu */
+/* Burger menu (Hidden by default) */
 .burger-menu {
     display: none;
     font-size: 30px;
@@ -174,7 +175,6 @@ header {
     width: 180px; /* Adjust this value to your preferred size */
     height: auto; /* Keeps aspect ratio */
 }
-
 
 /*------------------------------- bg image of form and motto ------------------------------------*/
 
@@ -1472,45 +1472,102 @@ footer {
 }
 /*------------------------- footer END --------------------*/
 
-/*----------------------------------------- Responsive Design -----------------------------------------------*/
-@media screen and (max-width: 768px) {
-    .main-nav {
-        flex-direction: row;
-        align-items: center;
-        position: relative;
+@media (max-width: 1024px) {
+    .company-track {
+        width: calc(250px * 3 + 40px * 2); /* 3 cards for medium screens */
     }
+}
 
-    .nav-left {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .nav-links {
+/* Hide login and signup buttons in desktop view (above 480px) */
+@media screen and (min-width: 481px) {
+    .nav-links .login-btn,
+    .nav-links .signup-btn {
         display: none;
-        flex-direction: column;
-        background: #101327;
-        width: 100%;
+    }
+}
+
+/*----------------------------------------- Responsive Design -----------------------------------------------*/
+@media screen and (max-width: 768px) { 
+
+    .main-nav{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    header{
+        padding: 10px;
+    }
+    /* Hide the nav links by default */
+    .nav-links {
+        display: none; /* Hidden on small screens */
         position: absolute;
-        top: 60px;
+        top: 60px;  /* Adjust based on your header height */
         left: 0;
-        padding: 10px 0;
+        background-color: #333;
+        width: 100%;
         text-align: center;
+        padding: 20px 0;
+    }
+
+    /* Show the nav links when the active class is added */
+    .nav-links.active {
+        display: block;
+    }
+
+    /* Style the individual nav items */
+    .nav-links li {
+        display: block;
+        padding: 10px 0;
     }
 
     .nav-links a {
+        font-size: 18px;
+        font-weight: 500;
+        color: #fff;
+        text-decoration: none;
         padding: 10px;
-        display: block;
+        transition: all 0.3s ease-in-out;
     }
 
-    .buttons {
-        display: none;
-        flex-direction: column;
+    .nav-links a:hover {
+        background-color: #2a2b36;
+    }
+
+    .nav-links a.active {
+        background-color: #2a2b36;
+        font-weight: bold;
+    }
+
+    .nav-links a.active::after {
         width: 100%;
-        text-align: center;
     }
 
+    /* Adjust the burger menu to be visible on small screens */
     .burger-menu {
         display: block;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* for company slider */
+    .slider-btn {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+
+    #nextBtn {
+        right: -0px; /* Move button closer to the card */
+    }
+    
+    #prevBtn {
+        left: -5px; /* Adjust for uniformity */
+    }
+
+    .company-track {
+        width: calc(250px * 2 + 40px * 1); /* 2 cards for tablets */
+        gap: 30px;
     }
 
     /* form container */
@@ -1549,10 +1606,6 @@ footer {
 
     .urgent-jobs-container{
         gap: 10px;
-    }
-
-    .stat-card{
-        width: 100%;
     }
 
     .job-section, .statics-section, .ads-section{
@@ -1699,6 +1752,80 @@ footer {
 }
 
 @media screen and (max-width: 480px) {
+   .buttons {
+    display: none;
+}
+
+.nav-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Ensure nav-links are flex, wrapping, and taking full width */
+.nav-links {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap onto new lines */
+    width: 100%;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 9999;
+    padding: 0;
+}
+
+/* Ensure each li takes up half the width to create two per row */
+.nav-links li {
+    width: 50%; /* 2 items per row */
+    padding: 10px 0;
+    text-align: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 16px;
+    padding: 10px;
+    text-align: center;
+    display: block;
+}
+
+/* Burger menu styling */
+.burger-menu {
+    display: block;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Hide nav by default */
+.nav-links {
+    display: none;
+}
+
+/* Show menu when active */
+.nav-links.active {
+    display: flex;
+}
+
+    
+    #nextBtn {
+        right: 5px; /* Move button even closer for small screens */
+    }
+
+    #prevBtn {
+        left: 5px;
+    }
+
+    .company-track {
+        width: 250px; /* 1 card for mobile */
+    }
+
+    .slider-btn {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+
     .motto {
         width: fit-content;
     }
@@ -1735,6 +1862,10 @@ footer {
 
     .job-page-main {
         padding: 10px; 
+    }
+
+    .stat-card{
+        width: 100%;
     }
 
 }

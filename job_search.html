@@ -19,18 +19,22 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="job_search.html">Jobs</a></li>
-                    <li><a href="#">Faqs</a></li>
+                    <li><a href="#">Explore Companies</a></li>
                     <li><a href="#">Contact us</a></li>
+                    <li><a href="start.html" class="login-btn">Login</a></li>
+                    <li><a href="start.html" class="signup-btn">Sign up</a></li>
                 </ul>
             </div>
-    
-            <div class="buttons">
+
+             <!-- Moved Buttons Inside nav-links -->
+             <div class="buttons">
                 <a href="start.html" class="login-btn">Login</a>
                 <a href="start.html" class="signup-btn">Sign up</a>
             </div>
     
+            <!-- Burger Menu Button -->
             <div class="burger-menu" onclick="toggleMenu()">
-                &#9776; 
+                &#9776; <!-- Unicode for the burger icon -->
             </div>
         </nav>
     </header>
@@ -343,11 +347,8 @@
             </div>
         </div>
     </footer>  
-    
-    <script>
-        function redirectToDashboard() {
-            window.location.href = 'jobs.html';
-        }
-    </script>
+    <script src="script/nav-hover-effect.js"></script>
+    <script src="script/redirect.js"></script>
+
 </body>
 </html>

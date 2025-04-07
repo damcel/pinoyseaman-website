@@ -122,40 +122,71 @@
             <div class="stat-card">
                 <div class="icon-title">
                     <i class="fa-solid fa-user"></i>
-                    <h3>Registered User</h3>
+                    <h3>Registered Job-Seekers</h3>
                 </div>
-            </div>
-            <p>
-                Total: 
-                <?php
-                // Include the database connection file
-                include 'db.php';
+                <p>
+                    Total: 
+                    <?php
+                    // Include the database connection file
+                    include 'db.php';
 
-                // Query to count total users in the job_seeker table
-                $sql = "SELECT COUNT(*) AS total_users FROM job_seeker";
-                $result = $conn->query($sql);
+                    // Query to count total users in the job_seeker table
+                    $sql = "SELECT COUNT(*) AS total_users FROM job_seeker";
+                    $result = $conn->query($sql);
 
-                if ($result && $row = $result->fetch_assoc()) {
-                    echo $row['total_users'];
-                } else {
-                    echo "0"; // Display 0 if the query fails
-                }
-                ?>
-            </p>
+                    if ($result && $row = $result->fetch_assoc()) {
+                        echo number_format($row['total_users']);
+                    } else {
+                        echo "0"; // Display 0 if the query fails
+                    }
+                    ?>
+                </p>
             </div>
             <div class="stat-card">
                 <div class="icon-title">
                     <i class="fa-solid fa-building"></i>
                     <h3>Registered Company</h3>
                 </div>
-                <p>Total: 249</p>
+                <p>
+                    Total: 
+                    <?php
+                    // Include the database connection file
+                    include 'db.php';
+
+                    // Query to count total users in the job_seeker table
+                    $sql = "SELECT COUNT(*) AS total_employers FROM employer WHERE verify = 'y'";
+                    $result = $conn->query($sql);
+
+                    if ($result && $row = $result->fetch_assoc()) {
+                        echo $row['total_employers'];
+                    } else {
+                        echo "0"; // Display 0 if the query fails
+                    }
+                    ?>
+                </p>
             </div>
             <div class="stat-card">
                 <div class="icon-title">
                     <i class="fa-solid fa-briefcase"></i>
                     <h3>Job Posted</h3>
                 </div>
-                <p>Total: 100</p>
+                <p>
+                    Total: 
+                    <?php
+                    // Include the database connection file
+                    include 'db.php';
+
+                    // Query to count total jobs where expiry is not less than today's date
+                    $sql = "SELECT COUNT(*) AS total_jobs FROM jobs WHERE expiry >= CURDATE()";
+                    $result = $conn->query($sql);
+
+                    if ($result && $row = $result->fetch_assoc()) {
+                        echo $row['total_jobs'];
+                    } else {
+                        echo "0"; // Display 0 if the query fails
+                    }
+                    ?>
+                </p>
             </div>
         </div>
     </section>

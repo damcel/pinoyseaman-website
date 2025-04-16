@@ -63,28 +63,79 @@ body{
 	list-style: none;
   }
 
-#sidebar.close{
+/* When sidebar is collapsed */
+#sidebar.close {
   padding: 5px;
   width: 60px;
+}
+
+/* Collapse text but keep icon */
+#sidebar.close ul li a {
+  font-size: 0;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+/* Example icon style */
+#sidebar ul li a i {
+  font-size: 18px;
+}
+
+/* Optional: tooltip or hover title */
+#sidebar.close ul li a::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 70px;
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+#sidebar.close ul li a:hover::after {
+  opacity: 1;
 }
 
 .rotate svg:last-child{
   rotate: 180deg;
 }
 
-#toggle-btn{
+/* Toggle Button hide image */
+#sidebar.close .logo-container {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+#sidebar.close .sidebar-header {
+  padding: 0;
+}
+
+/* Toggle Button */
+#toggle-btn {
   margin-left: auto;
-  padding: 1em;
+  padding: 0.6em 0.8em;
   border: 1px solid rgb(196, 196, 196);
-  border-radius: .5em;
+  border-radius: 0.5em;
   background: none;
   cursor: pointer;
-
-  svg{
-    transition: rotate 150ms ease;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-#toggle-btn:hover{
+
+#toggle-btn svg {
+  transition: rotate 150ms ease;
+  width: 24px;
+  height: 24px;
+}
+
+#toggle-btn:hover {
   background-color: var(--hover-clr);
 }
 
@@ -117,13 +168,6 @@ body{
     display: none;
 }
 
-.sidebar-header {
-  height: 50px;
-  display: flex;
-  align-items: center; /* Align items vertically */
-  justify-content: space-between; /* Keep space between logo and button */
-}
-
 .logo-link a{
   height: fit-content;
   text-decoration: none;
@@ -131,14 +175,29 @@ body{
   margin: 0;
 }
 
-.logo-container img{
-  width: 100%;
+.sidebar-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  box-sizing: border-box;
+  border-bottom: 2px solid var(--line-clr);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
-.sidebar-collapsed .logo-container {
-  opacity: 0; /* Hide logo */
-  width: 0; /* Collapse the space */
-  overflow: hidden;
+.logo-container {
+  width: 200px; /* Prevent logo from stretching */
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  height: 50px;
+  width: auto;
+  max-width: 100%;
+  display: block;
 }
 
 /* Reset styles for all sidebar links */
@@ -165,6 +224,49 @@ body{
   background-color: var(--hover-clr);
   color: #FEFEFE;
   font-weight: bold;
+}
+
+/* ------------- hide the li in default ------------------ */
+
+/* Hide company profile card when sidebar is collapsed */
+#sidebar.close .company-profile-card {
+  display: none;
+}
+/* Default: hide the item */
+.collapsed-only {
+  display: none;
+}
+
+/* Show only when sidebar is collapsed */
+#sidebar.close .collapsed-only {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  border-radius: 5px;
+  font-size: 0;
+  justify-content: center;
+  margin-bottom: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar.close .collapsed-only a{
+  margin-bottom: 0;
+}
+
+#sidebar.close .collapsed-only i {
+  font-size: 18px;
+}
+
+/* Smooth and consistent hover styling */
+#sidebar.close .collapsed-only:hover {
+  background-color: var(--hover-clr);
+  color: #FEFEFE;
+}
+
+/* Optional: adjust icon color on hover if needed */
+#sidebar.close .collapsed-only:hover i {
+  color: #FEFEFE;
 }
 /*--------------------------- sidebar end -----------------------------*/
 
@@ -208,7 +310,7 @@ body{
   background-color: var(--base-clr);
 	display: flex;
   justify-content: flex-end; /* Aligns everything to the right */
-  padding: 15px 60px 15px 0;
+  padding: 15px 60px 15px 60px;
   align-items: center;
   gap: 15px;
   position: relative;
@@ -354,6 +456,7 @@ body{
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 20px;
 }
 
 .related-job-card{
@@ -500,7 +603,7 @@ body{
 	font-size: 13px;
 }
 .day {
-	padding: 5px;
+	padding: 8px;
 	text-align: center;
 	border-radius: 50%;
 	cursor: pointer;
@@ -552,10 +655,6 @@ body{
 	align-items: center;
 	justify-content: center;
 	font-weight: bold;
-}
-
-#currency-list{
-  padding: 10px;
 }
 
 .rate {
@@ -1286,6 +1385,7 @@ dd {
 .company-profile{
   margin-top: 20px;
 }
+
 /*----------------------------------- responsive ---------------------------------- */
 
 @media(max-width: 800px) {

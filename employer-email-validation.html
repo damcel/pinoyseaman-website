@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>dashboard jobs</title>
+    <style>
+    .header-container {
+    background-color: var(--base-clr);
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px 60px 15px 60px;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    border-bottom: 2px solid var(--line-clr);
+}
+
+.dashboard-job-container{
+	background-color: #F2F5FA;
+    box-shadow: none;
+}
+
+.dashboard-card {
+    background-color: #F2F5FA;
+    padding: 0;
+    border-radius: 15px;
+    box-shadow: none;
+}
+
+    .company-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 1em;
+  margin-top: 1rem;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--line-clr);
+}
+
+.company-logo-placeholder img{
+  width: 200px;
+  height: 100px;
+  object-fit: fill;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.company-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #0B1C33;
+  text-align: center;
+}
+
+.create-job-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-job-btn:hover {
+  background-color: #0056b3;
+}
+
+.dashboard-card.center {
+  align-items: center;
+  text-align: center;
+}
+.domain-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+.domain-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.domain-card-header h2 {
+  font-size: 1.5rem;
+  color: #0B1C33;
+  margin: 0;
+}
+
+.domain-description {
+  flex: 1 1 100%;
+  font-size: 0.95rem;
+  color: #333;
+  margin: 10px 0;
+}
+
+.add-domain-btn {
+  background-color: white;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  align-self: flex-start;
+  transition: 0.3s;
+}
+
+.add-domain-btn:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.domain-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #f8f9fb;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.domain-icon {
+  width: 100px;
+  margin-bottom: 20px;
+  filter: invert(35%) sepia(94%) saturate(738%) hue-rotate(188deg) brightness(96%) contrast(92%);
+}
+
+.no-domain {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #0B1C33;
+  margin-bottom: 8px;
+}
+
+.domain-subtext {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.email-header {
+  background-color: #ffffff;
+  padding: 18px 24px;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  margin-bottom: 16px;
+}
+
+.back-arrow {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: #000;
+}
+
+.back-arrow:hover {
+  color: #007bff;
+}
+
+.reminders-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  margin-right: auto;
+  background: rgba(230, 225, 225, 0.6); /* Soft light grey with slight transparency */
+  width: 320px;
+  height: 36px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  backdrop-filter: blur(4px); /* Optional: soft blur */
+  box-sizing: border-box;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  padding: 0 10px;
+}
+
+.search-btn {
+  background-color: #ef4444; /* Red */
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight depth */
+  margin-right: 10px;
+}
+
+
+    </style>
+</head>
+<body>
+  <aside id="sidebar">
+    <nav class="sidebar-nav">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <a href="dashboardjobs.html" class="logo-link">
+                    <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                </a>
+            </div>
+            <button onclick="toggleSidebar()" id="toggle-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                    <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                </svg>
+            </button>
+        </div>
+        <ul class="ul-links">
+            <div class="company-card">
+                <div class="company-logo-placeholder">
+                    <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+                </div>
+                <h3 class="company-name">Company Name</h3>
+                <button class="create-job-btn">+ Create Job</button>
+            </div>
+          <li>
+            <a href="employer-dashboard.html">
+              <!-- SVG Icon -->
+              <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
+            </a>
+          </li>
+          <li class="separator">
+            <a href="employer-posting.html">
+              <!-- SVG Icon -->
+              <i class="fa-regular fa-user"></i><span>Job Post</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <!-- SVG Icon -->
+              <i class="fa-solid fa-business-time"></i><span>Analytics</span>
+            </a>
+          </li>
+          <li class="separator">
+            <a href="#">
+              <!-- SVG Icon -->
+              <i class="fa-regular fa-building"></i><span>Advertise</span>
+            </a>
+          </li>
+        </ul>
+    </nav>
+</aside>
+    
+    <main class="dashboard-container">
+        <section class="header-container">
+            <!-- New Search Container -->
+            <div class="search-bar-container">
+              <input type="text" placeholder="Search..." class="search-input" disabled />
+              <button class="search-btn">
+                <i class="fa-solid fa-q"></i>
+              </button>
+            </div>
+          
+            <!-- Your existing saved and profile dropdown (unchanged) -->
+            <div class="saved-ctn">
+              <a href="saved.html" class="saved-btn">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </a>
+            </div>
+            <div class="dropdown-container">
+              <button class="profile-btn" id="dpBtn">DP</button>
+              <div class="dropdown" id="dropdownMenu">
+                <a href="#" class="prfl">Profile Settings</a>
+                <a href="index.html">Logout</a>
+              </div>
+            </div>
+          </section>
+          
+          <section class="job-list-container">
+            <div class="job-search-container">
+              <section class="dashboard-job-container">
+
+                <div class="email-header">
+                    <a href="employer-dashboard.html" class="back-arrow">&#8592;</a>
+                    <span class="header-title">Email validation (Domain)</span>
+                </div>
+                  
+                  <div class="reminders-container">
+                    (Reminders container)
+                  </div>
+                  
+                <div class="dashboard-card">
+                  <div class="domain-card">
+                    <div class="domain-card-header">
+                      <h2>Domains for job posting access</h2>
+                      <p class="domain-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                      <button class="add-domain-btn">+ Add domain</button>
+                    </div>
+          
+                    <div class="domain-empty">
+                      <img src="icons/document-img.png" alt="Document Icon" class="domain-icon">
+                      <p class="no-domain">No domain added</p>
+                      <p class="domain-subtext">Add a valid email domain to turn on verifications<br>for authorized members.</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>    
+        
+    </main>
+    
+    <script src="script/sidenav.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+</body>
+</html>

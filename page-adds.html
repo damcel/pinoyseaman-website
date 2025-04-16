@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>dashboard jobs</title>
+    <style>
+
+.company-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 1em;
+  margin-top: 1rem;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--line-clr);
+}
+
+.company-logo-placeholder img{
+  width: 200px;
+  height: 100px;
+  object-fit: fill;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.company-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #0B1C33;
+  text-align: center;
+}
+
+.create-job-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-job-btn:hover {
+  background-color: #0056b3;
+}
+
+    ul{
+        margin-bottom: 0;
+    }
+
+    .job-posting-container{
+        background-color: var(--base-clr);
+        padding: 15px;
+        display: flex;
+        flex-wrap: wrap; 
+        border-radius: 8px;
+        box-shadow: 0 4px 4px rgba(43, 43, 43, 0.1);
+    }
+
+    .post-header h2 {
+        font-size: 1.5rem;
+    }
+
+.subtext {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.tab-list {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  padding-left: 0;
+  border-bottom: 2px solid #eee;
+}
+
+.tab-list a{
+    text-decoration: none;
+    color: black;
+}
+
+.tab-list li {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.active-tab {
+  border-bottom: 2px solid #0072ff;
+  font-weight: 600;
+}
+
+.create-post-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.post-input-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background: #ccc;
+  border-radius: 50%;
+}
+
+.post-input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.post-options {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
+}
+
+.post-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cta-card {
+  background: #f7faff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 12px;
+  align-items: center;
+}
+
+.cta-button {
+  background: #0a66c2;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.post-sidebar {
+  flex: 2;
+}
+
+.highlight-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.highlight-img {
+  width: 80px;
+  margin: 10px 0;
+}
+
+.highlight-empty {
+  font-weight: 600;
+}
+
+/* -------------------- ADS --------------------------*/
+.page-ads-wrapper {
+  background-color: #f4f7fa;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  padding: 10px;
+}
+
+.ads-header {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.page-dropdown-btn {
+  background-color: #0072ff;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-dropdown-btn .arrow {
+  font-size: 12px;
+}
+
+#pageDropdownMenu {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 260px;
+  padding: 16px;
+  display: none;
+  z-index: 999;
+}
+
+#pageDropdownMenu form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dropdown-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.cancel-btn {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.result-btn {
+  background-color: #0072ff;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.result-btn:hover {
+  background-color: #005fd1;
+}
+
+.no-ads-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.ads-illustration {
+  width: 160px;
+  margin-bottom: 20px;
+}
+
+.ads-subtext {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.boost-button {
+  background-color: transparent;
+  color: #0072ff;
+  border: 2px solid #0072ff;
+  padding: 8px 18px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.boost-button:hover {
+  background-color: #0072ff;
+  color: #fff;
+}
+
+/* -------------------- ADS END--------------------------*/
+
+/* ------------------- search button ---------------------------*/
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  margin-right: auto;
+  background: rgba(230, 225, 225, 0.6); /* Soft light grey with slight transparency */
+  width: 320px;
+  height: 36px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  backdrop-filter: blur(4px); /* Optional: soft blur */
+  box-sizing: border-box;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  padding: 0 10px;
+}
+
+.search-btn {
+  background-color: #ef4444; /* Red */
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight depth */
+  margin-right: 10px;
+}
+
+/* ------------------- search button end---------------------------*/
+
+.page-footer {
+  margin-top: 30px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding-left: 0;
+  margin-bottom: 10px;
+}
+
+.footer-branding {
+  font-size: 0.8rem;
+  color: #666;
+}
+    </style>
+</head>
+<body>
+    <aside id="sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <button onclick="toggleSidebar()" id="toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul class="ul-links">
+                <div class="company-card">
+                    <div class="company-logo-placeholder">
+                        <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+                    </div>
+                    <h3 class="company-name">Company Name</h3>
+                    <button class="create-job-btn">+ Create Job</button>
+                </div>
+              <li>
+                <a href="employer-dashboard.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="employer-posting.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Job Post</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="#">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-building"></i><span>Advertise</span>
+                </a>
+              </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <main class="dashboard-container">
+        <section class="header-container">
+            <!-- New Search Container -->
+            <div class="search-bar-container">
+                <input type="text" placeholder="Search..." class="search-input" disabled />
+                <button class="search-btn">
+                  <i class="fa-solid fa-q"></i>
+                </button>
+              </div>
+
+            <div class="saved-ctn">
+                <a href="saved.html" class="saved-btn">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </a>
+            </div>
+            <div class="dropdown-container">
+                <button class="profile-btn" id="dpBtn">DP</button>
+                <!-- Dropdown Menu -->
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="#" class="prfl">Profile Settings</a>
+                    <a href="index.html">Logout</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="job-list-container">
+            <div class="job-search-container">
+                <section class="job-posting-container">
+                    <!-- Header Tabs -->
+                   <div class="post-header">
+                       <h2>Job posts</h2>
+                       <p class="subtext">Manage your page’s organic and paid content</p>
+                       <ul class="tab-list">
+                       <li><a href="employer-posting.html">Published</a></li>
+                       <li class="active-tab"><a href="page-adds.html">Page ads</a></li>
+                       </ul>
+                   </div>
+               </section>
+
+                <section class="dashboard-job-container">
+                    <div class="page-ads-wrapper">
+                        <!-- Dropdown -->
+                        <div class="ads-header">
+                            <button class="page-dropdown-btn" onclick="togglePageDropdown()">Page <span class="arrow">&#9662;</span></button>
+                          
+                            <div class="dropdown-menu" id="pageDropdownMenu" style="display: none;">
+                              <form>
+                                <label class="dropdown-option">
+                                  <input type="radio" name="adType" checked />
+                                  <span>Page</span>
+                                </label>
+                                <label class="dropdown-option">
+                                  <input type="radio" name="adType" />
+                                  <span>Campaign Manager</span>
+                                </label>
+                          
+                                <div class="dropdown-actions">
+                                  <button type="button" class="cancel-btn" onclick="togglePageDropdown()">Cancel</button>
+                                  <button type="submit" class="result-btn">Show result</button>
+                                </div>
+                              </form>
+                            </div>
+                        </div>
+                    
+                        <!-- Empty State -->
+                        <div class="no-ads-content">
+                          <img
+                            class="ads-illustration"
+                            src="https://img.icons8.com/external-flaticons-flat-flat-icons/120/000000/external-meeting-resume-flaticons-flat-flat-icons.png"
+                            alt="No ads illustration"
+                          />
+                          <h3>There are no page ads</h3>
+                          <p class="ads-subtext">
+                            Boost your job posting to extend your reach through an advertising campaign
+                          </p>
+                          <button class="boost-button">Boost a post</button>
+                        </div>
+                      </div>
+                </section>
+
+                <section class="dashboard-job-container">
+                    <!-- Call to Action Box -->
+                    <div class="cta-card">
+                        <div class="cta-text">
+                        <h4>Post quickly, hire smarter.</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
+                        <button class="cta-button">Post a Job today</button>
+                        </div>
+                        <div class="cta-image">
+                        <img src="https://img.icons8.com/color/96/megaphone.png" alt="Megaphone" />
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="currency-date-aside">
+                <aside class="currency-container">
+                    <div class="highlight-box">
+                        <h5>Post highlights</h5>
+                        <p class="subtext">In the last 30 days</p>
+                        <img class="highlight-img" src="https://img.icons8.com/office/80/laptop.png" alt="No highlights" />
+                        <p class="highlight-empty">No highlights</p>
+                        <p class="highlight-sub">No recent post to highlight.</p>
+                      </div>
+                </aside>
+                <aside class="calendar-container">
+                    <!-- Footer Section -->
+                    <footer class="page-footer">
+                        <ul class="footer-links">
+                        <li>About us</li>
+                        <li>Our Story</li>
+                        <li>Privacy & Terms</li>
+                        <li>Advertise</li>
+                        <li>Ad Choices</li>
+                        <li>Get in Touch</li>
+                        </ul>
+                        <p class="footer-branding">
+                        <strong style="color: #0072ff;">PINOYSEAMAN</strong> pinoyseaman.com © 2025
+                        </p>
+                    </footer>
+                </aside>
+
+            </div>
+        </section>
+
+    </main>
+    
+    <script>
+        function togglePageDropdown() {
+          const menu = document.getElementById("pageDropdownMenu");
+          menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+      
+        document.addEventListener("click", function (e) {
+          const dropdown = document.getElementById("pageDropdownMenu");
+          const button = document.querySelector(".page-dropdown-btn");
+          if (dropdown && !dropdown.contains(e.target) && !button.contains(e.target)) {
+            dropdown.style.display = "none";
+          }
+        });
+    </script>
+
+    <script src="script/sidenav.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+</body>
+</html>

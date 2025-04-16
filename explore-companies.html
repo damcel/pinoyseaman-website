@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Explore Companies</title>
+    <style>
+        .company-header {
+        background-color: #0f1128;
+        padding: 40px;
+        border-radius: 25px;
+        max-width: 1100px;
+        margin: 40px auto;
+        color: white;
+        font-family: 'Arial', sans-serif;
+        }
+
+        .company-header-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 150px;
+        }
+
+        .text-content {
+        max-width: 550px;
+        }
+
+        .text-content h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        }
+
+        .text-content p {
+        font-size: 16px;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        }
+
+        .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        max-width: 450px;
+        }
+
+        .search-box input {
+        border: none;
+        padding: 12px 16px;
+        width: 100%;
+        font-size: 14px;
+        outline: none;
+        }
+
+        .search-box button {
+        background-color: #f04f56;
+        border: none;
+        padding: 12px 16px;
+        cursor: pointer;
+        }
+
+        .search-box i {
+        color: white;
+        font-size: 16px;
+        }
+
+        .image-content img {
+        max-width: 400px;
+        height: auto;
+        }
+
+        /* ------------------------ company perks ------------------------------ */
+        .company-perks {
+        text-align: center;
+        padding: 60px 20px;
+        font-family: 'Arial', sans-serif;
+        }
+
+        .company-perks h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2c2f44;
+        margin-bottom: 50px;
+        }
+
+        .perks-grid {
+        display: flex;
+        justify-content: center;
+        gap: 80px;
+        flex-wrap: wrap;
+        }
+
+        .perk-item {
+        max-width: 220px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+        .perk-item img {
+        width: 200px;
+        height: auto;
+        margin-bottom: 20px;
+        }
+
+        .perk-text {
+        text-align: center;
+        }
+
+        .perk-subtext {
+        font-size: 15px;
+        color: #000;
+        margin: 0 0 8px;
+        height: 40px; /* Fixed height to align images */
+        }
+
+        .perk-item h3 {
+        font-size: 17px;
+        font-weight: 600;
+        color: #000;
+        margin: 0;
+        }
+
+        .company-card-rating {
+        padding: 10px;
+        }
+
+        .company-card-rating h3 {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 10px 0 8px;
+        color: #000;
+        }
+
+        .rating-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5px;
+        }
+
+        .star {
+        color: #1f2b7b;
+        font-size: 18px;
+        margin-right: 4px;
+        }
+
+        .rating-value {
+        font-size: 16px;
+        color: #000;
+        }
+
+        .review-count {
+        font-size: 15px;
+        color: #000;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="nav-left">
+                <div class="logo-container">
+                    <a href="index.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="job_search.html">Jobs</a></li>
+                    <li><a href="#">Explore Companies</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="start.html" class="login-btn">Login</a></li>
+                    <li><a href="start.html" class="signup-btn">Sign up</a></li>
+                </ul>
+            </div>
+
+             <!-- Moved Buttons Inside nav-links -->
+             <div class="buttons">
+                <a href="start.html" class="login-btn">Login</a>
+                <a href="start.html" class="signup-btn">Sign up</a>
+            </div>
+    
+            <!-- Burger Menu Button -->
+            <div class="burger-menu" onclick="toggleMenu()">
+                &#9776; <!-- Unicode for the burger icon -->
+            </div>
+        </nav>
+    </header>
+    
+<main>
+
+    <section class="company-header">
+        <div class="company-header-container">
+            <div class="text-content">
+              <h1>Find the right company for you</h1>
+              <p>Everything you need to know about a company,<br> all in one place</p>
+              <div class="search-box">
+                <input type="text" placeholder="Search by company name" />
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+              </div>
+            </div>
+            <div class="image-content">
+              <img src="images/group.png" alt="Team illustration" />
+            </div>
+          </div>
+    </section>
+
+    <section>
+        <div class="company-title-card">
+            <h2>Companies</h2>
+            <p>
+                Join us and connect with top talent effortlessly. Post jobs, 
+                find skilled crew members, and streamline your hiring process. 
+                all in one place!
+            </p>
+        </div>
+    
+        <div class="slider-wrapper">
+            <button id="prevBtn" class="slider-btn">&#10094;</button>
+    
+            <div class="company-container">
+                <div class="company-track">
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-rating">
+                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
+                            <div class="rating-section">
+                              <span class="star">★</span>
+                              <span class="rating-value">4.6</span>
+                            </div>
+                            <p class="review-count">100 Reviews</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-rating">
+                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
+                            <div class="rating-section">
+                              <span class="star">★</span>
+                              <span class="rating-value">4.6</span>
+                            </div>
+                            <p class="review-count">100 Reviews</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-rating">
+                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
+                            <div class="rating-section">
+                              <span class="star">★</span>
+                              <span class="rating-value">4.6</span>
+                            </div>
+                            <p class="review-count">100 Reviews</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-rating">
+                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
+                            <div class="rating-section">
+                              <span class="star">★</span>
+                              <span class="rating-value">4.6</span>
+                            </div>
+                            <p class="review-count">100 Reviews</p>
+                        </div>
+                    </div>
+    
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-rating">
+                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
+                            <div class="rating-section">
+                              <span class="star">★</span>
+                              <span class="rating-value">4.6</span>
+                            </div>
+                            <p class="review-count">100 Reviews</p>
+                        </div>
+                    </div>
+
+                    <div class="company-card">
+                        <div class="employer-profile-container">
+                            <img src="company-logo/marsa.jpg" alt="Company image">
+                        </div>
+                        <div class="company-card-rating">
+                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
+                            <div class="rating-section">
+                              <span class="star">★</span>
+                              <span class="rating-value">4.6</span>
+                            </div>
+                            <p class="review-count">100 Reviews</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <button id="nextBtn" class="slider-btn">&#10095;</button>
+        </div>
+    </section>
+
+    <section class="company-perks">
+        <h2>Get to know your future company before you apply</h2>
+        <div class="perks-grid">
+          <div class="perk-item">
+            <p class="perk-subtext">Find out about the company culture</p>
+            <img src="images/achievement-img.png" alt="Culture and values icon" />
+            <h3>Culture and values</h3>
+          </div>
+          <div class="perk-item">
+            <p class="perk-subtext">Read reviews from employees</p>
+            <img src="images/heart-img.png" alt="Ratings and reviews icon" />
+            <h3>Ratings and reviews</h3>
+          </div>
+          <div class="perk-item">
+            <p class="perk-subtext">Find perks that matter to you</p>
+            <img src="images/rate-img.png" alt="Perks and benefits icon" />
+            <h3>Perks and benefits</h3>
+          </div>
+        </div>
+    </section>
+
+</main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section brand">
+                <img src="pinoyseaman-logo/alternativeHeaderLogo.png" alt="footer-logo">
+                <p>© 2023 pinoyseaman. All rights reserved.</p>
+            </div>
+            <div class="footer-section contact">
+                <h3>Get in Touch</h3>
+                <p>Emilia Str, Makati City</p>
+                <p>filoseaman@gmail.com</p>
+                <p>Phone number: (123) 456 78 90</p>
+            </div>
+            <div class="footer-section links">
+                <h3>Learn More</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+            </div>
+            <div class="footer-section links">
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Advertise</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>   
+    <script src="script/company-arrow.js"></script>
+    <script src="script/nav-hover-effect.js"></script>
+</body>
+</html>

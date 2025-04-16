@@ -14,7 +14,6 @@ h1, p {
     margin: 0;
 }
 
-
 header {
     background-color: #101327;
     color: #fff;
@@ -1299,6 +1298,8 @@ figcaption {
 
 .seafarer-box,
 .employer-box {
+    position: relative; /* important for absolute positioning inside */
+    justify-content: center; /* Center content horizontally */
     display: flex;
     align-items: center;
     width: 360px;
@@ -1325,18 +1326,20 @@ figcaption {
 
 .seafarer-box a{
     inset: 0; 
+    position: absolute;
     display: flex;
     gap: 20px;
-    padding: 0;
+    padding: 35px 0 35px 0;
     margin-left: 50px;
     color: #0044cc; 
 }
 
 .employer-box a{
     inset: 0; 
+    position: absolute;
     display: flex;
     gap: 20px;
-    padding: 0;
+    padding: 35px 0 35px 0;
     margin-left: 50px;
     color: #E63639; 
 }
@@ -1356,10 +1359,14 @@ figcaption {
 
 .seafarer-box:hover {
     background-color: #cce0ff;
+    border-left: 6px solid #0066ff; /* brighter blue */
+    border-right: 6px solid #0066ff;
 }
 
 .employer-box:hover {
     background-color: #ffcccc;
+    border-left: 6px solid #ff0000; /* brighter red */
+    border-right: 6px solid #ff0000;
 }
 
 .back{
@@ -1412,6 +1419,7 @@ figcaption {
 /*------------------------- login-signup END --------------------*/
 
 /*------------------------- footer --------------------*/
+
 footer {
     background-color: #1e2125; /* Dark background */
     color: #ffffff; /* White text */
@@ -1432,20 +1440,6 @@ footer {
 .footer-section {
     flex: 1;
     min-width: 200px;
-}
-
-.brand h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.brand span {
-    color: red; /* Highlighted text */
-}
-
-.brand p {
-    font-size: 14px;
 }
 
 .footer-section h3 {
@@ -1469,6 +1463,28 @@ footer {
 
 .footer-section ul li a:hover {
     text-decoration: underline;
+}
+
+.footer-section img{
+    width: 50%;
+}
+
+.brand{
+    margin-top: 18px;
+}
+
+.brand h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.brand span {
+    color: red; /* Highlighted text */
+}
+
+.brand p {
+    font-size: 14px;
 }
 /*------------------------- footer END --------------------*/
 

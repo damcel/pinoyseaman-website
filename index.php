@@ -51,7 +51,7 @@
                         <h1>Registration Form</h1>
                     </div>
                     <div>
-                        <form>
+                        <form action="includes/seaman_init_reg.php" method="POST" class="form-container">
                             <div class="user-card">
                                 <div class="input-fname">
                                     <label for="firstname">Firstname</label>
@@ -100,8 +100,8 @@
                             </div>
     
                             <div class="checkbox-container">
-                                <input type="checkbox" id="employer" name="employer">
-                                <label for="employer">Allow Employer to view my profile and include me on manual job search.</label>
+                                <input type="checkbox" id="view" name="view">
+                                <label for="view">Allow Employer to view my profile and include me on manual job search.</label>
                             </div>
     
                             <div class="btn-create">

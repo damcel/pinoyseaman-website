@@ -200,6 +200,61 @@
                 all in one place!
             </p>
         </div>
+
+        <div class="slider-wrapper">
+            <button id="prevBtn" class="slider-btn">&#10094;</button>
+
+            <div class="company-container">
+                <div class="company-track">
+                    <?php
+                    // Include the database connection file
+                    include 'db.php';
+
+                    // Query to get all featured companies
+                    $sql = "SELECT fc.company_code, e.company, e.company_profile, cl.logo_url
+                            FROM featured_companies fc
+                            INNER JOIN employer e ON fc.company_code = e.company_code
+                            INNER JOIN company_logo cl ON e.company_code = cl.company_code
+                            WHERE e.verify = 'y'";
+                    $result = $conn->query($sql);
+
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $company_name = $row['company'];
+                            $company_profile = $row['company_profile'];
+                            $company_code = $row['company_code'];
+                            $logo_url = $row['logo_url'];
+                            ?>
+                            <div class="company-card">
+                                <div class="employer-profile-container">
+                                    <img src="<?php echo htmlspecialchars($logo_url); ?>" alt="Company image">
+                                </div>
+                                <div class="company-card-content">
+                                    <h3><strong><?php echo htmlspecialchars($company_name); ?></strong></h3>
+                                    <p><?php echo htmlspecialchars($company_profile) ?></p>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        echo "<p>No featured companies available at the moment.</p>";
+                    }
+                    ?>
+                </div>
+            </div>
+            <button id="nextBtn" class="slider-btn">&#10095;</button>
+        </div>
+    </section>
+
+    <!-- <section>
+        <div class="company-title-card">
+            <h2>Companies</h2>
+            <p>
+                Join us and connect with top talent effortlessly. Post jobs, 
+                find skilled crew members, and streamline your hiring process. 
+                all in one place!
+            </p>
+        </div>
     
         <div class="slider-wrapper">
             <button id="prevBtn" class="slider-btn">&#10094;</button>
@@ -287,7 +342,7 @@
             </div>
             <button id="nextBtn" class="slider-btn">&#10095;</button>
         </div>
-    </section>
+    </section> -->
     
     <section class="job-section">
         <div class="company-title-card">

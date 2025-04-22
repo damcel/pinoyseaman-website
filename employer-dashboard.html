@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <title>dashboard jobs</title>
+    <style>
+    .header-container {
+    background-color: var(--base-clr);
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px 60px 15px 60px;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    border-bottom: 2px solid var(--line-clr);
+}
+
+  .company-profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 5px;
+  margin-top: 1rem;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  border: 1px solid var(--line-clr);
+}
+
+.company-logo-placeholder img{
+  width: 200px;
+  height: 100px;
+  object-fit: fill;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.company-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #0B1C33;
+  text-align: center;
+}
+
+.create-job-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-job-btn:hover {
+  background-color: #0056b3;
+}
+
+.dashboard-card {
+  background-color: rgb(244, 242, 242);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-card.center {
+  align-items: center;
+  text-align: center;
+}
+
+.task-item {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.task-info a {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.close-task {
+  background: none;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.primary-btn {
+  width: 20%;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.primary-btn:hover {
+  background-color: #0056b3;
+}
+
+.post-icon {
+  width: 80px;
+  margin: 10px 0;
+}
+
+.stats-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 100px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.stat-box strong {
+  font-size: 22px;
+  color: #000;
+}
+
+.stat-box span {
+  font-size: 12px;
+  display: block;
+  margin-top: 5px;
+}
+
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}
+
+.neutral {
+  color: gray;
+}
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  margin-right: auto;
+  background: rgba(230, 225, 225, 0.6); /* Soft light grey with slight transparency */
+  width: 320px;
+  height: 36px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  backdrop-filter: blur(4px); /* Optional: soft blur */
+  box-sizing: border-box;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  padding: 0 10px;
+}
+
+.search-btn {
+  background-color: #ef4444; /* Red */
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight depth */
+  margin-right: 10px;
+}
+
+    </style>
+</head>
+<body>
+    <aside id="sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <button onclick="toggleSidebar()" id="toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul class="ul-links">
+                <div class="company-profile-card">
+                    <div class="company-logo-placeholder">
+                        <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+                    </div>
+                    <h3 class="company-name">Company Name</h3>
+                    <button class="create-job-btn">+ Create Job</button>
+                </div>
+                <li class="collapsed-only">
+                  <a href="#">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Create Job</span>
+                  </a>
+                </li>
+              <li>
+                <a href="employer-dashboard.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="employer-posting.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Job Post</span>
+                </a>
+              </li>
+              <li>
+                <a href="employer-analytics.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="#">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-building"></i><span>Advertise</span>
+                </a>
+              </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <main class="dashboard-container">
+        <section class="header-container">
+            <!-- New Search Container -->
+            <div class="search-bar-container">
+              <input type="text" placeholder="Search..." class="search-input" disabled />
+              <button class="search-btn">
+                <i class="fa-solid fa-q"></i>
+              </button>
+            </div>
+          
+            <!-- Your existing saved and profile dropdown (unchanged) -->
+            <div class="saved-ctn">
+              <a href="saved.html" class="saved-btn">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </a>
+            </div>
+            <div class="dropdown-container">
+              <button class="profile-btn" id="dpBtn">DP</button>
+              <div class="dropdown" id="dropdownMenu">
+                <a href="#" class="prfl">Profile Settings</a>
+                <a href="index.html">Logout</a>
+              </div>
+            </div>
+          </section>
+          
+
+        <section class="job-list-container">
+            <div class="job-search-container">
+              <section class="dashboard-job-container">
+          
+                <!-- Task for today section -->
+                <div class="dashboard-card">
+                  <h3>Task for today</h3>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          
+                  <div class="task-item">
+                    <div class="task-info">
+                      <strong>Add a valid email domain</strong>
+                      <span>Protect your brand on pinoyseaman by adding a valid email domain. <a href="employer-email-validation.html">Add</a></span>
+                    </div>
+                    <button class="close-task">X</button>
+                  </div>
+          
+                  <div class="task-item">
+                    <div class="task-info">
+                      <strong>Post a free job</strong>
+                      <span>Post a job in minutes and reach more qualified applicants. <a href="employer-jobpost.html">Post free job</a></span>
+                    </div>
+                    <button class="close-task">X</button>
+                  </div>
+                </div>
+          
+                <!-- Manage recent posts -->
+                <div class="dashboard-card center">
+                  <h3>Manage recent posts</h3>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                  <img src="icons/document-img.png" alt="" class="document-img" />
+                  <h4>Your page doesn’t have any post from the last 30 days</h4>
+                  <span>Pages that post 2x a week grow 5x faster</span>
+                  <button class="primary-btn">+ Start a post today</button>
+                </div>
+          
+                <!-- Post quickly -->
+                <div class="dashboard-card">
+                  <h3>Post quickly, hire smarter.</h3>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
+                  <button class="primary-btn">Post a Job today</button>
+                </div>
+          
+                <!-- Performance Tracker -->
+                <div class="dashboard-card">
+                  <h3>Performance Tracker</h3>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                  <div class="stats-container">
+                    <div class="stat-box">
+                      <strong>100</strong>
+                      <p>Search appearance<br><span class="positive">+100% last 7 days</span></p>
+                    </div>
+                    <div class="stat-box">
+                      <strong>0</strong>
+                      <p>Applicants<br><span class="neutral">0% last 7 days</span></p>
+                    </div>
+                    <div class="stat-box">
+                      <strong>0</strong>
+                      <p>Post Impression<br><span class="negative">-100% last 7 days</span></p>
+                    </div>
+                    <div class="stat-box">
+                      <strong>100</strong>
+                      <p>Job post visitors<br><span class="positive">+100% last 7 days</span></p>
+                    </div>
+                  </div>
+                </div>
+          
+              </section>
+            </div>
+          </section>          
+
+    </main>
+    
+    <script src="script/sidenav.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+</body>
+</html>

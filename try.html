@@ -91,7 +91,7 @@
                 <section class="job-posting-container">
 
                     <!-- Create New Jobs Card -->
-                    <button class="display-card create-job open-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#jobPostModal">
+                    <button class="display-card create-job open-modal-btn" type="button">
                         <div class="icon white"><i class="fa-solid fa-plus"></i></div>
                         <div class="text">
                             <div class="title white">POST NEW</div>
@@ -140,17 +140,19 @@
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 
                         <div class="task-item">
-                          <div class="task-info">
-                              <strong>Add a valid email domain</strong>
-                              <span>Protect your brand on pinoyseaman by adding a valid email domain. <a href="employer-email-validation.html">Add</a></span>
-                          </div>
+                        <div class="task-info">
+                            <strong>Add a valid email domain</strong>
+                            <span>Protect your brand on pinoyseaman by adding a valid email domain. <a href="employer-email-validation.html">Add</a></span>
+                        </div>
+                        <button class="close-task">X</button>
                         </div>
                 
                         <div class="task-item">
-                          <div class="task-info">
-                              <strong>Post a free job</strong>
-                              <span>Post a job in minutes and reach more qualified applicants. <a href="employer-jobpost.html">Post free job</a></span>
-                          </div>
+                        <div class="task-info">
+                            <strong>Post a free job</strong>
+                            <span>Post a job in minutes and reach more qualified applicants. <a href="employer-jobpost.html">Post free job</a></span>
+                        </div>
+                        <button class="close-task">X</button>
                         </div>
                     </div>
                 
@@ -258,7 +260,7 @@
                     <h2 class="job-post-h2">Recent Job Posted</h2>
                     <div class="job-item">
                         <div class="job-information">
-                            <p class="employer-post-job-title">Tanker</p>
+                            <p class="job-title">Tanker</p>
                             <button class="job-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-recent-job"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
                         <div class="job-meta">
@@ -269,7 +271,7 @@
                 
                     <div class="job-item">
                         <div class="job-information">
-                            <p class="employer-post-job-title">Chief Cook</p>
+                            <p class="job-title">Chief Cook</p>
                             <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
                         <div class="job-meta">
@@ -280,7 +282,7 @@
                 
                     <div class="job-item">
                         <div class="job-information">
-                            <p class="employer-post-job-title">Bosun</p>
+                            <p class="job-title">Bosun</p>
                             <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
                         <div class="job-meta">
@@ -291,7 +293,7 @@
                 
                     <div class="job-item">
                         <div class="job-information">
-                            <p class="employer-post-job-title">Chief Engineer</p>
+                            <p class="job-title">Chief Engineer</p>
                             <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
                         <div class="job-meta">
@@ -300,7 +302,8 @@
                         </div>
                     </div>
                 </aside>
-                                             
+                                
+                  
                 <aside class="calendar-container">
                     <!-- Footer Section -->
                     <footer class="page-footer">
@@ -326,42 +329,40 @@
 
     </main>
 
-    <!------------------- Show user applicant profile ------------------------>
-    <section class="modal fade" id="applicantModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal -->
+    <div class="modal fade" id="applicantModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Applicant Information</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- Add this inside the modal-body -->
-                    <section class="modal-profile-card">
-                        <div class="user-profile-header">
-                            <div class="profile-pic">
-                                <img src="company-logo/german.jpg" alt="">
-                            </div>
-                            <div class="user-profile-details">
-                                <h3>Juan Dela Cruz</h3>
-                            
-                                <div class="info-pair">
-                                <p class="text-muted">Rank:</p>
-                                <label>Cadet</label>
-                                </div>
-                            
-                                <div class="info-pair">
-                                <p class="text-muted">Vessel:</p>
-                                <label>Vessel type</label>
-                                </div>
-                            
-                                <span class="requirements-badge">
-                                Complete Requirements <span class="info-icon">✔</span>
-                                </span>
+                    <div class="modal-profile-card">
+                        <div class="profile-header">
+                        <div class="profile-pic"></div>
+                        <div class="user-profile-details">
+                            <h3>Juan Dela Cruz</h3>
+                          
+                            <div class="info-pair">
+                              <p class="text-muted">Rank:</p>
+                              <label>Cadet</label>
                             </div>
                           
-                            <button type="button" class="btn btn-secondary contact-btn" id="contactPopoverBtn">
-                                Contact
-                            </button>
+                            <div class="info-pair">
+                              <p class="text-muted">Vessel:</p>
+                              <label>Vessel type</label>
+                            </div>
+                          
+                            <span class="requirements-badge">
+                              Complete Requirements <span class="info-icon">✔</span>
+                            </span>
+                          </div>
+                          
+                          <button type="button" class="btn btn-secondary contact-btn" id="contactPopoverBtn">
+                            Contact
+                        </button>
                         </div>
                     
                         <section class="education-section">
@@ -389,7 +390,8 @@
                                                 <div class="attachment-content">
                                                     <span>taengbinasateasdasda</span>
                                                     <div class="attachment-icons">
-                                                        <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></i></a>
+                                                        <a href="#"><i class="fa-solid fa-cloud-arrow-down"></i></a>
+                                                        <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -399,228 +401,56 @@
                                </div>
                         </section>               
                     
-                        <section class="experience-section">
-                            <div>
-                                <h5>Seafaring Experience</h5>
-                                <p>Cadetship</p>
-                                <small>Mar 2025 – Apr 2025</small>
-                            </div>
-                            <div>
-                                <h5>Land-Based Work Experience</h5>
-                                <p>Cadetship</p>
-                                <small>Mar 2025 – Apr 2025</small>
-                            </div>
-                        </section>
+                        <div class="experience-section">
+                        <div>
+                            <h5>Seafaring Experience</h5>
+                            <p>Cadetship</p>
+                            <small>Mar 2025 – Apr 2025</small>
+                        </div>
+                        <div>
+                            <h5>Land-Based Work Experience</h5>
+                            <p>Cadetship</p>
+                            <small>Mar 2025 – Apr 2025</small>
+                        </div>
+                        </div>
                     
-                        <section class="documents-grid">
-                            <div class="document-item">
-                              <strong>Seaman Book</strong><br>
-                              <small>SeamanBook.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/SeamanBook.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Competence</strong><br>
-                              <small>Competence.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/Competence.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Visas</strong><br>
-                              <small>SeamanVisa.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/SeamanVisa.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Certificate</strong><br>
-                              <small>Certificate.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/Certificate.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Passport</strong><br>
-                              <small>SeamanPassport.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/SeamanPassport.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Merits</strong><br>
-                              <small>Merits.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/Merits.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                        </section>                          
-                    </section>
+                        <div class="documents-grid">
+                        <div><strong>Seaman Book</strong><br><small>SeamanBook.pdf</small> <span class="download-icon"><i class="fa-solid fa-download" style="color: red; margin-left: 6px;"></i></span></div>
+                        <div><strong>Competence</strong><br><small>Competence.pdf</small> <span class="download-icon"><i class="fa-solid fa-download" style="color: red; margin-left: 6px;"></i></span></div>
+                        <div><strong>Visas</strong><br><small>SeamanVisa.pdf</small> <span class="download-icon"><i class="fa-solid fa-download" style="color: red; margin-left: 6px;"></i></span></div>
+                        <div><strong>Certificate</strong><br><small>Certificate.pdf</small> <span class="download-icon"><i class="fa-solid fa-download" style="color: red; margin-left: 6px;"></i></span></div>
+                        <div><strong>Passport</strong><br><small>SeamanPassport.pdf</small> <span class="download-icon"><i class="fa-solid fa-download" style="color: red; margin-left: 6px;"></i></span></div>
+                        <div><strong>Merits</strong><br><small>Merits.pdf</small> <span class="download-icon"><i class="fa-solid fa-download" style="color: red; margin-left: 6px;"></i></span></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="downloadAllFiles()">Download All Files</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Edit recent job Modal -->
-    <section class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  
-        <!-- update / Delete recent job Modal -->
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header justify-content-between align-items-center">
-                    <h1 class="modal-title fs-5" id="jobPostModalLabel">Edit Job</h1>
-                    <div class="d-flex align-items-center gap-2">
-                        <button type="button" class="btn text-danger p-0" title="Delete Job" id="deleteJobBtn">
-                            <i class="fa-solid fa-trash-can fs-5"></i>
-                        </button>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <!-- HERE -->
-                    <form>
-                        <div class="mb-3 text-center">
-                            <label for="jobImage" class="form-label d-block">Job post image</label>
-                            <div class="upload-image">
-                                <input type="file" id="jobImage" class="form-control d-none">
-                                <div class="upload-box">
-                                    <p>Upload Vessel or Company Image</p>
-                                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="jobPostName" class="form-label">Job Title</label>
-                                <select class="form-select searchable-select" id="jobPostName">
-                                    <option disabled selected>Select job post</option>
-                                    <option value="Chief Engineer">Chief Engineer</option>
-                                    <option value="Messman">Messman</option>
-                                    <option value="Deck Man">Deck Man</option>
-                                    <option value="IT">IT</option>
-                                    <option value="Offshore Vessel">Offshore Vessel</option>
-                                    <option value="Fishing Vessel">Fishing Vessel</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="rank" class="form-label">Rank*</label>
-                                <input type="text" class="form-control" id="rank" value="Cadet">
-                            </div>
-                            <div class="col">
-                                <label for="contractLength" class="form-label">Contract Length*</label>
-                                <input type="text" class="form-control" id="contractLength" value="9 months">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="vesselType" class="form-label">Vessel type*</label>
-                                <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
-                            </div>
-                            <div class="col">
-                                <label for="jobRequirements" class="form-label">Job requirements*</label>
-                                <input type="text" class="form-control job-requirements-input" id="jobRequirements"
-                                    value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="jobDescription" class="form-label">Job Description*</label>
-                            <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Update</button>
-                </div>
+    <div class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
-    </section>
-
-
-        <!-- JOB POST Modal -->
-        <section class="modal fade" id="jobPostModal" tabindex="-1" aria-labelledby="jobPostModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="jobPostModalLabel">Create Job</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- HERE -->
-                        <form>
-                            <div class="mb-3 text-center">
-                                <label for="jobImage" class="form-label d-block">Job post image</label>
-                                <div class="upload-image">
-                                    <input type="file" id="jobImage" class="form-control d-none">
-                                    <div class="upload-box">
-                                        <p>Upload Vessel or Company Image</p>
-                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label for="jobPostName" class="form-label">Job Title</label>
-                                    <select class="form-select searchable-select" id="jobPostName">
-                                        <option disabled selected>Select job post</option>
-                                        <option value="Chief Engineer">Chief Engineer</option>
-                                        <option value="Messman">Messman</option>
-                                        <option value="Deck Man">Deck Man</option>
-                                        <option value="IT">IT</option>
-                                        <option value="Offshore Vessel">Offshore Vessel</option>
-                                        <option value="Fishing Vessel">Fishing Vessel</option>
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="rank" class="form-label">Rank*</label>
-                                    <input type="text" class="form-control" id="rank" value="Cadet">
-                                </div>
-                                <div class="col">
-                                    <label for="contractLength" class="form-label">Contract Length*</label>
-                                    <input type="text" class="form-control" id="contractLength" value="9 months">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label for="vesselType" class="form-label">Vessel type*</label>
-                                    <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
-                                </div>
-                                <div class="col">
-                                    <label for="jobRequirements" class="form-label">Job requirements*</label>
-                                    <input type="text" class="form-control job-requirements-input" id="jobRequirements"
-                                        value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="jobDescription" class="form-label">Job Description*</label>
-                                <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter password" style="width: 50%;">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Post Job</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
+    </div>
+  
     
     <script src="script/sidenav.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>

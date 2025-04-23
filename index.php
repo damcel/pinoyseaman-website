@@ -21,14 +21,14 @@
                     <li><a href="job_search.html">Jobs</a></li>
                     <li><a href="#">Explore Companies</a></li>
                     <li><a href="#">Contact us</a></li>
-                    <li><a href="start.html" class="login-btn">Login</a></li>
+                    <li><a href="start.php" class="login-btn">Login</a></li>
                     <li><a href="start.html" class="signup-btn">Sign up</a></li>
                 </ul>
             </div>
 
              <!-- Moved Buttons Inside nav-links -->
              <div class="buttons">
-                <a href="start.html" class="login-btn">Login</a>
+                <a href="start.php" class="login-btn">Login</a>
                 <a href="start.html" class="signup-btn">Sign up</a>
             </div>
     

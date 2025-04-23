@@ -39,6 +39,6 @@ $message = isset($_GET['message']) ? $_GET['message'] : 'No message provided.';
     <div class="alert <?php echo htmlspecialchars($type); ?>">
         <?php echo htmlspecialchars($message); ?>
     </div>
-    <a href="../index.php">Go back to the homepage</a>
+    <a href="index.php">Go back to the homepage</a>
 </body>
 </html>

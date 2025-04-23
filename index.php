@@ -211,11 +211,9 @@
                     include 'db.php';
 
                     // Query to get all featured companies
-                    $sql = "SELECT fc.company_code, e.company, e.company_profile, cl.logo_url
-                            FROM featured_companies fc
-                            INNER JOIN employer e ON fc.company_code = e.company_code
-                            INNER JOIN company_logo cl ON e.company_code = cl.company_code
-                            WHERE e.verify = 'y'";
+                    $sql = "SELECT company_code, company, company_profile, logo
+                            FROM employer
+                            WHERE verify = 'y' AND (member_type = 'Plan1' OR member_type = 'Plan2' OR member_type = 'Plan3' OR member_type = 'Plan4')";
                     $result = $conn->query($sql);
 
                     if ($result && $result->num_rows > 0) {
@@ -223,11 +221,17 @@
                             $company_name = $row['company'];
                             $company_profile = $row['company_profile'];
                             $company_code = $row['company_code'];
-                            $logo_url = $row['logo_url'];
+                            $logo = $row['logo'];
+                            $logo_path = "company-logo/" . $logo;
+
+                            // Check if the logo file exists, otherwise use the placeholder
+                            if (!file_exists($logo_path) || empty($logo)) {
+                                $logo_path = "company-logo/Logo-placeholder.png";
+                            }
                             ?>
                             <div class="company-card">
                                 <div class="employer-profile-container">
-                                    <img src="<?php echo htmlspecialchars($logo_url); ?>" alt="Company image">
+                                    <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Company image">
                                 </div>
                                 <div class="company-card-content">
                                     <h3><strong><?php echo htmlspecialchars($company_name); ?></strong></h3>
@@ -245,216 +249,123 @@
             <button id="nextBtn" class="slider-btn">&#10095;</button>
         </div>
     </section>
-
-    <!-- <section>
-        <div class="company-title-card">
-            <h2>Companies</h2>
-            <p>
-                Join us and connect with top talent effortlessly. Post jobs, 
-                find skilled crew members, and streamline your hiring process. 
-                all in one place!
-            </p>
-        </div>
-    
-        <div class="slider-wrapper">
-            <button id="prevBtn" class="slider-btn">&#10094;</button>
-    
-            <div class="company-container">
-                <div class="company-track">
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/wil.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-content">
-                            <h3><strong>Deck Department</strong></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
-                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
-                                 aliquam magni?</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/wil.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-content">
-                            <h3><strong>Deck Department</strong></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
-                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
-                                 aliquam magni?</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/wil.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-content">
-                            <h3><strong>Deck Department</strong></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
-                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
-                                 aliquam magni?</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/wil.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-content">
-                            <h3><strong>Deck Department</strong></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, 
-                                accusamus. Possimus, aliquam incidunt eaque delectus aperiam atque neque nemo laudantium aspernatur quos 
-                                reprehenderit tempore, eum consectetur et expedita deserunt culpa?</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/wil.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-content">
-                            <h3><strong>Deck Department</strong></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
-                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
-                                 aliquam magni?</p>
-                        </div>
-                    </div>
-
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/marsa.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-content">
-                            <h3><strong>Deck Department</strong></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                 Quasi dignissimos porro praesentium debitis adipisci reprehenderit molestias, 
-                                 itaque possimus quibusdam illum recusandae ipsam deserunt culpa. Reiciendis praesentium soluta unde 
-                                 aliquam magni?</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <button id="nextBtn" class="slider-btn">&#10095;</button>
-        </div>
-    </section> -->
     
     <section class="job-section">
         <div class="company-title-card">
             <h2>Urgent Seaman Job Hiring</h2>
         </div>
         <div class="urg-job-main-container">
-            <section>
-                <div class="urgent-jobs-container">
-                    <div class="company-info">
-                        <div class="company-jobs-img">
-                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
-                        </div>
-                        <div class="company-jobs-content">
-                            <h2>Tanker Vessel</h2>
-                            <h3>Ast Shipping Company</h3>
-                            <div class="tags">Chemical Tanker</div>
-                        </div>
-                    </div>
-                    <div class="company-jobs-btn">
-                        <button class="jobs-btn">Details & Apply</button>
-                    </div>
-                </div>
-            </section>
-            <section>
-                <div class="urgent-jobs-container">
-                    <div class="company-info">
-                        <div class="company-jobs-img">
-                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
-                        </div>
-                        <div class="company-jobs-content">
-                            <h2>Tanker Vessel</h2>
-                            <h3>Ast Shipping Company</h3>
-                            <div class="tags">Chemical Tanker</div>
-                        </div>
-                    </div>
-                    <div class="company-jobs-btn">
-                        <button class="jobs-btn">Details & Apply</button>
-                    </div>
-                </div>
-            </section>
-            <section>
-                <div class="urgent-jobs-container">
-                    <div class="company-info">
-                        <div class="company-jobs-img">
-                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
-                        </div>
-                        <div class="company-jobs-content">
-                            <h2>Tanker Vessel</h2>
-                            <h3>Ast Shipping Company</h3>
-                            <div class="tags">Chemical Tanker</div>
-                        </div>
-                    </div>
-                    <div class="company-jobs-btn">
-                        <button class="jobs-btn">Details & Apply</button>
-                    </div>
-                </div>
-            </section>
-            <section>
-                <div class="urgent-jobs-container">
-                    <div class="company-info">
-                        <div class="company-jobs-img">
-                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
-                        </div>
-                        <div class="company-jobs-content">
-                            <h2>Tanker Vessel</h2>
-                            <h3>Ast Shipping Company</h3>
-                            <div class="tags">Chemical Tanker</div>
-                        </div>
-                    </div>
-                    <div class="company-jobs-btn">
-                        <button class="jobs-btn">Details & Apply</button>
-                    </div>
-                </div>
-            </section>
-            <section>
-                <div class="urgent-jobs-container">
-                    <div class="company-info">
-                        <div class="company-jobs-img">
-                            <img src="company-logo/scanmar_big.jpg" alt="SCANMAR">
-                        </div>
-                        <div class="company-jobs-content">
-                            <h2>Tanker Vessel</h2>
-                            <h3>Ast Shipping Company</h3>
-                            <div class="tags">Chemical Tanker</div>
-                        </div>
-                    </div>
-                    <div class="company-jobs-btn">
-                        <button class="jobs-btn">Details & Apply</button>
-                    </div>
-                </div>
-            </section>
+
+                <?php
+
+                // Include the database connection file
+                include 'db.php';
+
+                // Query to get all featured companies
+                $sql = "SELECT e.company_code, e.company, e.logo, j.job_title, j.vessel
+                        FROM employer e
+                        INNER JOIN jobs j ON e.company_code = j.company_code
+                        WHERE j.expiry >= CURDATE() AND e.verify = 'y' AND (e.member_type = 'Plan1' OR e.member_type = 'Plan2' OR e.member_type = 'Plan3' OR e.member_type = 'Plan4')";
+                $result = $conn->query($sql);
+
+                if ($result && $result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $company_name = $row['company'];
+                        $company_code = $row['company_code'];
+                        $logo = $row['logo'];
+                        $job_title = $row['job_title'];
+                        $vessel = $row['vessel'];
+
+                        $logo_path = "company-logo/" . $logo;
+
+                        // Check if the logo file exists, otherwise use the placeholder
+                        if (!file_exists($logo_path) || empty($logo)) {
+                            $logo_path = "company-logo/Logo-placeholder.png";
+                        }
+                        ?>
+                        <section>
+                            <div class="urgent-jobs-container">
+                                <div class="company-info">
+                                    <div class="company-jobs-img">
+                                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Company image">
+                                    </div>
+                                    <div class="company-jobs-content">
+                                        <h2><?php echo htmlspecialchars($job_title) ?></h2>
+                                        <h3><?php echo htmlspecialchars($company_name); ?></h3>
+                                        <div class="tags"><?php echo htmlspecialchars($vessel) ?></div>
+                                    </div>
+                                </div>
+                                <div class="company-jobs-btn">
+                                    <button class="jobs-btn">Details & Apply</button>
+                                </div>
+                            </div>
+                        </section>
+                        <?php
+                    }
+                } else {
+                    echo "<p>No featured companies available at the moment.</p>";
+                }
+
+                ?>
         </div>
         <a href="job_search.html">Search all jobs <i class="fa-solid fa-arrow-right"></i></a>
     </section>
 
     <section class="ads-section">
-        <div class="ads-container">
-            <div class="ads-card"><a href=""><img src="company-ads/vship_logo.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/wallem_logo.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/status_big.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/marl.jpg" alt="ads"></a></div>
-            <!-- Duplicate ads for a seamless effect -->
-            <div class="ads-card"><a href=""><img src="company-ads/vship_logo.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/wallem_logo.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/status_big.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/marl.jpg" alt="ads"></a></div>
-            <!-- Duplicate ads for a seamless effect -->
-            <div class="ads-card"><a href=""><img src="company-ads/vship_logo.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/wallem_logo.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/status_big.jpg" alt="ads"></a></div>
-            <div class="ads-card"><a href=""><img src="company-ads/marl.jpg" alt="ads"></a></div>
+    <div class="ads-container">
+
+        <?php
+        // Include the database connection file
+        include 'db.php';
+
+        // Query to get all featured companies
+        $sql = "SELECT e.company_code, ca.ads_url
+                FROM employer e
+                INNER JOIN company_ads ca ON e.company_code = ca.company_code
+                WHERE e.verify = 'y' AND (e.member_type = 'Plan1' OR e.member_type = 'Plan2' OR e.member_type = 'Plan3' OR e.member_type = 'Plan4')";
+        $result = $conn->query($sql);
+
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $company_code = $row['company_code'];
+                $ads_url = $row['ads_url'];
+
+                $ads_path = "company-ads/" . $ads_url;
+
+                // Check if the logo file exists, otherwise use the placeholder
+                if (!file_exists($ads_path) || empty($ads_path)) {
+                    $ads_path = "company-ads/ads-placeholder.png";
+                }
+                ?>
+                
+                    <div class="ads-card"><a href=""><img src="<?php echo htmlspecialchars($ads_path); ?>" alt="ads"></a></div>
+                
+                <?php
+            }
+        } else {
+            echo "<p>No featured companies available at the moment.</p>";
+        }
+
+        ?>
+
         </div>
+
+        <!-- <div class="ads-container">
+            <div class="ads-card"><a href=""><img src="company-ads/vship_logo.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/wallem_logo.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/status_big.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/marl.jpg" alt="ads"></a></div>
+            
+            <div class="ads-card"><a href=""><img src="company-ads/vship_logo.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/wallem_logo.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/status_big.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/marl.jpg" alt="ads"></a></div>
+            
+            <div class="ads-card"><a href=""><img src="company-ads/vship_logo.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/wallem_logo.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/status_big.jpg" alt="ads"></a></div>
+            <div class="ads-card"><a href=""><img src="company-ads/marl.jpg" alt="ads"></a></div>
+        </div> -->
     </section>
 
 </main>

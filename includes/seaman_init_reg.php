@@ -63,6 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $stmt->close();
 
+        // Insert action into the action table
+        $actionQuery = "INSERT INTO action (date, action, seaman, time) VALUES (CURDATE(), 'Seaman Initial Registration', ?, CURTIME())";
+        $actionStmt = $conn->prepare($actionQuery);
+        $actionStmt->bind_param("s", $email);
+        $actionStmt->execute();
+        $actionStmt->close();
+
         $pdo = null;
         $stmt = null;
 

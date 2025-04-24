@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
-    <title>dashboard jobs</title>
+    <title>Profile Settings</title>
 </head>
 <body>
     <aside id="sidebar">
@@ -93,29 +93,84 @@
 
         <section class="job-list-container">
             <div class="job-search-container">
-                <section class="account-settings-container">
-                    <div class="settings-card">
-                      <h2>Account</h2>
-                      <ul>
-                        <li>
-                            <span class="modal-link" data-bs-toggle="modal" data-bs-target="#email-modal">
-                            Change Email
-                            </span>
-                        </li>
-                        <li>
-                            <span class="modal-link" data-bs-toggle="modal" data-bs-target="#pwd-modal">
-                            Change Password     
-                            </span>
-                        </li>
-                      </ul>
+                <section class="company-profile-container">
+                    <div class="company-cover">
+                        <div class="company-profile-box">
+                            <img src="company-logo/german.jpg" alt="image">
+                        </div>
                     </div>
+                
+                    <article class="company-info-box">
+                        <!-- Moved Company Name, Rating, and Review Button inside company-info-box -->
+                        <header class="company-header">
+                            <div class="company-name">
+                                <h2>PinoySeaman</h2>
+                                <div class="rating">
+                                    <p class="star-rating">
+                                        <span class="rating-value">5.0</span> ⭐⭐⭐⭐⭐
+                                    </p>
+                                    <p class="review-count">
+                                        total rating from <a href="#" class="review-link">26 reviews</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="company-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-company-profile"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </header>
+                
+                        <h3>Company Overview</h3>
+                
+                        <dl class="company-details">
+                            <div class="info-item">
+                                <dt>Website</dt>
+                                <dd><a href="https://www.pinoyseaman.com/index.php" target="_blank" rel="noopener noreferrer">pinoyseaman.com</a></dd>
+                            </div>
+
+                            <div class="info-item">
+                                <dt>Contact Person</dt>
+                                <dd>Daniel Pagcaliwangan</dd>
+                            </div>
+                
+                            <div class="info-item">
+                                <dt>Phone</dt>
+                                <dd>09452733164</dd>
+                            </div>
+            
+                            <div class="info-item">
+                                <dt>Email</dt>
+                                <dd>Pagcaliwangan11@gmail.com</dd>
+                            </div>
+                
+                            <div class="info-item">
+                                <dt>Address</dt>
+                                <dd>Scandic Palace, Emilia str, Makati City</dd>
+                            </div>
+                        </dl>
+                
+                        <section class="company-description">
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos iste quia inventore nisi nulla quibusdam nobis, 
+                                aliquid quis autem minima, fugiat, veritatis esse architecto ab sapiente aut. Alias, iure minima.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla omnis deleniti ipsum dicta fugiat, temporibus, quis obcaecati autem vel velit, iusto nisi alias illo. Quidem ipsa dolore ex aliquam eveniet.
+                            </p>
+                        </section>
+                    </article>
                 </section>
-                  
+              
                 <section class="account-settings-container">
                     <div class="settings-card">
-                      <h2>Email Settings</h2>
-                      <p>Here you can set up your email preferences</p>
-                      
+                        <h2>Account Settings</h2>
+                        <ul>
+                          <li>
+                              <span class="modal-link" data-bs-toggle="modal" data-bs-target="#email-modal">
+                              Change Email
+                              </span>
+                          </li>
+                          <li>
+                              <span class="modal-link" data-bs-toggle="modal" data-bs-target="#pwd-modal">
+                              Change Password     
+                              </span>
+                          </li>
+                        </ul>
                       <div class="settings-item">
                         <div>
                           <h2>Pinoyseaman updates</h2>
@@ -220,6 +275,75 @@
         </div>
     </section>
 
+    <!-- EDIt COMPANY PROFILE MODAL -->
+    <section class="modal fade" id="edit-company-profile" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Edit Company Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <section class="modal-body">
+                    <div class="container-fluid">
+                        <form>
+                            <div class="mb-3 text-center">
+                                <label for="jobImage" class="form-label d-block">Job post image</label>
+                                <div class="upload-image">
+                                    <input type="file" id="jobImage" class="form-control d-none">
+                                    <div class="upload-box">
+                                        <p>Upload Vessel or Company Image</p>
+                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <!-- Name Row -->
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="companyName" class="form-label">Company Name:</label>
+                                    <input type="text" class="form-control" id="companyName" placeholder="pinoyseaman">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="website" class="form-label">Website:</label>
+                                    <input type="text" class="form-control" id="website" placeholder="pinoyseaman.com">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="contact-person" class="form-label">Contact Person:</label>
+                                    <input type="text" class="form-control" id="contact-person" placeholder="Danny Pagcaliwangan">
+                                </div>
+                        
+                                <!-- Second Row -->
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="phone" class="form-label">Phone:</label>
+                                    <input type="number" class="form-control" id="phone" placeholder="09452733164">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" placeholder="Emilia Str, scandic palace">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="pagcaliwanganbigdick@gmail.com">    
+                                </div>
+                        
+                                <div class="mb-3">
+                                    <label for="about-company" class="form-label">About Company</label>
+                                    <textarea class="form-control" id="about-company" rows="4">company profile and story</textarea>
+                                </div>
+                                    
+                                <!-- Email Row -->
+                                <div class="col-12">
+                                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password" placeholder="pinoyseaman password">
+                                </div>
+                            </div>
+                        </form>
+                    </div>                  
+                </section>
+            </div>
+        </div>
+    </section>
+
     <!-- Modal -->
     <section class="modal fade" id="pwd-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -248,10 +372,6 @@
                   
                     <button type="submit" class="btn btn-primary w-100">Save</button>
                 </form>                  
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
         </div>

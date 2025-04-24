@@ -1,0 +1,422 @@
+<?php
+session_start(); // Start the session
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['seeker_id'])) {
+    // Redirect to the login page with an error message
+    header("Location: user-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <title>Profile Settings</title>
+</head>
+<body>
+    <aside id="sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <button onclick="toggleSidebar()" id="toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul class="ul-links">
+              <li class="menu-title">MENU</li>
+              <li>
+                <a href="dashboardjobs.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-briefcase"></i><span>Jobs</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="userprofile.php">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Profile</span>
+                </a>
+              </li>
+              
+              <li class="menu-title">ANALYTICS</li>
+              <li>
+                <a href="history.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-business-time"></i><span>History</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="companies.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-building"></i><span>Companies</span>
+                </a>
+              </li>
+                <div id="progress-main-container" class="progress-main-container">
+                    <div class="complete-percentage">
+                        <p>Complete your profile</p>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                        <p id="progress-text">0% Completed</p>
+                        <div class="incomplete-container">
+                            <h3>Incomplete Fields:</h3>
+                            <ul id="missing-fields"></ul>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-container">
+        <section class="header-container">
+            <div class="saved-ctn">
+                <a href="saved.html" class="saved-btn">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </a>
+            </div>
+            <div class="dropdown-container">
+                <button class="profile-btn" id="dpBtn">DP</button>
+                <!-- Dropdown Menu -->
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="saved.html" class="prfl">Profile Settings</a>
+                    <a href="includes/logout.php">Logout</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="profile-setup-container">
+            <section class="profile-settings">
+                <div class="tabs-container">
+                    <nav class="tabs">
+                        <ul>
+                            <li class="tab active"><a href="userprofile.html">Account Setting</a></li>
+                            <li class="tab"><a href="seafarer-documents.html">Passport & Seamans book</a></li>
+                            <li class="tab"><a href="competency-certificate.html">Competency & Certificates</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+            <section class="profile-section">
+                <!-- Added Header Section -->
+                <div class="profile-header">
+                    <i class="fa-solid fa-user"></i>
+                    <h3>Daniel Pagcaliwangan, 24</h3>
+                    <a href="mailto:pagcaliwangan11@gmail.com">
+                        <i class="fa-solid fa-envelope"></i> pagcaliwangan11@gmail.com
+                    </a>
+                    <a href="">
+                        <i class="fa-solid fa-phone"></i> 
+                        <span>Not set</span>
+                    </a>
+                </div>
+            
+                <div class="profile-container">
+                    <div class="profile-picture">
+                        <label for="upload-photo">
+                            <div class="upload-box">
+                                <p>Upload your photo</p>
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                            </div>
+                        </label>
+                        <input type="file" id="upload-photo" hidden>
+                        <p id="jobStatusText">Interested</p> <!-- This will display the selected status, default is "Interested" -->
+                    </div>
+                    
+                    <div class="profile-details">
+                        <div class="details-section">
+                            <h4>Details</h4>
+                            <p><strong>Address:</strong> Lipa City</p>
+                            <p><strong>Planned status:</strong> Availability</p>
+                            <p><strong>Gender:</strong></p>
+                            <p><strong>Date of birth:</strong> 26 Aug 2000 (24 years old)</p>
+                            <p><strong>Place of birth:</strong></p>
+                            <p><strong>Marital status:</strong></p>
+                            <p><strong>Religion:</strong></p>
+                            <p><strong>Nationality:</strong></p>
+                            <p><strong>Level of English:</strong> Not set</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Last Employment</h4>
+                            <p><strong>Rank:</strong> N/A</p>
+                            <p><strong>Vessel:</strong> N/A</p>
+                            <p><strong>Type:</strong> N/A</p>
+                            <p><strong>Duration:</strong> N/A</p>
+                        </div>
+                        <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section class="education-section">
+                <h2 class="header-info">Education</h2>
+                <div class="education-container">
+                    <table class="table-content">
+                        <thead>
+                            <tr>
+                                <th>School</th>
+                                <th>Field of Study</th>
+                                <th>Educational Level</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Attachment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="School">University of Batangas</td>
+                                <td data-label="Field of Study">Information Technology</td>
+                                <td data-label="Educational Level">Bachelor's Degree</td>
+                                <td data-label="Start Date">2020</td>
+                                <td data-label="End Date">2024</td>
+                                <td class="attachment-cell" data-label="Attachment">
+                                    <div class="attachment-content">
+                                        <span>taengbinasateasdasda</span>
+                                        <div class="attachment-icons">
+                                            <a href="#"><i class="fa-solid fa-cloud-arrow-down"></i></a>
+                                            <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>                
+                    </table>          
+                    <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add Education</button>
+                </div>
+            </section>
+            <section class="experience-container">
+                <div class="box-container">  
+                    <h2 class="header-info">Seafaring Experience</h2> 
+                    <div class="experience-box">
+                        <p class="experience-content">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </p>
+                        <i class="fa-solid fa-pen-to-square edit-icon"></i>
+                        <button class="add-work-exp-btn">+ Add work experience</button>
+                        <hr>
+                        <button class="add-cv-btn">+ Add CV</button>
+                    </div>
+                </div>
+        
+                <div class="box-container">
+                    <h2 class="header-info">Land-Based Work Experience</h2>
+                    <div class="experience-box">
+                        <p class="experience-content">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </p>
+                        <i class="fa-solid fa-pen-to-square edit-icon"></i>
+                        <hr>
+                        <button class="land-exp-btn">+ Add work experience</button>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+    </main>
+
+    <!-- ✅ Bootstrap Modal -->
+    <section class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Edit Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <section class="modal-body">
+                    <div class="container-fluid">
+                        <form>
+                        <div class="row g-3">
+                            <!-- Name Row -->
+                            <div class="col-md-4 col-sm-12">
+                            <label for="firstName" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="firstName" value="Daniel">
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            <label for="middleName" class="form-label">Middle name</label>
+                            <input type="text" class="form-control" id="middleName">
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            <label for="lastName" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="lastName" value="Pagcaliwangan">
+                            </div>
+                    
+                            <!-- Second Row -->
+                            <div class="col-md-4 col-sm-12">
+                            <label for="Address" class="form-label">Address</label>
+                            <select class="form-select" id="Address">
+                                <option selected disabled></option>
+                            </select>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            <label for="placeOfBirth" class="form-label">Place of birth</label>
+                            <input type="text" class="form-control" id="placeOfBirth">
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            <label for="dob" class="form-label">Date of birth</label>
+                            <input type="date" class="form-control" id="dob" value="2000-08-26">
+                            </div>
+                    
+                            <!-- Third Row -->
+                            <div class="col-md-4 col-sm-12">
+                            <label for="english level" class="form-label">Level of english</label>
+                            <select class="form-select" id="englishe level">
+                                <option selected disabled></option>
+                            </select>
+                            </div>
+                    
+                            <!-- Fourth Row -->
+                            <div class="col-md-4 col-sm-12">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender">
+                                <option selected disabled></option>
+                            </select>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            <label for="maritalStatus" class="form-label">Marital status</label>
+                            <select class="form-select" id="maritalStatus">
+                                <option selected disabled></option>
+                            </select>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            <label for="nationality" class="form-label">Nationality</label>
+                            <select class="form-select" id="nationality">
+                                <option selected disabled></option>
+                            </select>
+                            </div>
+                    
+                            <!-- Fifth Row -->
+                            <div class="col-md-4 col-sm-12">
+                            <label for="religion" class="form-label">Religion</label>
+                            <select class="form-select" id="religion">
+                                <option selected disabled></option>
+                            </select>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                            <label for="rank" class="form-label">Rank</label>
+                            <select class="form-select" id="rank">
+                                <option selected disabled></option>
+                            </select>
+                            </div>
+                    
+                           <!-- Job Status Row with Smaller Toggleable Buttons -->
+                            <div class="col-md-6 col-sm-12">
+                                <label for="jobStatus" class="form-label">Job status</label>
+                                <div class="btn-group" role="group" aria-label="Job Status">
+                                    <button type="button" class="btn btn-outline-primary btn-sm active" id="interestedBtn" onclick="toggleJobStatus(this)">Interested</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" id="notInterestedBtn" onclick="toggleJobStatus(this)">Not Interested</button>
+                                </div>
+                            </div>
+                    
+                            <!-- Email Row -->
+                            <div class="col-12">
+                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="password" placeholder="pinoyseaman password">
+                            </div>
+                        </div>
+                        </form>
+                    </div>                  
+                </section>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--------- Modal ---------->
+    <section class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+    
+            <div class="modal-body">
+            <form>
+                <div class="mb-3">
+                <label for="school" class="form-label">School <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="school" placeholder="Enter school name">
+                </div>
+    
+                <div class="mb-3">
+                <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
+                </div>
+    
+                <div class="mb-3">
+                <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
+                </div>
+    
+                <div class="row mb-3">
+                <div class="col">
+                    <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="fromDate">
+                </div>
+                <div class="col">
+                    <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="toDate">
+                </div>
+                </div>
+    
+                <div class="mb-3">
+                    <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
+                    <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                </div>
+            </form>
+            </div>
+    
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+        </div>
+    </section>
+  
+
+    <script>
+        function toggleJobStatus(button) {
+            // Toggle the active class to change the button's appearance
+            const buttons = document.querySelectorAll('.btn-group .btn');
+            buttons.forEach((btn) => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+    
+            // Update the job status text based on the selected button
+            const jobStatusText = document.getElementById("jobStatusText");
+            if (button.id === "interestedBtn") {
+                jobStatusText.textContent = "Interested";
+            } else {
+                jobStatusText.textContent = "Not Interested";
+            }
+        }
+    </script>
+    <script src="script/sidenav.js"></script>
+    <script src="script/progress-bar.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+    <!-- Bootstrap JS with Popper (near the end of body) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

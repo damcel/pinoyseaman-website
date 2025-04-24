@@ -6,8 +6,34 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Home</title>
+    <style>
+        /* Alert Styles */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: #4caf50; /* Green for success */
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+            z-index: 1000;
+        }
+        .alert.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .alert.error {
+            background-color: #f44336; /* Red for error */
+        }
+    </style>
 </head>
 <body>
+    <!-- Alert Container -->
+    <div id="alert" class="alert"></div>
     <header>
         <nav class="main-nav">
             <div class="nav-left">
@@ -401,5 +427,29 @@
     <script src="script/company-arrow.js"></script>
     <script src="script/nav-hover-effect.js"></script>
     <script src="script/ads-carousel.js"></script>
+    <script>
+        // Function to show alert
+        function showAlert(message, type = 'success') {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = message;
+            alertBox.className = `alert ${type} show`;
+
+            // Hide the alert after 3 seconds
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 3000);
+        }
+
+        // Check for query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        const type = urlParams.get('type'); // 'success' or 'error'
+
+        if (message) {
+            showAlert(message, type);
+            // Remove query parameters from the URL
+            history.replaceState(null, '', window.location.pathname);
+        }
+    </script>
 </body>
 </html>

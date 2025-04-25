@@ -38,24 +38,24 @@
         <nav class="main-nav">
             <div class="nav-left">
                 <div class="logo-container">
-                    <a href="index.html" class="logo-link">
+                    <a href="index.php" class="logo-link">
                         <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="job_search.html">Jobs</a></li>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="job_search.php">Jobs</a></li>
                     <li><a href="#">Explore Companies</a></li>
                     <li><a href="#">Contact us</a></li>
                     <li><a href="start.php" class="login-btn">Login</a></li>
-                    <li><a href="start.html" class="signup-btn">Sign up</a></li>
+                    <li><a href="start.php" class="signup-btn">Sign up</a></li>
                 </ul>
             </div>
 
              <!-- Moved Buttons Inside nav-links -->
              <div class="buttons">
                 <a href="start.php" class="login-btn">Login</a>
-                <a href="start.html" class="signup-btn">Sign up</a>
+                <a href="start.php" class="signup-btn">Sign up</a>
             </div>
     
             <!-- Burger Menu Button -->
@@ -334,7 +334,7 @@
 
                 ?>
         </div>
-        <a href="job_search.html">Search all jobs <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="job_search.php">Search all jobs <i class="fa-solid fa-arrow-right"></i></a>
     </section>
 
     <section class="ads-section">

@@ -6,262 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
-    <title>dashboard jobs</title>
-    <style>
-
-.header-container{
-    padding: 15px 60px 15px 60px;
-}
-
-.company-profile-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  padding: 5px;
-  border-radius: 1em;
-  margin-top: 1rem;
-  border: 1px solid var(--line-clr);
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-
-.company-logo-placeholder img{
-  width: 200px;
-  height: 100px;
-  object-fit: fill;
-  border-radius: 12px;
-  margin-bottom: 10px;
-}
-
-.company-name {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 10px;
-  color: #0B1C33;
-  text-align: center;
-}
-
-.create-job-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.create-job-btn:hover {
-  background-color: #0056b3;
-}
-
-    ul{
-        margin-bottom: 0;
-    }
-
-    .job-posting-container{
-        background-color: var(--base-clr);
-        padding: 15px;
-        display: flex;
-    flex-wrap: wrap; 
-    border-radius: 8px;
-    box-shadow: 0 4px 4px rgba(43, 43, 43, 0.1);
-    }
-
-        .post-header h2 {
-  font-size: 1.5rem;
-}
-
-.subtext {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* ------------------- search button ---------------------------*/
-
-.search-bar-container {
-  display: flex;
-  align-items: center;
-  border-radius: 50px;
-  margin-right: auto;
-  background: rgba(230, 225, 225, 0.6); /* Soft light grey with slight transparency */
-  width: 320px;
-  height: 36px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-  backdrop-filter: blur(4px); /* Optional: soft blur */
-  box-sizing: border-box;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 14px;
-  color: #333;
-  padding: 0 10px;
-}
-
-.search-btn {
-  background-color: #ef4444; /* Red */
-  border: none;
-  color: white;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight depth */
-  margin-right: 10px;
-}
-
-/* ------------------- account settings ---------------------------*/
-
-.settings-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #e0e0e0;
-  padding: 15px 0;
-}
-
-.settings-item h3 {
-  margin: 0;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 22px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
-  background-color: #ccc;
-  border-radius: 22px;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.4s;
-}
-
-input:checked + .slider {
-  background-color: #007bff;
-}
-
-input:checked + .slider:before {
-  transform: translateX(18px);
-}
-
-/* ------------- terms and condition ----------------*/
-
-.terms-card, .settings-card{
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Shared styles for both cards */
-.terms-card, .settings-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Shared <ul> styles */
-.terms-card ul,
-.settings-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 0; /* only .terms-card had this, added here for consistency */
-}
-
-/* Shared <li> styles */
-.terms-card li,
-.settings-card li {
-  margin: 10px 0;
-}
-
-/* Specific heading style inside terms-card .settings-card */
-.terms-card h2, .settings-card h2 {
-  font-weight: bold;
-  margin-bottom: 15px;
-  font-size: 20px;
-}
-
-
-.terms-card a, .settings-card .modal-link {
-  text-decoration: none;
-  color: gray;
-  cursor: pointer;
-}
-
-.terms-card a:hover, .settings-card .modal-link:hover {
-  color: #007bff;
-  transition: 0.3s;
-  font-weight: 600;
-}
-
-
-/* ------------------- account settings END---------------------------*/
-
-.page-footer {
-  font-size: 0.85rem;
-  text-align: center;
-}
-
-.footer-links {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  padding-left: 0;
-  margin-bottom: 10px;
-}
-
-.footer-branding{
-    display: flex;
-    align-items: center; /* vertically centers the text with the image */
-    gap: 10px; /* space between image and text */
-}
-
-.footer-branding img{
-    width: 130px;
-}
-
-.footer-branding p {
-  font-size: 0.8rem;
-  color: #666;
-  margin: 0; /* remove default spacing */
-}
-    </style>
+    <title>Profile Settings</title>
 </head>
 <body>
     <aside id="sidebar">
@@ -279,51 +24,58 @@ input:checked + .slider:before {
                 </button>
             </div>
             <ul class="ul-links">
-                <div class="company-profile-card">
-                    <div class="company-logo-placeholder">
-                        <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-                    </div>
-                    <h3 class="company-name">Company Name</h3>
-                    <button class="create-job-btn">+ Create Job</button>
-                </div>
-              <li>
-                <a href="employer-dashboard.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="employer-posting.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-user"></i><span>Job Post</span>
-                </a>
-              </li>
-              <li>
-                <a href="employer-analytics.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
-                </a>
-              </li>
-              <li class="separator">
+              <div class="company-profile-card">
+                <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+              </div>
+              <li class="collapsed-only">
                 <a href="#">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-building"></i><span>Advertise</span>
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Create Job</span>
                 </a>
               </li>
+            <li>
+              <a href="employer-dashboard.html">
+                <!-- SVG Icon -->
+                <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
+              </a>
+            </li>
+            <li class="separator">
+              <a href="employer-posting.html">
+                <!-- SVG Icon -->
+                <i class="fa-regular fa-user"></i><span>Job Post</span>
+              </a>
+            </li>
+            <li>
+              <a href="employer-analytics.html">
+                <!-- SVG Icon -->
+                <i class="fa-solid fa-business-time"></i><span>Analytics</span>
+              </a>
+            </li>
+            <li class="separator">
+              <a href="#">
+                <!-- SVG Icon -->
+                <i class="fa-regular fa-building"></i><span>Advertise</span>
+              </a>
+            </li>
+                <div id="progress-main-container" class="progress-main-container">
+                  <div class="complete-percentage">
+                      <p>Complete your profile</p>
+                  </div>
+                  <div class="progress-container">
+                      <div class="progress-bar" id="progress-bar"></div>
+                      <p id="progress-text">0% Completed</p>
+                      <div class="incomplete-container">
+                          <h3>Incomplete Fields:</h3>
+                          <ul id="missing-fields"></ul>
+                      </div>
+                  </div>
+                </div>
             </ul>
         </nav>
     </aside>
     
     <main class="dashboard-container">
         <section class="header-container">
-            <!-- New Search Container -->
-            <div class="search-bar-container">
-              <input type="text" placeholder="Search..." class="search-input" disabled />
-              <button class="search-btn">
-                <i class="fa-solid fa-q"></i>
-              </button>
-            </div>
-          
             <!-- Your existing saved and profile dropdown (unchanged) -->
             <div class="saved-ctn">
               <a href="saved.html" class="saved-btn">
@@ -333,7 +85,7 @@ input:checked + .slider:before {
             <div class="dropdown-container">
               <button class="profile-btn" id="dpBtn">DP</button>
               <div class="dropdown" id="dropdownMenu">
-                <a href="#" class="prfl">Profile Settings</a>
+                <a href="employer-settings.html" class="prfl">Settings</a>
                 <a href="index.html">Logout</a>
               </div>
             </div>
@@ -341,29 +93,84 @@ input:checked + .slider:before {
 
         <section class="job-list-container">
             <div class="job-search-container">
-                <section class="account-settings-container">
-                    <div class="settings-card">
-                      <h2>Account</h2>
-                      <ul>
-                        <li>
-                            <span class="modal-link" data-bs-toggle="modal" data-bs-target="#email-modal">
-                            Change Email
-                            </span>
-                        </li>
-                        <li>
-                            <span class="modal-link" data-bs-toggle="modal" data-bs-target="#pwd-modal">
-                            Change Password     
-                            </span>
-                        </li>
-                      </ul>
+                <section class="company-profile-container">
+                    <div class="company-cover">
+                        <div class="company-profile-box">
+                            <img src="company-logo/german.jpg" alt="image">
+                        </div>
                     </div>
+                
+                    <article class="company-info-box">
+                        <!-- Moved Company Name, Rating, and Review Button inside company-info-box -->
+                        <header class="company-header">
+                            <div class="company-name">
+                                <h2>PinoySeaman</h2>
+                                <div class="rating">
+                                    <p class="star-rating">
+                                        <span class="rating-value">5.0</span> ⭐⭐⭐⭐⭐
+                                    </p>
+                                    <p class="review-count">
+                                        total rating from <a href="#" class="review-link">26 reviews</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="company-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-company-profile"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </header>
+                
+                        <h3>Company Overview</h3>
+                
+                        <dl class="company-details">
+                            <div class="info-item">
+                                <dt>Website</dt>
+                                <dd><a href="https://www.pinoyseaman.com/index.php" target="_blank" rel="noopener noreferrer">pinoyseaman.com</a></dd>
+                            </div>
+
+                            <div class="info-item">
+                                <dt>Contact Person</dt>
+                                <dd>Daniel Pagcaliwangan</dd>
+                            </div>
+                
+                            <div class="info-item">
+                                <dt>Phone</dt>
+                                <dd>09452733164</dd>
+                            </div>
+            
+                            <div class="info-item">
+                                <dt>Email</dt>
+                                <dd>Pagcaliwangan11@gmail.com</dd>
+                            </div>
+                
+                            <div class="info-item">
+                                <dt>Address</dt>
+                                <dd>Scandic Palace, Emilia str, Makati City</dd>
+                            </div>
+                        </dl>
+                
+                        <section class="company-description">
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos iste quia inventore nisi nulla quibusdam nobis, 
+                                aliquid quis autem minima, fugiat, veritatis esse architecto ab sapiente aut. Alias, iure minima.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla omnis deleniti ipsum dicta fugiat, temporibus, quis obcaecati autem vel velit, iusto nisi alias illo. Quidem ipsa dolore ex aliquam eveniet.
+                            </p>
+                        </section>
+                    </article>
                 </section>
-                  
+              
                 <section class="account-settings-container">
                     <div class="settings-card">
-                      <h2>Email Settings</h2>
-                      <p>Here you can set up your email preferences</p>
-                      
+                        <h2>Account Settings</h2>
+                        <ul>
+                          <li>
+                              <span class="modal-link" data-bs-toggle="modal" data-bs-target="#email-modal">
+                              Change Email
+                              </span>
+                          </li>
+                          <li>
+                              <span class="modal-link" data-bs-toggle="modal" data-bs-target="#pwd-modal">
+                              Change Password     
+                              </span>
+                          </li>
+                        </ul>
                       <div class="settings-item">
                         <div>
                           <h2>Pinoyseaman updates</h2>
@@ -468,6 +275,75 @@ input:checked + .slider:before {
         </div>
     </section>
 
+    <!-- EDIt COMPANY PROFILE MODAL -->
+    <section class="modal fade" id="edit-company-profile" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Edit Company Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <section class="modal-body">
+                    <div class="container-fluid">
+                        <form>
+                            <div class="mb-3 text-center">
+                                <label for="jobImage" class="form-label d-block">Job post image</label>
+                                <div class="upload-image">
+                                    <input type="file" id="jobImage" class="form-control d-none">
+                                    <div class="upload-box">
+                                        <p>Upload Vessel or Company Image</p>
+                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <!-- Name Row -->
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="companyName" class="form-label">Company Name:</label>
+                                    <input type="text" class="form-control" id="companyName" placeholder="pinoyseaman">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="website" class="form-label">Website:</label>
+                                    <input type="text" class="form-control" id="website" placeholder="pinoyseaman.com">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="contact-person" class="form-label">Contact Person:</label>
+                                    <input type="text" class="form-control" id="contact-person" placeholder="Danny Pagcaliwangan">
+                                </div>
+                        
+                                <!-- Second Row -->
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="phone" class="form-label">Phone:</label>
+                                    <input type="number" class="form-control" id="phone" placeholder="09452733164">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" placeholder="Emilia Str, scandic palace">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="pagcaliwanganbigdick@gmail.com">    
+                                </div>
+                        
+                                <div class="mb-3">
+                                    <label for="about-company" class="form-label">About Company</label>
+                                    <textarea class="form-control" id="about-company" rows="4">company profile and story</textarea>
+                                </div>
+                                    
+                                <!-- Email Row -->
+                                <div class="col-12">
+                                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password" placeholder="pinoyseaman password">
+                                </div>
+                            </div>
+                        </form>
+                    </div>                  
+                </section>
+            </div>
+        </div>
+    </section>
+
     <!-- Modal -->
     <section class="modal fade" id="pwd-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -496,10 +372,6 @@ input:checked + .slider:before {
                   
                     <button type="submit" class="btn btn-primary w-100">Save</button>
                 </form>                  
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
         </div>

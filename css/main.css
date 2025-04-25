@@ -122,6 +122,7 @@ header {
     letter-spacing: 0.4px;
     color: #fff;
     background-color: transparent; 
+    align-content: center;
 }
 
 .signup-btn:hover{
@@ -1267,156 +1268,158 @@ figcaption {
 
 /*------------------------- job-page END --------------------*/
 
-/*------------------------- login-signup --------------------*/
+.company-header {
+    background-color: #0f1128;
+    padding: 40px;
+    border-radius: 25px;
+    max-width: 1100px;
+    margin: 40px auto;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    }
 
-.login-signup-main {
+    .company-header-container {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
-    min-height: 100vh; 
-    padding: 0 auto; 
-    background: linear-gradient(to top, #b3d9ff 5%, #ffffff 50%);
-}
+    align-items: center;
+    justify-content: center;
+    gap: 150px;
+    }
 
-.login-signup {
+    .text-content {
+    max-width: 550px;
+    }
+
+    .text-content h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    }
+
+    .text-content p {
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+    }
+
+    .search-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 450px;
+    }
+
+    .search-box input {
+    border: none;
+    padding: 12px 16px;
     width: 100%;
-    padding: 15px;
+    font-size: 14px;
+    outline: none;
+    }
+
+    .search-box button {
+    background-color: #f04f56;
+    border: none;
+    padding: 12px 16px;
+    cursor: pointer;
+    }
+
+    .search-box i {
+    color: white;
+    font-size: 16px;
+    }
+
+    .image-content img {
+    max-width: 400px;
+    height: auto;
+    }
+
+    /* ------------------------ company perks ------------------------------ */
+    .company-perks {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: 'Arial', sans-serif;
+    }
+
+    .company-perks h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c2f44;
+    margin-bottom: 50px;
+    }
+
+    .perks-grid {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    }
+
+    .perk-item {
+    max-width: 220px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgb(222, 221, 221);
-}
-
-.login-signup h3 {
-    font-size: 25px;
-    margin-left: 15px;
-    margin-bottom: 10px;
-}
-
-.seafarer-box,
-.employer-box {
-    position: relative; /* important for absolute positioning inside */
-    justify-content: center; /* Center content horizontally */
-    display: flex;
     align-items: center;
-    width: 360px;
-    height: 100px;
-    margin: 0 auto;
-    border-radius: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
+    }
 
-/* Background colors */
-.seafarer-box {
-    background-color: #ddeeff;
-    border-left: 6px solid #507fdc;
-    border-right: 6px solid #507fdc;
-}
-
-.employer-box {
-    background-color: #ffdddd;
-    border-left: 6px solid #e2686a;
-    border-right: 6px solid #e2686a;
-}
-
-.seafarer-box a{
-    inset: 0; 
-    position: absolute;
-    display: flex;
-    gap: 20px;
-    padding: 35px 0 35px 0;
-    margin-left: 50px;
-    color: #0044cc; 
-}
-
-.employer-box a{
-    inset: 0; 
-    position: absolute;
-    display: flex;
-    gap: 20px;
-    padding: 35px 0 35px 0;
-    margin-left: 50px;
-    color: #E63639; 
-}
-
-/* Icons */
-.seafarer-box i{
-    margin-right: 10px;
-    font-size: 30px; 
-    color: #0044cc; 
-}
-
-.employer-box i {
-    margin-right: 10px;
-    font-size: 30px; 
-    color: #E63639; 
-}
-
-.seafarer-box:hover {
-    background-color: #cce0ff;
-    border-left: 6px solid #0066ff; /* brighter blue */
-    border-right: 6px solid #0066ff;
-}
-
-.employer-box:hover {
-    background-color: #ffcccc;
-    border-left: 6px solid #ff0000; /* brighter red */
-    border-right: 6px solid #ff0000;
-}
-
-.back{
-    align-self:flex-end;
-    color: #686a6b;
-    margin-left: 5px;
-}
-
-.back:hover{
-    text-decoration: underline;
-}
-
-.start-logo {
-    margin-bottom: 10px; /* Add spacing between logo and form */
-}
-
-.start-logo img {
-    max-width: 150px; /* Adjust as needed */
+    .perk-item img {
+    width: 200px;
     height: auto;
-}
+    margin-bottom: 20px;
+    }
 
-.logo-start-container {
-    display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically (if section has height) */
-    width: 100%; /* Ensures it spans the full width */
-   padding-bottom: 10px;
-}
+    .perk-text {
+    text-align: center;
+    }
 
-.logo-start-link img {
-    display: block;
-    width: 180px; /* Adjust as needed */
-    height: auto; /* Maintains aspect ratio */
-}
+    .perk-subtext {
+    font-size: 15px;
+    color: #000;
+    margin: 0 0 8px;
+    height: 40px; /* Fixed height to align images */
+    }
 
-.logo-start-link a {
-    display: flex; /* Makes the link fit the image */
-    align-items: center;
-    width: fit-content;
-    padding: 0;
+    .perk-item h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #000;
     margin: 0;
-    text-decoration: none; /* Ensures no text styling issues */
-}
+    }
 
-.logo-start-link img {
-    display: block; /* Removes extra spacing */
-    width: 200px; /* Adjust this value to your preferred size */
-    height: auto; /* Keeps aspect ratio */
-}
-/*------------------------- login-signup END --------------------*/
+    .company-card-rating {
+    padding: 10px;
+    }
+
+    .company-card-rating h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0 8px;
+    color: #000;
+    }
+
+    .rating-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    }
+
+    .star {
+    color: #1f2b7b;
+    font-size: 18px;
+    margin-right: 4px;
+    }
+
+    .rating-value {
+    font-size: 16px;
+    color: #000;
+    }
+
+    .review-count {
+    font-size: 15px;
+    color: #000;
+    }
 
 /*------------------------- footer --------------------*/
 

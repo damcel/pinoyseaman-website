@@ -6,373 +6,6 @@
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>dashboard jobs</title>
-    <style>
-
-.header-container{
-    padding: 15px 60px 15px 60px;
-}
-
-.company-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  padding: 1em;
-  margin-top: 1rem;
-  margin-bottom: 1em;
-  border-radius: 1em;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--line-clr);
-}
-
-.company-logo-placeholder img{
-  width: 200px;
-  height: 100px;
-  object-fit: fill;
-  border-radius: 12px;
-  margin-bottom: 10px;
-}
-
-.company-name {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 10px;
-  color: #0B1C33;
-  text-align: center;
-}
-
-.create-job-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.create-job-btn:hover {
-  background-color: #0056b3;
-}
-
-    ul{
-        margin-bottom: 0;
-    }
-
-    .job-posting-container{
-        background-color: var(--base-clr);
-        padding: 15px;
-        display: flex;
-    flex-wrap: wrap; 
-    border-radius: 8px;
-    box-shadow: 0 4px 4px rgba(43, 43, 43, 0.1);
-    }
-
-        .post-header h2 {
-  font-size: 1.5rem;
-}
-
-.tab-list {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  padding-left: 0;
-  border-bottom: 2px solid #eee;
-}
-
-.tab-list a{
-    text-decoration: none;
-    color: black;
-}
-
-.tab-list li {
-  padding: 10px 0;
-  cursor: pointer;
-}
-
-.active-tab {
-  border-bottom: 2px solid #0072ff;
-  font-weight: 600;
-}
-
-/*-- Performance ---*/
-.dashboard-card {
-  background-color: rgb(244, 242, 242);
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.dashboard-card.center {
-  align-items: center;
-  text-align: center;
-}
-
-.task-item {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.task-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 14px;
-}
-
-.task-info a {
-  color: #007bff;
-  font-weight: 500;
-}
-
-.close-task {
-  background: none;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.primary-btn {
-  width: 20%;
-  background-color: #007bff;
-  border: none;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.primary-btn:hover {
-  background-color: #0056b3;
-}
-
-.post-icon {
-  width: 80px;
-  margin: 10px 0;
-}
-
-.stats-container {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
-
-.stat-box {
-  flex: 1;
-  min-width: 100px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-}
-
-.stat-box strong {
-  font-size: 22px;
-  color: #000;
-}
-
-.stat-box span {
-  font-size: 12px;
-  display: block;
-  margin-top: 5px;
-}
-
-.positive {
-  color: green;
-}
-
-.negative {
-  color: red;
-}
-
-.neutral {
-  color: gray;
-}
-
-/*--- performance end */
-/* ------------------- search button ---------------------------*/
-
-.search-bar-container {
-  display: flex;
-  align-items: center;
-  border-radius: 50px;
-  margin-right: auto;
-  background: rgba(230, 225, 225, 0.6); /* Soft light grey with slight transparency */
-  width: 320px;
-  height: 36px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-  backdrop-filter: blur(4px); /* Optional: soft blur */
-  box-sizing: border-box;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 14px;
-  color: #333;
-  padding: 0 10px;
-}
-
-.search-btn {
-  background-color: #ef4444; /* Red */
-  border: none;
-  color: white;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight depth */
-  margin-right: 10px;
-}
-
-.metrics-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.metrics-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.metrics-header h3 {
-  color: #002f6c;
-  margin: 0;
-}
-
-.metrics-dropdown {
-  position: relative;
-}
-
-.dropdown-toggle {
-  background-color: #0072ff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.dropdown-list {
-  position: absolute;
-  top: 38px;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 8px 0;
-  list-style: none;
-  width: 200px;
-  display: none;
-  z-index: 10;
-}
-
-.dropdown-list li {
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.dropdown-list li:hover {
-  background-color: #f0f0f0;
-}
-
-.metrics-legend {
-  display: flex;
-  justify-content: flex-end;
-  gap: 30px;
-  margin-top: 16px;
-  font-size: 14px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.line {
-  display: inline-block;
-  width: 20px;
-  height: 2px;
-  border-radius: 4px;
-}
-
-.natural {
-  background-color: #0072ff;
-}
-
-.sponsored {
-  background-color: #a3a3a3;
-}
-
-/* -------------------- export and date -----------------------*/
-.date-export-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fffafa;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.date-range-dropdown {
-  border: 1px solid #000;
-  padding: 8px 14px;
-  border-radius: 30px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.date-range-dropdown .arrow {
-  font-size: 12px;
-}
-
-.export-btn {
-  background-color: #0072ff;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.export-btn .icon {
-  font-size: 14px;
-}
-
-</style>
 </head>
 <body>
     <aside id="sidebar">
@@ -390,13 +23,9 @@
                 </button>
             </div>
             <ul class="ul-links">
-                <div class="company-card">
-                    <div class="company-logo-placeholder">
-                        <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-                    </div>
-                    <h3 class="company-name">Company Name</h3>
-                    <button class="create-job-btn">+ Create Job</button>
-                </div>
+              <div class="company-profile-card">
+                <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+              </div>
               <li>
                 <a href="employer-dashboard.html">
                   <!-- SVG Icon -->
@@ -420,21 +49,26 @@
                   <!-- SVG Icon -->
                   <i class="fa-regular fa-building"></i><span>Advertise</span>
                 </a>
-              </li>
+              </li>   
+                <div id="progress-main-container" class="progress-main-container">
+                  <div class="complete-percentage">
+                      <p>Complete your profile</p>
+                  </div>
+                  <div class="progress-container">
+                      <div class="progress-bar" id="progress-bar"></div>
+                      <p id="progress-text">0% Completed</p>
+                      <div class="incomplete-container">
+                          <h3>Incomplete Fields:</h3>
+                          <ul id="missing-fields"></ul>
+                      </div>
+                  </div>
+                </div>
             </ul>
         </nav>
     </aside>
     
     <main class="dashboard-container">
         <section class="header-container">
-            <!-- New Search Container -->
-            <div class="search-bar-container">
-              <input type="text" placeholder="Search..." class="search-input" disabled />
-              <button class="search-btn">
-                <i class="fa-solid fa-q"></i>
-              </button>
-            </div>
-          
             <!-- Your existing saved and profile dropdown (unchanged) -->
             <div class="saved-ctn">
               <a href="saved.html" class="saved-btn">
@@ -444,7 +78,7 @@
             <div class="dropdown-container">
               <button class="profile-btn" id="dpBtn">DP</button>
               <div class="dropdown" id="dropdownMenu">
-                <a href="#" class="prfl">Profile Settings</a>
+                <a href="employer-settings.html" class="prfl">Settings</a>
                 <a href="index.html">Logout</a>
               </div>
             </div>

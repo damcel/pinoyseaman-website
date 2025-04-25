@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
     <title>dashboard jobs</title>
     <style>
 
@@ -28,51 +28,6 @@
   object-fit: fill;
   border-radius: 12px;
   margin-bottom: 10px;
-}
-
-.company-name {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 10px;
-  color: #0B1C33;
-  text-align: center;
-}
-
-.create-job-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.create-job-btn:hover {
-  background-color: #0056b3;
-}
-
-    ul{
-        margin-bottom: 0;
-    }
-
-    .job-posting-container{
-        background-color: var(--base-clr);
-        padding: 15px;
-        display: flex;
-        flex-wrap: wrap; 
-        border-radius: 8px;
-        box-shadow: 0 4px 4px rgba(43, 43, 43, 0.1);
-    }
-
-    .post-header h2 {
-        font-size: 1.5rem;
-    }
-
-.subtext {
-  color: #666;
-  font-size: 0.9rem;
 }
 
 .tab-list {
@@ -303,47 +258,6 @@
 
 /* -------------------- ADS END--------------------------*/
 
-/* ------------------- search button ---------------------------*/
-
-.search-bar-container {
-  display: flex;
-  align-items: center;
-  border-radius: 50px;
-  margin-right: auto;
-  background: rgba(230, 225, 225, 0.6); /* Soft light grey with slight transparency */
-  width: 320px;
-  height: 36px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-  backdrop-filter: blur(4px); /* Optional: soft blur */
-  box-sizing: border-box;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 14px;
-  color: #333;
-  padding: 0 10px;
-}
-
-.search-btn {
-  background-color: #ef4444; /* Red */
-  border: none;
-  color: white;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight depth */
-  margin-right: 10px;
-}
-
 /* ------------------- search button end---------------------------*/
 
 .page-footer {
@@ -373,10 +287,10 @@
         <nav class="sidebar-nav">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <a href="dashboardjobs.html" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
-                    </a>
-                </div>
+                  <a href="dashboardjobs.html" class="logo-link">
+                      <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                  </a>
+              </div>
                 <button onclick="toggleSidebar()" id="toggle-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
                         <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
@@ -384,13 +298,9 @@
                 </button>
             </div>
             <ul class="ul-links">
-                <div class="company-card">
-                    <div class="company-logo-placeholder">
-                        <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-                    </div>
-                    <h3 class="company-name">Company Name</h3>
-                    <button class="create-job-btn">+ Create Job</button>
-                </div>
+              <div class="company-profile-card">
+                <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+              </div>  
               <li>
                 <a href="employer-dashboard.html">
                   <!-- SVG Icon -->
@@ -421,14 +331,6 @@
     
     <main class="dashboard-container">
         <section class="header-container">
-            <!-- New Search Container -->
-            <div class="search-bar-container">
-                <input type="text" placeholder="Search..." class="search-input" disabled />
-                <button class="search-btn">
-                  <i class="fa-solid fa-q"></i>
-                </button>
-              </div>
-
             <div class="saved-ctn">
                 <a href="saved.html" class="saved-btn">
                     <i class="fa-solid fa-book-bookmark"></i>

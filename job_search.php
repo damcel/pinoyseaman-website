@@ -54,15 +54,52 @@
             </nav>
         </section>
         <section>
+            <form method="POST" action="job_search.php">
             <div class="search-container">
-                <select class="search-select">
-                    <option selected>Select job</option>
-                </select>
-                <select class="search-select">
-                    <option selected>Select vessel type</option>
-                </select>
-                <button class="search-button">Find jobs</button>
+                
+                    <select class="search-select" name="job_type">
+                        <option value="" <?php echo empty($_POST['job_type']) ? 'selected' : ''; ?>>Select job</option>
+                        <?php
+                        // Include the database connection file
+                        include 'db.php';
+
+                        // Query to fetch jobs from the seaman_jobs table in ascending order
+                        $jobQuery = "SELECT DISTINCT job FROM seaman_jobs ORDER BY job ASC";
+                        $jobResult = $conn->query($jobQuery);
+
+                        if ($jobResult && $jobResult->num_rows > 0) {
+                            while ($row = $jobResult->fetch_assoc()) {
+                                $job = htmlspecialchars($row['job']); // Escape special characters
+                                $selected = (isset($_POST['job_type']) && $_POST['job_type'] === $job) ? 'selected' : '';
+                                echo "<option value=\"$job\" $selected>$job</option>";
+                            }
+                        } else {
+                            echo "<option value=\"\">No jobs available</option>";
+                        }
+                        ?>
+                    </select>
+                    <select class="search-select" name="vessel_type">
+                        <option value="" <?php echo empty($_POST['vessel_type']) ? 'selected' : ''; ?>>Select vessel type</option>
+                        <?php
+                        // Query to fetch vessel types from the vessel_types table in ascending order
+                        $typeQuery = "SELECT DISTINCT type FROM vessel_types ORDER BY type ASC";
+                        $typeResult = $conn->query($typeQuery);
+
+                        if ($typeResult && $typeResult->num_rows > 0) {
+                            while ($row = $typeResult->fetch_assoc()) {
+                                $type = htmlspecialchars($row['type']); // Escape special characters
+                                $selected = (isset($_POST['vessel_type']) && $_POST['vessel_type'] === $type) ? 'selected' : '';
+                                echo "<option value=\"$type\" $selected>$type</option>";
+                            }
+                        } else {
+                            echo "<option value=\"\">No types available</option>";
+                        }
+                        ?>
+                    </select>
+                    <button class="search-button" type="submit">Find Jobs</button>
+                
             </div>
+            </form>
         </section>
 
         <section>
@@ -85,37 +122,51 @@
                 </h3>
             </div>
 
+            <?php
+            // Include the database connection file
+            include 'db.php';
+
+            // Pagination variables
+            $jobsPerPage = 10; // Number of jobs per page
+            $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+            $offset = ($currentPage - 1) * $jobsPerPage;
+
+            // Get the search filters from the form
+            $jobType = isset($_POST['job_type']) ? $_POST['job_type'] : '';
+            $vesselType = isset($_POST['vessel_type']) ? $_POST['vessel_type'] : '';
+
+            // Build the WHERE clause dynamically
+            $whereClauses = ["j.expiry >= CURDATE()"]; // Ensure jobs are not expired
+            if (!empty($jobType)) {
+                $whereClauses[] = "j.job_title LIKE '%" . $conn->real_escape_string($jobType) . "%'";
+            }
+            if (!empty($vesselType)) {
+                $whereClauses[] = "j.vessel LIKE '%" . $conn->real_escape_string($vesselType) . "%'";
+            }
+            $whereSQL = !empty($whereClauses) ? "WHERE " . implode(" AND ", $whereClauses) : "";
+
+            // Query to count total jobs with filters
+            $totalJobsQuery = "SELECT COUNT(*) AS total_jobs FROM jobs j $whereSQL";
+            $totalJobsResult = $conn->query($totalJobsQuery);
+            $totalJobs = $totalJobsResult->fetch_assoc()['total_jobs'];
+            $totalPages = ceil($totalJobs / $jobsPerPage);
+
+            // Query to fetch jobs with filters for the current page
+            $jobQuery = "SELECT j.job_title, j.vessel, j.date_posted, e.company, e.logo 
+                        FROM jobs j
+                        INNER JOIN employer e ON j.company_code = e.company_code
+                        $whereSQL
+                        ORDER BY j.date_posted DESC
+                        LIMIT $offset, $jobsPerPage";
+            $jobResult = $conn->query($jobQuery);
+            ?>
+
             <div class="job-card-container">
                 <?php
-                // Include the database connection file
-                include 'db.php';
-
-                // Pagination variables
-                $jobsPerPage = 10; // Number of jobs per page
-                $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
-                $offset = ($currentPage - 1) * $jobsPerPage;
-
-                // Query to count total jobs
-                $totalJobsQuery = "SELECT COUNT(*) AS total_jobs FROM jobs WHERE expiry >= CURDATE()";
-                $totalJobsResult = $conn->query($totalJobsQuery);
-                $totalJobs = $totalJobsResult->fetch_assoc()['total_jobs'];
-                $totalPages = ceil($totalJobs / $jobsPerPage);
-
-                // Query to fetch jobs for the current page
-                $jobQuery = "SELECT j.job_title, j.vessel, j.date_posted, e.company, e.logo 
-                            FROM jobs j
-                            INNER JOIN employer e ON j.company_code = e.company_code
-                            WHERE j.expiry >= CURDATE()
-                            ORDER BY j.date_posted DESC
-                            LIMIT $offset, $jobsPerPage";
-                $jobResult = $conn->query($jobQuery);
-
                 if ($jobResult && $jobResult->num_rows > 0) {
                     while ($job = $jobResult->fetch_assoc()) {
                         $jobTitle = htmlspecialchars($job['job_title']);
                         $vessel = htmlspecialchars($job['vessel']);
-                        // $salary = htmlspecialchars($job['salary']);
-                        // $contract = htmlspecialchars($job['contract']);
                         $datePosted = htmlspecialchars($job['date_posted']);
                         $companyName = htmlspecialchars($job['company']);
                         $logoPath = "company-logo/" . htmlspecialchars($job['logo']);
@@ -134,8 +185,6 @@
                                 
                                 <div class="job-details">
                                     <p class="job-description"><i class="fas fa-ship"></i> <?php echo $vessel; ?></p>
-                                    <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
-                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract in months</p>
                                 </div>  
                                 
                                 <a href="#" class="company-link"><i class="fas fa-briefcase"></i> <?php echo $companyName; ?></a>
@@ -149,7 +198,7 @@
                         <?php
                     }
                 } else {
-                    echo "<p>No jobs available at the moment.</p>";
+                    echo "<p>No jobs available matching your criteria.</p>";
                 }
                 ?>
             </div>

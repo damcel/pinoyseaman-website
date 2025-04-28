@@ -152,7 +152,7 @@
             $totalPages = ceil($totalJobs / $jobsPerPage);
 
             // Query to fetch jobs with filters for the current page
-            $jobQuery = "SELECT j.job_title, j.vessel, j.date_posted, e.company, e.logo 
+            $jobQuery = "SELECT j.job_title, j.vessel, j.date_posted, j.code, e.company, e.logo 
                         FROM jobs j
                         INNER JOIN employer e ON j.company_code = e.company_code
                         $whereSQL
@@ -194,7 +194,7 @@
                             
                             <div class="apply-container">
                                 <p class="date-posted"><?php echo $datePosted; ?></p>
-                                <button class="apply-button">Details & Apply</button>
+                                <a href="jobs.php?job_id=<?php echo $job['code']; ?>" class="apply-button">Details & Apply</a>
                             </div>
                         </section>
                         <?php

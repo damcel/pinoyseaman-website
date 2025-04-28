@@ -185,6 +185,8 @@
                                 
                                 <div class="job-details">
                                     <p class="job-description"><i class="fas fa-ship"></i> <?php echo $vessel; ?></p>
+                                    <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
+                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
                                 </div>  
                                 
                                 <a href="#" class="company-link"><i class="fas fa-briefcase"></i> <?php echo $companyName; ?></a>

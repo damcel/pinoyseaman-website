@@ -428,45 +428,50 @@ $user = $userResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="educationForm" action="includes/add_education.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="mb-3">
                         <label for="school" class="form-label">School <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="school" placeholder="Enter school name">
+                        <input type="text" class="form-control" id="school" name="school" placeholder="Enter school name">
                     </div>
         
                     <div class="mb-3">
                         <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
+                        <input type="text" class="form-control" id="educationLevel" name="educationLevel" placeholder="e.g. Certification, Bachelor's">
                     </div>
         
                     <div class="mb-3">
                         <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
+                        <input type="text" class="form-control" id="fieldOfStudy" name="fieldOfStudy" placeholder="e.g. Information Technology">
                     </div>
         
                     <div class="row mb-3">
                     <div class="col">
                         <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="fromDate">
+                        <input type="date" class="form-control" id="fromDate" name="fromDate">
                     </div>
                     <div class="col">
                         <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="toDate">
+                        <input type="date" class="form-control" id="toDate" name="toDate">
                     </div>
                     </div>
         
                     <div class="mb-3">
                         <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                        <input type="file" class="form-control" id="documentUpload" name="documentUpload" accept=".pdf,.doc,.docx">
                     </div>
-                </form>                 
+                                
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div> 
+
+                </form> 
+
             </div>
         </div>
     </section>

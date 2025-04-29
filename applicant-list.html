@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/dashboard.css">
-    <title>Job Post</title>
+    <title>Applicant List</title>
 </head>
 <body>
     <aside id="sidebar">
@@ -72,7 +73,7 @@
         <section class="header-container">
             <!-- Your existing saved and profile dropdown (unchanged) -->
             <div class="saved-ctn">
-              <a href="#" class="saved-btn">
+              <a href="saved.html" class="saved-btn">
                 <i class="fa-solid fa-book-bookmark"></i>
               </a>
             </div>
@@ -80,7 +81,7 @@
               <button class="profile-btn" id="dpBtn">DP</button>
               <div class="dropdown" id="dropdownMenu">
                 <a href="employer-settings.html" class="prfl">Settings</a>
-                <a href="index.php">Logout</a>
+                <a href="index.html">Logout</a>
               </div>
             </div>
           </section>
@@ -90,81 +91,103 @@
                 <section class="job-posting-container">
                      <!-- Header Tabs -->
                     <div class="post-header">
-                        <h3>Post Job</h3>
-                        <p class="subtext">What seafaring rank or position are you hiring for? Post it here!</p>
+                        <h3>Applicant List</h3>
+                        <p class="subtext">Looking for the right seafarer? Browse and choose from the list below!</p>
                         <ul class="tab-list">
-                        <li class="active-tab"><a href="employer-posting.html">Published</a></li>
-                        <li><a href="applicant-list.html">Applicant</a></li>
+                        <li><a href="employer-posting.html">Published</a></li>
+                        <li class="active-tab"><a href="applicant-list.html">Applicant</a></li>
                         </ul>
+                        <div class="search-applicant">
+                            <select class="search-select">
+                              <option value="">Select job</option>
+                              <!-- Add your job options -->
+                            </select>
+                          
+                            <select class="search-select">
+                              <option value="">Select vessel type</option>
+                              <!-- Add your vessel type options -->
+                            </select>
+                          
+                            <button class="dashboard-src-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                          </div>
                     </div>
-                </section>
-
-                <section class="dashboard-job-container">
-                    <!-- Call to Action Box -->
-                    <div class="cta-card">
-                        <div class="cta-text">
-                        <h4>Post quickly, hire smarter.</h4>
-                        <p>Aplikanteng Seaman, Isang Post Lang</p>
-                        <button class="cta-button" data-bs-toggle="modal" data-bs-target="#jobPostModal">Post Job</button>
-                        </div>
-                        <div class="cta-image">
-                        <img src="https://img.icons8.com/color/96/megaphone.png" alt="Megaphone" />
-                        </div>
-                    </div>
-                </section>
-                
-                <section class="dashboard-job-container">
-                    <!-- related job list -->
-                    <article class="job-details-container">
-                        <!-- cards for related job list -->
-                        <section class="employer-related-job">
-                            <div class="job-card">
-                                <div class="card-left">
-                                    <label class="job-title">Tanker</label>
-                                    <p class="posting-job-detail"><i class="fas fa-ship"></i>Cargo Ship</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-calendar"></i>Contract Length</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-file-word"></i>Job Requirement</p>
-                                    <label>Description</label>
-                                    <p class="job-posting-description">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo 
-                                    laboriosam numquam molestiae perspiciatis, eius ut exercitationem at?
-                                    </p>
-                                </div>
-                                <div class="card-right">
-                                    <button class="job-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-recent-job"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <img src="company-logo/marsa.jpg" alt="">
-                                    <button class="boost-btn">Boost Post</button>
-                                </div>
+                </section>  
+                <section class="applicant-profile-container">
+                    <section class="applicant-card-list">
+                        <article class="applicant-profile-card">
+                            <div class="applicant-profile">
+                                <img src="images/default-profile.png" alt="applicant-profile-photo">
+                                <div>
+                                    <p>Rank</p>
+                                    <p>Position</p>
+                                    <figcaption class="requirements">Complete Requirement <i class="fa-solid fa-circle-check"></i></figcaption>
+                                </div>        
+                            <div>
+                                <button class="edit-btn"  data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><i class="fa-solid fa-eye"></i></button>
                             </div>
-                        </section>
-                    </article>
-
-                    <!-- related job list -->
-                    <article class="job-details-container">
-                        <!-- cards for related job list -->
-                        <section class="employer-related-job">
-                            <div class="job-card">
-                                <div class="card-left">
-                                    <label class="job-title">Chief Engineer</label>
-                                    <p class="posting-job-detail"><i class="fas fa-ship"></i>Cargo Ship</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-calendar"></i>Contract Length</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-file-word"></i>Job Requirement</p>
-                                    <label>Description</label>
-                                    <p class="job-posting-description">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo 
-                                    laboriosam numquam molestiae perspiciatis, eius ut exercitationem at?
-                                    </p>
-                                </div>
-                                <div class="card-right">
-                                    <button class="job-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-recent-job"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <img src="company-logo/marsa.jpg" alt="">
-                                    <button class="boost-btn">Boost Post</button>
-                                </div>
+                        </article>
+                        <article class="applicant-profile-card">
+                            <div class="applicant-profile">
+                                <img src="images/default-profile.png" alt="applicant-profile-photo">
+                                <div>
+                                    <p>Rank</p>
+                                    <p>Position</p>
+                                    <figcaption class="requirements">Complete Requirement <i class="fa-solid fa-circle-check"></i></figcaption>
+                                </div>                         
+                            <div>
+                                <button class="edit-btn"><i class="fa-solid fa-eye"></i></button>
                             </div>
-                        </section>
-                    </article>
-
-                </section>                                                  
+                        </article>
+                        <article class="applicant-profile-card">
+                            <div class="applicant-profile">
+                                <img src="images/default-profile.png" alt="applicant-profile-photo">
+                                <div>
+                                    <p>Rank</p>
+                                    <p>Position</p>
+                                    <figcaption class="requirements">Complete Requirement <i class="fa-solid fa-circle-check"></i></figcaption>
+                                </div>                        
+                            <div>
+                                <button class="edit-btn"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </article>
+                        <article class="applicant-profile-card">
+                            <div class="applicant-profile">
+                                <img src="images/default-profile.png" alt="applicant-profile-photo">
+                                <div>
+                                    <p>Rank</p>
+                                    <p>Position</p>
+                                    <figcaption class="requirements">Complete Requirement <i class="fa-solid fa-circle-check"></i></figcaption>
+                                </div>                       
+                            <div>
+                                <button class="edit-btn"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </article>
+                        <article class="applicant-profile-card">
+                            <div class="applicant-profile">
+                                <img src="images/default-profile.png" alt="applicant-profile-photo">
+                                <div>
+                                    <p>Rank</p>
+                                    <p>Position</p>
+                                    <figcaption class="requirements">Complete Requirement <i class="fa-solid fa-circle-check"></i></figcaption>
+                                </div>                      
+                            <div>
+                                <button class="edit-btn"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </article>
+                        <article class="applicant-profile-card">
+                            <div class="applicant-profile">
+                                <img src="images/default-profile.png" alt="applicant-profile-photo">
+                                <div>
+                                    <p>Rank</p>
+                                    <p>Position</p>
+                                    <figcaption class="requirements">Complete Requirement <i class="fa-solid fa-circle-check"></i></figcaption>
+                                </div>                           
+                            <div>
+                                <button class="edit-btn"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </article>
+                    </section>  
+                </section>             
             </div>
             
             <div class="currency-date-aside">
@@ -392,12 +415,183 @@
             </div>
         </div>
     </section>
+
+    <!------------------- Show user applicant profile ------------------------>
+    <section class="modal fade" id="applicant-profile-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Applicant Information</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add this inside the modal-body -->
+                    <section class="modal-profile-card">
+                        <div class="user-profile-header">
+                            <div class="profile-pic">
+                                <img src="company-logo/german.jpg" alt="">
+                            </div>
+                            <div class="user-profile-details">
+                                <h3>Juan Dela Cruz</h3>
+                            
+                                <div class="info-pair">
+                                <p class="text-muted">Rank:</p>
+                                <label>Cadet</label>
+                                </div>
+                            
+                                <div class="info-pair">
+                                <p class="text-muted">Vessel:</p>
+                                <label>Vessel type</label>
+                                </div>
+                            
+                                <span class="requirements-badge">
+                                Complete Requirements <span class="info-icon">✔</span>
+                                </span>
+                            </div>
+                          
+                            <button type="button" class="btn btn-secondary contact-btn" id="contactPopoverBtn">
+                                Contact
+                            </button>
+                        </div>
+                    
+                        <section class="education-section">
+                            <h2 class="header-info">Education</h2>
+                            <div class="education-container">
+                                <table class="table-content">
+                                    <thead>
+                                        <tr>
+                                            <th>School</th>
+                                            <th>Field of Study</th>
+                                            <th>Educational Level</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Attachment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="School">University of Batangas</td>
+                                            <td data-label="Field of Study">Information Technology</td>
+                                            <td data-label="Educational Level">Bachelor's Degree</td>
+                                            <td data-label="Start Date">2020</td>
+                                            <td data-label="End Date">2024</td>
+                                            <td class="attachment-cell" data-label="Attachment">
+                                                <div class="attachment-content">
+                                                    <span>taengbinasateasdasda</span>
+                                                    <div class="attachment-icons">
+                                                        <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></i></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>                
+                                </table>          
+                               </div>
+                        </section>               
+                    
+                        <section class="experience-section">
+                            <div>
+                                <h5>Seafaring Experience</h5>
+                                <p>Cadetship</p>
+                                <small>Mar 2025 – Apr 2025</small>
+                            </div>
+                            <div>
+                                <h5>Land-Based Work Experience</h5>
+                                <p>Cadetship</p>
+                                <small>Mar 2025 – Apr 2025</small>
+                            </div>
+                        </section>
+                    
+                        <section class="documents-grid">
+                            <div class="document-item">
+                              <strong>Seaman Book</strong><br>
+                              <small>SeamanBook.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/SeamanBook.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Competence</strong><br>
+                              <small>Competence.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/Competence.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Visas</strong><br>
+                              <small>SeamanVisa.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/SeamanVisa.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Certificate</strong><br>
+                              <small>Certificate.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/Certificate.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Passport</strong><br>
+                              <small>SeamanPassport.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/SeamanPassport.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Merits</strong><br>
+                              <small>Merits.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/Merits.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                        </section>                          
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="downloadAllFiles()">Download All Files</button>
+                </div>
+            </div>
+        </div>
+    </section>
     
     <script src="script/sidenav.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
     <!-- Bootstrap JS with Popper (near the end of body) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+     <!-- jQuery (very important, load it FIRST) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="script/popover.js"></script>
+
+    <!-- Your own script to activate Select2 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const selects = document.querySelectorAll('.search-select');
+        selects.forEach(select => {
+            $(select).select2({
+            placeholder: 'Select an option',
+            allowClear: true,
+            width: 'resolve'
+            });
+        });
+        });
+    </script>
     
 </body>
 </html>

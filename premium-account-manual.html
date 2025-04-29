@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <title>Account Plan</title>
+
+    <style>
+        /* ===== General Container Styles ===== */
+.profile-setup-container {
+  font-family: 'Arial', sans-serif;
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+.premium-account-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.premium-account .progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1rem;
+  margin: 0 auto;
+  list-style: none;
+}
+
+.premium-account .progress-steps::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ddd;
+  z-index: 0;
+}
+
+.premium-account .progress-steps .step {
+    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 1;
+  flex: 1;
+}
+
+.premium-account .progress-steps .step:first-child {
+  left: -60px;
+}
+
+.premium-account .progress-steps .step:last-child {
+  right: -50px;
+}
+
+.premium-account .progress-steps .step .circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #000;
+  z-index: 1;
+}
+
+.premium-account .progress-steps .step.completed .circle {
+  border-color: #000;
+  color: #000;
+}
+
+.premium-account .progress-steps .step.active .circle {
+  border-color: #000;
+  color: #000;
+}
+
+.premium-account .progress-steps .step .label {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #333;
+  white-space: nowrap;
+}
+
+.premium-account a{
+    text-decoration: none;
+    color: black;
+}
+
+
+
+/* ===== Progress Steps Styling ===== */
+.progress-steps {
+  display: flex;
+  list-style: none;
+  gap: 4rem;
+  padding: 0;
+  position: relative;
+}
+
+.progress-steps::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 1.8rem;
+  right: 1.8rem;
+  height: 2px;
+  background-color: #ccc;
+  z-index: 0;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.step .circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.step.completed .circle {
+  background-color: #fff;
+  border-color: #000;
+  color: #000;
+}
+
+.step.active .circle {
+  background-color: #000;
+  border-color: #000;
+}
+
+.step .label {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+/* ===== Payment Layout Section ===== */
+.payment-section .payment-container {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* ===== Left: How To Pay Box ===== */
+.how-to-pay-box {
+  flex: 1 1 60%;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.payment-steps {
+  list-style: decimal inside;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  padding-left: 0;
+}
+
+.payment-steps a.bank-link {
+  color: #000;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.email-link {
+  color: #000;
+  text-decoration: underline;
+}
+
+.payment-steps ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.payment-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 2rem;
+}
+
+.payment-icons .icon {
+  width: 130px;
+  height: auto;
+}
+
+/* ===== Right: Purchase Summary Box ===== */
+.purchase-summary-box {
+  flex: 1 1 35%;
+}
+
+.summary-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+}
+
+.summary-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.summary-item,
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.summary-item.bold {
+  font-weight: bold;
+}
+
+.summary-total {
+  border-top: 1px solid #e0e0e0;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  font-weight: bold;
+}
+
+.total-price {
+  font-size: 1.2rem;
+  color: #000;
+}
+
+.order-status-btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #1db954;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-status-btn:hover {
+  background-color: #1aa34a;
+}
+
+    </style>
+</head>
+<body>
+    <aside id="sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <button onclick="toggleSidebar()" id="toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul class="ul-links">
+                <div class="company-profile-card">
+                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+                </div>
+              <li>
+                <a href="employer-dashboard.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="employer-posting.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Job Post</span>
+                </a>
+              </li>
+              <li>
+                <a href="employer-analytics.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="account-plan.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-building"></i><span>Premium Plan</span>
+                </a>
+              </li>
+                <div id="progress-main-container" class="progress-main-container">
+                  <div class="complete-percentage">
+                      <p>Complete your profile</p>
+                  </div>
+                  <div class="progress-container">
+                      <div class="progress-bar" id="progress-bar"></div>
+                      <p id="progress-text">0% Completed</p>
+                      <div class="incomplete-container">
+                          <h3>Incomplete Fields:</h3>
+                          <ul id="missing-fields"></ul>
+                      </div>
+                  </div>
+                </div>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-container">
+        <section class="header-container">
+            <div class="saved-ctn">
+                <a href="#" class="saved-btn">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </a>
+            </div>
+            <div class="dropdown-container">
+                <button class="profile-btn" id="dpBtn">DP</button>
+                <!-- Dropdown Menu -->
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="#" class="prfl">Profile Settings</a>
+                    <a href="index.html">Logout</a>
+                </div>
+            </div>
+        </section>
+        <section class="profile-setup-container">
+            <section>
+                <div class="premium-account-container">
+                    <nav class="premium-account">
+                        <ul class="progress-steps">
+                            <li class="step completed"> <!-- THIS IS FOR SUBSCRIPTION -->
+                                <a href="account-plan.html"><span class="circle">&#10003;</span></a>
+                                <span class="label">Subscription</span>
+                            </li>
+                            <li class="step active"> <!-- THIS IS FOR PAYMENT -->
+                                <a href="premium-account-manual.html"><span class="circle"><i class="fa-solid fa-hourglass-half"></i></span></a>
+                                <span class="label">Payment</span>
+                            </li>
+                            <li class="step"> <!-- THIS IS FOR CONFIRM -->
+                                <a href="manual-payment-receipt.html"><span class="circle"></span></a>
+                                <span class="label">Confirm</span>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+        
+            <section class="job-list payment-section">
+                <article class="payment-container">
+                    <div class="how-to-pay-box">
+                        <!-- THIS IS for how to payment box on the left -->
+                        <h2 class="section-title">How to pay?</h2>
+                        <ol class="payment-steps">
+                            <li>
+                                Click here <strong><a href="#" class="bank-link" data-bs-toggle="modal" data-bs-target="#bank-account">PinoySeamanBankDetails</a></strong> to redirect
+                                to the Bank details for manual payment.
+                            </li>
+                            <li>
+                                Send the payment thru the bank that is given on the link.
+                            </li>
+                            <li>
+                                Send the Screenshot of payment via PinoySeaman Email.
+                                <ul>
+                                    <li>Email: <a href="mailto:pinoyseaman@pinoyseaman.com" class="email-link">pinoyseaman@pinoyseaman.com</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                Wait for 1–3 working days for status approval.
+                            </li>
+                        </ol>
+                        <div class="payment-icons">
+                            <img src="icons/document-check.png" alt="Security Icon" class="icon" />
+                            <img src="icons/mail-check.png" alt="Email Icon" class="icon" />
+                            <img src="icons/approved.png" alt="Approved Stamp" class="icon" />
+                        </div>
+                    </div>
+        
+                    <div class="purchase-summary-box">
+                        <!-- THIS IS for purchase summary on the right-->
+                        <div class="summary-card">
+                            <h3 class="summary-title">Purchase Summary</h3>
+                            <div class="summary-item">
+                                <span>Product name</span>
+                                <span>Price</span>
+                            </div>
+                            <div class="summary-item bold">
+                                <span>Professional tier</span>
+                                <span>$799.99</span>
+                            </div>
+                            <div class="summary-total">
+                                <span>Total:</span>
+                                <span class="total-price">$799.99</span>
+                            </div>
+                            <button class="order-status-btn">View your order status</button>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </section>        
+    </main>
+
+   <!-- Modal -->
+<section class="modal fade" id="bank-account" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Bank Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+              <p>Bank: <strong>EastWestSouthNorth Bank</strong></p>
+              <p>Name: <strong>Pinoy Seaman Bank</strong></p>
+              <p>Account Number: <strong>0123456789</strong></p>
+            </div>
+            <div class="ms-3">
+              <img src="icons/bill.png" alt="Bills Illustration" style="width: 100px; height: auto;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+    <script src="script/sidenav.js"></script>
+    <script src="script/progress-bar.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+    <script src="script/currency-calendar.js"></script>
+    <!-- Bootstrap JS with Popper (near the end of body) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

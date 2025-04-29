@@ -54,29 +54,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Active menu item script
+    // Active menu item script (cleaned, no localStorage)
     const links = document.querySelectorAll("aside nav ul li a");
     const currentPage = window.location.pathname.split("/").pop(); // Get current page filename
-    const storedPage = localStorage.getItem("activeLink");
 
-    // Set active class based on stored page OR current page
     links.forEach(link => {
-        const linkPage = link.getAttribute("href").split("/").pop(); // Get filename from href
+        const linkPage = link.getAttribute("href").split("/").pop();
 
-        if (linkPage === storedPage || linkPage === currentPage) {
+        // Apply active class if link matches the current page
+        if (linkPage === currentPage) {
             link.classList.add("active");
         }
 
-        // Add click event to update the active class
+        // Optional: keep visual feedback on click in SPAs
         link.addEventListener("click", function () {
-            // Remove 'active' class from all links
             links.forEach(l => l.classList.remove("active"));
-
-            // Add 'active' class to the clicked link
             this.classList.add("active");
-
-            // Store only the filename in localStorage
-            localStorage.setItem("activeLink", linkPage);
         });
     });
 });

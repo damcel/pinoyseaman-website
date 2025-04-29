@@ -47,9 +47,9 @@
                 </a>
               </li>
               <li class="separator">
-                <a href="#">
+                <a href="account-plan.html">
                   <!-- SVG Icon -->
-                  <i class="fa-regular fa-building"></i><span>Advertise</span>
+                  <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
                 </a>
               </li>
                 <div id="progress-main-container" class="progress-main-container">
@@ -73,7 +73,7 @@
         <section class="header-container">
             <!-- Your existing saved and profile dropdown (unchanged) -->
             <div class="saved-ctn">
-              <a href="saved.html" class="saved-btn">
+              <a href="#" class="saved-btn">
                 <i class="fa-solid fa-book-bookmark"></i>
               </a>
             </div>
@@ -100,31 +100,31 @@
                     </button>
                 
                     <!-- Job Seekdisplay-card -->
-                    <div class="display-card job-seeker">
+                    <a href="applicant-list.html" class="display-card job-seeker">
                         <div class="icon"><i class="fa-solid fa-users"></i></div>
                         <div class="text">
                             <div class="title-seeker">JOB SEEKER</div>
                             <div class="subtitle green">4 job applicant</div>
                         </div>
-                    </div>
+                    </a>
                 
                     <!-- Total Jobs Card -->
-                    <div class="display-card total-jobs">
+                    <a href="employer-posting.html" class="display-card total-jobs">
                         <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
                         <div class="text">
                             <div class="title-jobs">TOTAL JOBS</div>
                             <div class="subtitle purple">6 job posted</div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Notification Card -->
-                    <div class="display-card notification">
+                    <a href="#" class="display-card notification">
                         <div class="icon"><i class="fa-solid fa-bell"></i></div>
                         <div class="text">
                             <div class="title-notif">NOTIFICATION</div>
                             <div class="subtitle yellow">6 Notifications</div>
                         </div>
-                    </div>
+                    </a>
         
                 </section>
             </div>
@@ -132,37 +132,91 @@
 
         <section class="job-list-container">
             <div class="job-search-container">                  
-
                 <section class="dashboard-job-container">
-                   <!-- Task for today section -->
-                    <div class="dashboard-card">
-                        <h3>Task for today</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                
-                        <div class="task-item">
-                          <div class="task-info">
-                              <strong>Add a valid email domain</strong>
-                              <span>Protect your brand on pinoyseaman by adding a valid email domain. <a href="employer-email-validation.html">Add</a></span>
+                    <div class="display-job-posted">
+                        <div class="project-summary">
+                          <div class="summary-header">
+                            <h3>Job Post Monitoring</h3>
+                            <div class="jobpost-dropdown">
+                              <button class="filter-btn" id="dropdownSelect">Recent Post <i class="fa-solid fa-angle-down"></i></button>
+                              <ul class="dropdown-menu" id="dropdownList">
+                                <li data-type="recent">Recent Job Post</li>
+                                <li data-type="all">Job Post List</li>
+                              </ul>
+                            </div>
+                          </div>
+                    
+                          <div class="table-responsive">
+                            <table class="summary-table" id="projectTable">
+                              <thead class="job-posted-header">
+                                <tr>
+                                  <th>Rank</th>
+                                  <th>Vessel Type</th>
+                                  <th>Date</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody id="tableBody">
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge rejected">Rejected</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
-                
-                        <div class="task-item">
-                          <div class="task-info">
-                              <strong>Post a free job</strong>
-                              <span>Post a job in minutes and reach more qualified applicants. <a href="employer-jobpost.html">Post free job</a></span>
-                          </div>
-                        </div>
-                    </div>
-                
-                    <!-- Manage recent posts -->
-                    <div class="dashboard-card center">
-                        <h3>Manage recent posts</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        <img src="icons/document-img.png" alt="" class="document-img" />
-                        <h4>Your page doesn’t have any post from the last 30 days</h4>
-                        <span>Pages that post 2x a week grow 5x faster</span>
-                        <button class="primary-btn">+ Start a post today</button>
-                    </div>
+                      </div>                  
                 </section>
 
                 <section class="performance-tracker">
@@ -251,53 +305,6 @@
                   
                     <div class="view-all">
                       <a href="#">View all →</a>
-                    </div>
-                </aside>
-
-                <aside class="job-post-container"> 
-                    <h2 class="job-post-h2">Recent Job Posted</h2>
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Tanker</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-recent-job"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div>
-                        </div>
-                    </div>
-                
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Chief Cook</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div>
-                        </div>
-                    </div>
-                
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Bosun</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div>
-                        </div>
-                    </div>
-                
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Chief Engineer</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div> 
-                        </div>
                     </div>
                 </aside>
                                              
@@ -621,7 +628,7 @@
                 </div>
             </div>
         </section>
-    
+    <script src="script/dashboard-drop-jobslist.js"></script>
     <script src="script/sidenav.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
     <!-- Bootstrap JS with Popper (near the end of body) -->

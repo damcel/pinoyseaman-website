@@ -8,28 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <title>Dashboard</title>
-    <style>
-        .cv-upload-box {
-  border: 2px dashed #d3d3d3;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  background-color: #f9f9f9;
-}
-
-.cv-upload-label {
-  display: block;
-  cursor: pointer;
-  color: #555;
-  font-size: 14px;
-}
-
-.cv-upload-label span {
-  color: #28a745; /* Bootstrap green */
-  text-decoration: underline;
-}
-
-    </style>
 </head>
 <body>
     <aside id="sidebar">
@@ -142,7 +120,7 @@
                                 <button class="bookmark-btn">
                                     <i class="fa-regular fa-bookmark"></i>
                                 </button>
-                                <button class="apply-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Details & Apply</button>
+                                <button class="apply-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanva-job" aria-controls="offcanvasRight">Details & Apply</button>
                             </div>
                         </section>
                     </article>
@@ -262,7 +240,7 @@
     </main>
 
     <!-- offcanva bootsrap -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanva-job" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>

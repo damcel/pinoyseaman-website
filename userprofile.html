@@ -7,23 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <title>Profile Settings</title>
-    <style>
-        .content-editIcon{
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .uploaded-file-box {
-        background-color: #f8f9fa;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .uploaded-file-box a:hover {
-        color: #0d6efd;
-        text-decoration: underline;
-        }
-
-    </style>
 </head>
 <body>
     <aside id="sidebar">
@@ -137,7 +120,7 @@
                             </div>
                         </label>
                         <input type="file" id="upload-photo" hidden>
-                        <p id="jobStatusText">Interested</p> <!-- This will display the selected status, default is "Interested" -->
+                        <p id="requirementStatus"></p> <!-- This will display the selected status, default is "Interested" -->
                     </div>
                     
                     <div class="profile-details">
@@ -352,10 +335,10 @@
                     
                            <!-- Job Status Row with Smaller Toggleable Buttons -->
                             <div class="col-md-6 col-sm-12">
-                                <label for="jobStatus" class="form-label">Job status</label>
+                                <label for="jobStatus" class="form-label">Requirements</label>
                                 <div class="btn-group" role="group" aria-label="Job Status">
-                                    <button type="button" class="btn btn-outline-primary btn-sm active" id="interestedBtn" onclick="toggleJobStatus(this)">Interested</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" id="notInterestedBtn" onclick="toggleJobStatus(this)">Not Interested</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm active" id="interestedBtn" onclick="toggleJobStatus(this)">Complete Requirements</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" id="notInterestedBtn" onclick="toggleJobStatus(this)">Incomplete Requirements</button>
                                 </div>
                             </div>
                     
@@ -659,11 +642,11 @@
             button.classList.add('active');
     
             // Update the job status text based on the selected button
-            const jobStatusText = document.getElementById("jobStatusText");
+            const requirementStatus = document.getElementById("requirementStatus");
             if (button.id === "interestedBtn") {
-                jobStatusText.textContent = "Interested";
+                requirementStatus.textContent = "Complete Requirements";
             } else {
-                jobStatusText.textContent = "Not Interested";
+                requirementStatus.textContent = "Incomplete Requirements";
             }
         }
     </script>

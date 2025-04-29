@@ -175,15 +175,15 @@ $user = $userResult->fetch_assoc();
                                 echo '<p><strong>Date of birth:</strong> N/A</p>';
                             }
                             ?>
-                            <p><strong>Place of birth:</strong> </p>
-                            <p><strong>Marital status:</strong></p>
-                            <p><strong>Religion:</strong></p>
-                            <p><strong>Nationality:</strong></p>
-                            <p><strong>Level of English:</strong> Not set</p>
+                            <p><strong>Place of birth:</strong> <?php echo !empty($user['place_of_birth']) ? htmlspecialchars($user['place_of_birth']) : 'N/A'; ?></p>
+                            <p><strong>Marital status:</strong> <?php echo !empty($user['marital_status']) ? htmlspecialchars($user['marital_status']) : 'N/A'; ?></p>
+                            <p><strong>Religion:</strong> <?php echo !empty($user['religion']) ? htmlspecialchars($user['religion']) : 'N/A'; ?></p>
+                            <p><strong>Nationality:</strong> <?php echo !empty($user['nationality']) ? htmlspecialchars($user['nationality']) : 'N/A'; ?></p>
+                            <p><strong>Level of English:</strong> <?php echo !empty($user['english_level']) ? htmlspecialchars($user['english_level']) : 'N/A'; ?></p>
                         </div>
                         <div class="details-section">
                             <h4>Last Employment</h4>
-                            <p><strong>Rank:</strong> N/A</p>
+                            <p><strong>Rank:</strong> <?php echo !empty($user['rank']) ? htmlspecialchars($user['rank']) : 'N/A'; ?></p>
                             <p><strong>Vessel:</strong> N/A</p>
                             <p><strong>Type:</strong> N/A</p>
                             <p><strong>Duration:</strong> N/A</p>
@@ -220,43 +220,74 @@ $user = $userResult->fetch_assoc();
                                     <div class="attachment-content">
                                         <span>taengbinasateasdasda</span>
                                         <div class="attachment-icons">
-                                            <a href="#"><i class="fa-solid fa-cloud-arrow-down"></i></a>
-                                            <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-education">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>                
                     </table>          
-                    <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add Education</button>
+                    <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#add-education">+ Add Education</button>
                 </div>
             </section>
 
             <section class="experience-container">
-                <div class="box-container">  
+                <section class="box-container">  
                     <h2 class="header-info">Seafaring Experience</h2> 
                     <div class="experience-box">
-                        <p class="experience-content">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
-                        <i class="fa-solid fa-pen-to-square edit-icon"></i>
-                        <button class="add-work-exp-btn">+ Add work experience</button>
-                        <hr>
-                        <button class="add-cv-btn">+ Add CV</button>
+                        <div>
+                            <div class="content-editIcon">
+                                <p class="experience-content">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                </p>
+                                <span class="edit-wrapper">
+                                    <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-experience">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                </span>
+                            </div>
+                    
+                            <!-- Styled uploaded file box -->
+                            <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
+                                <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
+                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
+                                Resume_JohnDoe.pdf
+                                </a>
+                            </div>
+                        </div>
+                        <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-experience">+ Add work experience</button>
                     </div>
-                </div>
+                </section>
+                
         
-                <div class="box-container">
+                <section class="box-container">
                     <h2 class="header-info">Land-Based Work Experience</h2>
                     <div class="experience-box">
-                        <p class="experience-content">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
-                        <i class="fa-solid fa-pen-to-square edit-icon"></i>
-                        <hr>
-                        <button class="land-exp-btn">+ Add work experience</button>
+                        <div>
+                            <div class="content-editIcon">
+                                <p class="experience-content">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                </p>
+                                <span class="edit-wrapper">
+                                    <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-land-experience">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                </span>
+                            </div>
+                    
+                            <!-- Styled uploaded file box -->
+                            <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
+                                <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
+                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
+                                Resume_JohnDoe.pdf
+                                </a>
+                            </div>
+                        </div>
+                        <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-land-experience">+ Add work experience</button>
                     </div>
-                </div>
+                </section>
             </section>
         </section>
 
@@ -389,57 +420,278 @@ $user = $userResult->fetch_assoc();
         </div>
     </section>
 
-    <!--------- Modal ---------->
-    <section class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!---------EDUCATION Modal ---------->
+    <section class="modal fade" id="add-education" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 700px;">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="school" class="form-label">School <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="school" placeholder="Enter school name">
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
+                    </div>
+        
+                    <div class="row mb-3">
+                    <div class="col">
+                        <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="fromDate">
+                    </div>
+                    <div class="col">
+                        <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="toDate">
+                    </div>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
+                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                    </div>
+                </form>                 
+                </div>
+                <div class="modal-footer d-flex gap-3">
+                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                </div> 
             </div>
-    
-            <div class="modal-body">
-            <form>
-                <div class="mb-3">
-                <label for="school" class="form-label">School <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="school" placeholder="Enter school name">
-                </div>
-    
-                <div class="mb-3">
-                <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
-                </div>
-    
-                <div class="mb-3">
-                <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
-                </div>
-    
-                <div class="row mb-3">
-                <div class="col">
-                    <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control" id="fromDate">
-                </div>
-                <div class="col">
-                    <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control" id="toDate">
-                </div>
-                </div>
-    
-                <div class="mb-3">
-                    <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                    <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
-                </div>
-            </form>
-            </div>
-    
-            <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-            </div>
-        </div>
         </div>
     </section>
+
+    
+    <!---------EDIT EDUCATION Modal ---------->
+    <section class="modal fade" id="edit-education" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="school" class="form-label">School <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="school" placeholder="Enter school name">
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
+                    </div>
+        
+                    <div class="row mb-3">
+                    <div class="col">
+                        <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="fromDate">
+                    </div>
+                    <div class="col">
+                        <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="toDate">
+                    </div>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
+                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                    </div>
+                </form>                
+                </div>
+                <div class="modal-footer d-flex gap-3">
+                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
+                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    </button>
+                </div>  
+            </div>
+        </div>
+    </section>
+
+    <!--add sea going experience modal -->
+    <section class="modal fade" id="add-experience" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Seaman Experience</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                    <!-- LEFT side -->
+                    <div class="col-md-6">
+                        <label for="medicalNotes" class="form-label">Sea Going Experience</label>
+                        <textarea id="medicalNotes" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                    </div>
+        
+                    <!-- RIGHT side -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
+                        <div class="text-muted mb-2">
+                            <i class="fa fa-upload fa-2x mb-2"></i><br>
+                            Drag and drop files here
+                        </div>
+                        <div>or</div>
+                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </section>  
+
+    <!--edit seagoing experience modal -->
+    <section class="modal fade" id="edit-experience" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Update Sea Going Experience</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                    <!-- LEFT side -->
+                    <div class="col-md-6">
+                        <label for="medicalNotes" class="form-label">SeaFaring Experience</label>
+                        <textarea id="medicalNotes" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                    </div>
+        
+                    <!-- RIGHT side -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
+                            <div class="text-muted mb-2">
+                                <i class="fa fa-upload fa-2x mb-2"></i><br>
+                                Drag and drop files here
+                            </div>
+                            <div>or</div>
+                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
+                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>  
+
+    
+    <!--landbase experience modal -->
+    <section class="modal fade" id="add-land-experience" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Land-base Experience</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                    <!-- LEFT side -->
+                    <div class="col-md-6">
+                        <label for="land-base-experience" class="form-label">Land-base Experience</label>
+                        <textarea id="land-base-experience" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                    </div>
+        
+                    <!-- RIGHT side -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
+                        <div class="text-muted mb-2">
+                            <i class="fa fa-upload fa-2x mb-2"></i><br>
+                            Drag and drop files here
+                        </div>
+                        <div>or</div>
+                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </section>  
+
+    <!--landbase experience modal -->
+    <section class="modal fade" id="edit-land-experience" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Update Land-base Experience</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                    <!-- LEFT side -->
+                    <div class="col-md-6">
+                        <label for="land-base-experience" class="form-label">Land-base Experience</label>
+                        <textarea id="land-base-experience" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                    </div>
+        
+                    <!-- RIGHT side -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
+                            <div class="text-muted mb-2">
+                                <i class="fa fa-upload fa-2x mb-2"></i><br>
+                                Drag and drop files here
+                            </div>
+                            <div>or</div>
+                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
+                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>       
   
 
     <script>

@@ -12,6 +12,18 @@ if (!isset($_SESSION['seeker_id'])) {
     header("Location: user-login-signup.php?type=error&message=You must log in to access this page.");
     exit;
 }
+
+// Include the database connection file
+include 'db.php';
+
+// Fetch user details from the database
+$seekerId = $_SESSION['seeker_id'];
+$userQuery = "SELECT * FROM job_seeker WHERE email = ?";
+$stmt = $conn->prepare($userQuery);
+$stmt->bind_param("s", $seekerId);
+$stmt->execute();
+$userResult = $stmt->get_result();
+$user = $userResult->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -116,13 +128,21 @@ if (!isset($_SESSION['seeker_id'])) {
                 <!-- Added Header Section -->
                 <div class="profile-header">
                     <i class="fa-solid fa-user"></i>
-                    <h3>Daniel Pagcaliwangan, 24</h3>
-                    <a href="mailto:pagcaliwangan11@gmail.com">
-                        <i class="fa-solid fa-envelope"></i> pagcaliwangan11@gmail.com
+                    <h3>
+                        <?php 
+                        echo htmlspecialchars($user['first_name']); 
+                        if (!empty($user['middle_name'])) {
+                            echo ' ' . htmlspecialchars(substr($user['middle_name'], 0, 1)) . '.';
+                        }
+                        echo ' ' . htmlspecialchars($user['last_name']); 
+                        ?>
+                    </h3>
+                    <a href="mailto:<?php echo htmlspecialchars($user['email']); ?>">
+                        <i class="fa-solid fa-envelope"></i> <?php echo htmlspecialchars($user['email']); ?>
                     </a>
                     <a href="">
                         <i class="fa-solid fa-phone"></i> 
-                        <span>Not set</span>
+                        <span><?php echo htmlspecialchars($user['cellphone']) ?></span>
                     </a>
                 </div>
             
@@ -141,11 +161,21 @@ if (!isset($_SESSION['seeker_id'])) {
                     <div class="profile-details">
                         <div class="details-section">
                             <h4>Details</h4>
-                            <p><strong>Address:</strong> Lipa City</p>
+                            <p><strong>Address:</strong> <?php echo !empty($user['address']) ? htmlspecialchars($user['address']) : 'N/A'; ?></p>
                             <p><strong>Planned status:</strong> Availability</p>
-                            <p><strong>Gender:</strong></p>
-                            <p><strong>Date of birth:</strong> 26 Aug 2000 (24 years old)</p>
-                            <p><strong>Place of birth:</strong></p>
+                            <p><strong>Gender:</strong> <?php echo !empty($user['gender']) ? htmlspecialchars($user['gender']) : 'N/A'; ?></p>
+                            <?php
+                            $dob = !empty($user['birthday']) ? $user['birthday'] : null;
+                            if ($dob) {
+                                $birthDate = new DateTime($dob);
+                                $currentDate = new DateTime();
+                                $age = $currentDate->diff($birthDate)->y;
+                                echo '<p><strong>Date of birth:</strong> ' . htmlspecialchars($birthDate->format('d M Y')) . ' (' . $age . ' years old)</p>';
+                            } else {
+                                echo '<p><strong>Date of birth:</strong> N/A</p>';
+                            }
+                            ?>
+                            <p><strong>Place of birth:</strong> </p>
                             <p><strong>Marital status:</strong></p>
                             <p><strong>Religion:</strong></p>
                             <p><strong>Nationality:</strong></p>
@@ -164,6 +194,7 @@ if (!isset($_SESSION['seeker_id'])) {
                     </div>
                 </div>
             </section>
+
             <section class="education-section">
                 <h2 class="header-info">Education</h2>
                 <div class="education-container">
@@ -200,6 +231,7 @@ if (!isset($_SESSION['seeker_id'])) {
                     <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add Education</button>
                 </div>
             </section>
+
             <section class="experience-container">
                 <div class="box-container">  
                     <h2 class="header-info">Seafaring Experience</h2> 
@@ -239,104 +271,120 @@ if (!isset($_SESSION['seeker_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
+                <form id="editForm" action="includes/update_profile.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+
                 <section class="modal-body">
                     <div class="container-fluid">
-                        <form>
                         <div class="row g-3">
                             <!-- Name Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="firstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstName" value="Daniel">
+                                <label for="firstName" class="form-label">First name</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" autocomplete="off" value="<?php echo htmlspecialchars($user['first_name']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="middleName" class="form-label">Middle name</label>
-                            <input type="text" class="form-control" id="middleName">
+                                <label for="middleName" class="form-label">Middle name</label>
+                                <input type="text" class="form-control" name="middleName" id="middleName" value="<?php echo htmlspecialchars($user['middle_name']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="lastName" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="lastName" value="Pagcaliwangan">
+                                <label for="lastName" class="form-label">Last name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo htmlspecialchars($user['last_name']); ?>">
                             </div>
                     
                             <!-- Second Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="Address" class="form-label">Address</label>
-                            <select class="form-select" id="Address">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($user['address']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="placeOfBirth" class="form-label">Place of birth</label>
-                            <input type="text" class="form-control" id="placeOfBirth">
+                                <label for="placeOfBirth" class="form-label">Place of birth</label>
+                                <input type="text" class="form-control" id="placeOfBirth" name="placeOfBirth" value="<?php echo htmlspecialchars($user['place_of_birth']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="dob" class="form-label">Date of birth</label>
-                            <input type="date" class="form-control" id="dob" value="2000-08-26">
+                                <label for="dob" class="form-label">Date of birth</label>
+                                <input type="date" class="form-control" id="dob" name="dob" value="<?php echo htmlspecialchars($user['birthday']); ?>">
                             </div>
                     
                             <!-- Third Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="english level" class="form-label">Level of english</label>
-                            <select class="form-select" id="englishe level">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="englishLevel" class="form-label">Level of English</label>
+                                <select class="form-select" id="englishLevel" name="englishLevel">
+                                    <option value="Beginner" <?php echo ($user['english_level'] === 'Beginner') ? 'selected' : ''; ?>>Beginner</option>
+                                    <option value="Intermediate" <?php echo ($user['english_level'] === 'Intermediate') ? 'selected' : ''; ?>>Intermediate</option>
+                                    <option value="Advanced" <?php echo ($user['english_level'] === 'Advanced') ? 'selected' : ''; ?>>Advanced</option>
+                                    <option value="Fluent" <?php echo ($user['english_level'] === 'Fluent') ? 'selected' : ''; ?>>Fluent</option>
+                                </select>
                             </div>
                     
                             <!-- Fourth Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="gender" class="form-label">Gender</label>
-                            <select class="form-select" id="gender">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" name="gender">
+                                    <option selected disabled>Select from option</option>
+                                    <option value="Male" <?php echo ($user['gender'] === 'Male') ? 'selected' : ''; ?>>Male</option>
+                                    <option value="Female" <?php echo ($user['gender'] === 'Female') ? 'selected' : ''; ?>>Female</option>
+                                    <option value="Diverse" <?php echo ($user['gender'] === 'Diverse') ? 'selected' : ''; ?>>Diverse</option>
+                                </select>
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="maritalStatus" class="form-label">Marital status</label>
-                            <select class="form-select" id="maritalStatus">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="maritalStatus" class="form-label">Marital status</label>
+                                <select class="form-select" id="maritalStatus" name="maritalStatus">
+                                    <option selected disabled>Select marital status</option>
+                                    <option value="Single" <?php echo ($user['marital_status'] === 'Single') ? 'selected' : ''; ?>>Single</option>
+                                    <option value="Married" <?php echo ($user['marital_status'] === 'Married') ? 'selected' : ''; ?>>Married</option>
+                                    <option value="Divorced" <?php echo ($user['marital_status'] === 'Divorced') ? 'selected' : ''; ?>>Divorced</option>
+                                    <option value="Widowed" <?php echo ($user['marital_status'] === 'Widowed') ? 'selected' : ''; ?>>Widowed</option>
+                                </select>
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="nationality" class="form-label">Nationality</label>
-                            <select class="form-select" id="nationality">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="nationality" class="form-label">Nationality</label>
+                                <input type="text" class="form-control" id="nationality" name="nationality" value="<?php echo htmlspecialchars($user['nationality']); ?>">
                             </div>
                     
                             <!-- Fifth Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="religion" class="form-label">Religion</label>
-                            <select class="form-select" id="religion">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="religion" class="form-label">Religion</label>
+                                <input type="text" class="form-control" id="religion" name="religion" value="<?php echo htmlspecialchars($user['religion']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="rank" class="form-label">Rank</label>
-                            <select class="form-select" id="rank">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="rank" class="form-label">Rank</label>
+                                <select class="form-select" id="rank" name="rank">
+                                    <option selected disabled>Select Rank</option>
+                                    <?php
+                                    $rankQuery = "SELECT rank_name_shortcut FROM seaman_ranks";
+                                    $rankResult = $conn->query($rankQuery);
+                                    if ($rankResult->num_rows > 0) {
+                                        while ($rank = $rankResult->fetch_assoc()) {
+                                            $selected = ($user['rank'] === $rank['rank_name_shortcut']) ? 'selected' : '';
+                                            echo '<option value="' . htmlspecialchars($rank['rank_name_shortcut']) . '" ' . $selected . '>' . htmlspecialchars($rank['rank_name_shortcut']) . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
                             </div>
                     
-                           <!-- Job Status Row with Smaller Toggleable Buttons -->
+                            <!-- Job Status Row with Smaller Toggleable Buttons -->
                             <div class="col-md-6 col-sm-12">
                                 <label for="jobStatus" class="form-label">Job status</label>
                                 <div class="btn-group" role="group" aria-label="Job Status">
-                                    <button type="button" class="btn btn-outline-primary btn-sm active" id="interestedBtn" onclick="toggleJobStatus(this)">Interested</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" id="notInterestedBtn" onclick="toggleJobStatus(this)">Not Interested</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm <?php echo ($user['job_status'] === 'Interested') ? 'active' : ''; ?>" id="interestedBtn" onclick="toggleJobStatus(this)">Interested</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm <?php echo ($user['job_status'] === 'Not Interested') ? 'active' : ''; ?>" id="notInterestedBtn" onclick="toggleJobStatus(this)">Not Interested</button>
                                 </div>
                             </div>
                     
                             <!-- Email Row -->
                             <div class="col-12">
-                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" id="password" placeholder="pinoyseaman password">
+                                <label for="password" class="form-label">Password (Leave blank if unchanged)</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" autocomplete="off">
                             </div>
                         </div>
-                        </form>
+                        
                     </div>                  
                 </section>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
+                </form>
             </div>
         </div>
     </section>

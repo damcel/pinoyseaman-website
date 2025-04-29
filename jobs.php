@@ -184,12 +184,14 @@ $job = $jobResult->fetch_assoc();
 
                 <?php
                 // Fetch similar jobs based on vessel type or job title
-                $similarJobsQuery = "SELECT j.code, j.job_title, j.vessel, j.date_posted, e.company, e.logo 
+                $similarJobsQuery = "SELECT j.code, j.job_title, j.vessel, j.date_posted, e.company, e.logo, e.member_type
                                     FROM jobs j
                                     INNER JOIN employer e ON j.company_code = e.company_code
                                     WHERE (j.vessel = ? OR j.job_title LIKE ?)
                                     AND j.code != ? 
                                     AND j.expiry >= CURDATE()
+                                    ORDER BY 
+                                        FIELD(e.member_type, 'Plan4', 'Plan3', 'Plan2', 'Plan1', 'FREE') ASC
                                     LIMIT 5";
                 $similarStmt = $conn->prepare($similarJobsQuery);
                 $jobTitleLike = '%' . $job['job_title'] . '%';

@@ -151,12 +151,14 @@
             $totalJobs = $totalJobsResult->fetch_assoc()['total_jobs'];
             $totalPages = ceil($totalJobs / $jobsPerPage);
 
-            // Query to fetch jobs with filters for the current page
+            // Query to fetch jobs with filters for the current page, prioritizing employers by member type
             $jobQuery = "SELECT j.job_title, j.vessel, j.date_posted, j.code, e.company, e.logo 
                         FROM jobs j
                         INNER JOIN employer e ON j.company_code = e.company_code
                         $whereSQL
-                        ORDER BY j.date_posted DESC
+                        ORDER BY 
+                            FIELD(e.member_type, 'Plan4', 'Plan3', 'Plan2', 'Plan1', 'free'), 
+                            j.date_posted DESC
                         LIMIT $offset, $jobsPerPage";
             $jobResult = $conn->query($jobQuery);
             ?>

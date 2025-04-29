@@ -195,6 +195,17 @@ $user = $userResult->fetch_assoc();
                 </div>
             </section>
 
+            <?php
+            // Fetch education details from the database
+            $educationQuery = "SELECT id, school_name, field_of_study, educ_level, from_date, to_date, attachment_url 
+                            FROM seaman_educ 
+                            WHERE email = ?";
+            $educationStmt = $conn->prepare($educationQuery);
+            $educationStmt->bind_param("s", $seekerId);
+            $educationStmt->execute();
+            $educationResult = $educationStmt->get_result();
+            ?>
+
             <section class="education-section">
                 <h2 class="header-info">Education</h2>
                 <div class="education-container">
@@ -210,24 +221,50 @@ $user = $userResult->fetch_assoc();
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="School">University of Batangas</td>
-                                <td data-label="Field of Study">Information Technology</td>
-                                <td data-label="Educational Level">Bachelor's Degree</td>
-                                <td data-label="Start Date">2020</td>
-                                <td data-label="End Date">2024</td>
-                                <td class="attachment-cell" data-label="Attachment">
-                                    <div class="attachment-content">
-                                        <span>taengbinasateasdasda</span>
-                                        <div class="attachment-icons">
-                                            <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-education">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
+                        <?php if ($educationResult->num_rows > 0): ?>
+                            <?php while ($education = $educationResult->fetch_assoc()): ?>
+                                <tr>
+                                    <td data-label="School"><?php echo htmlspecialchars($education['school_name']); ?></td>
+                                    <td data-label="Field of Study"><?php echo htmlspecialchars($education['field_of_study']); ?></td>
+                                    <td data-label="Educational Level"><?php echo htmlspecialchars($education['educ_level']); ?></td>
+                                    <td data-label="Start Date"><?php echo htmlspecialchars($education['from_date']); ?></td>
+                                    <td data-label="End Date"><?php echo htmlspecialchars($education['to_date']); ?></td>
+                                    <td class="attachment-cell" data-label="Attachment">
+                                        <div class="attachment-content">
+                                            <?php if (!empty($education['attachment_url'])): ?>
+                                                <a href="Uploads/Seaman/Education/<?php echo htmlspecialchars($education['attachment_url']); ?>" target="_blank" class="text-decoration-none">
+                                                    View Document
+                                                </a>
+                                            <?php else: ?>
+                                                <span>No Attachment</span>
+                                            <?php endif; ?>
+                                            <div class="attachment-icons">
+                                                <button 
+                                                    class="edit-education btn btn-outline-primary btn-sm" 
+                                                    type="button" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#edit-education"
+                                                    data-id="<?php echo $education['id']; ?>"
+                                                    data-school="<?php echo htmlspecialchars($education['school_name']); ?>"
+                                                    data-education-level="<?php echo htmlspecialchars($education['educ_level']); ?>"
+                                                    data-field-of-study="<?php echo htmlspecialchars($education['field_of_study']); ?>"
+                                                    data-from-date="<?php echo htmlspecialchars($education['from_date']); ?>"
+                                                    data-to-date="<?php echo htmlspecialchars($education['to_date']); ?>"
+                                                    data-attachment-url="<?php echo htmlspecialchars($education['attachment_url']); ?>"
+                                                >
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="text-center">No education records found.</td>
                             </tr>
-                        </tbody>                
+                        <?php endif; ?>
+                    </tbody>                
                     </table>          
                     <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#add-education">+ Add Education</button>
                 </div>
@@ -482,51 +519,55 @@ $user = $userResult->fetch_assoc();
         <div class="modal-dialog" style="max-width: 700px;">
             <div class="modal-content">
                 <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Education Information</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-        
-                <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="school" class="form-label">School <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="school" placeholder="Enter school name">
+
+                <form id="editEducationForm" action="includes/edit_education.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+                    <input type="hidden" name="educationId" id="educationId" value="">
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editSchool" class="form-label">School <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editSchool" name="school" value="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editEducationLevel" class="form-label">Education Level <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editEducationLevel" name="educationLevel" value="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editFieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editFieldOfStudy" name="fieldOfStudy" value="">
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="editFromDate" class="form-label">From <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="editFromDate" name="fromDate" value="">
+                            </div>
+                            <div class="col">
+                                <label for="editToDate" class="form-label">To <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="editToDate" name="toDate" value="">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editDocumentUpload" class="form-label">Add Document (PDF or Word)</label>
+                            <input type="file" class="form-control" id="editDocumentUpload" name="documentUpload" accept=".pdf,.doc,.docx">
+                            <small id="currentAttachment" class="form-text text-muted"></small>
+                        </div>
                     </div>
-        
-                    <div class="mb-3">
-                        <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
+
+                    <div class="modal-footer d-flex gap-3">
+                        <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                        <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                            <i class="fa-solid fa-trash me-2"></i>Delete
+                        </button>
                     </div>
-        
-                    <div class="mb-3">
-                        <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
-                    </div>
-        
-                    <div class="row mb-3">
-                    <div class="col">
-                        <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="fromDate">
-                    </div>
-                    <div class="col">
-                        <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="toDate">
-                    </div>
-                    </div>
-        
-                    <div class="mb-3">
-                        <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
-                    </div>
-                </form>                
-                </div>
-                <div class="modal-footer d-flex gap-3">
-                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
-                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
-                    </button>
-                </div>  
+                </form>
             </div>
         </div>
     </section>
@@ -715,6 +756,41 @@ $user = $userResult->fetch_assoc();
             } else {
                 jobStatusText.textContent = "Not Interested";
             }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const editButtons = document.querySelectorAll(".edit-education");
+            const educationIdInput = document.getElementById("educationId");
+            const schoolInput = document.getElementById("editSchool");
+            const educationLevelInput = document.getElementById("editEducationLevel");
+            const fieldOfStudyInput = document.getElementById("editFieldOfStudy");
+            const fromDateInput = document.getElementById("editFromDate");
+            const toDateInput = document.getElementById("editToDate");
+            const currentAttachment = document.getElementById("currentAttachment");
+
+            editButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    // Populate the modal fields with data from the button's data attributes
+                    educationIdInput.value = button.getAttribute("data-id");
+                    schoolInput.value = button.getAttribute("data-school");
+                    educationLevelInput.value = button.getAttribute("data-education-level");
+                    fieldOfStudyInput.value = button.getAttribute("data-field-of-study");
+                    fromDateInput.value = button.getAttribute("data-from-date");
+                    toDateInput.value = button.getAttribute("data-to-date");
+
+                    // Show the current attachment if it exists
+                    const attachmentUrl = button.getAttribute("data-attachment-url");
+                    if (attachmentUrl) {
+                        currentAttachment.textContent = `Current Attachment: ${attachmentUrl}`;
+                    } else {
+                        currentAttachment.textContent = "No attachment uploaded.";
+                    }
+                });
+            });
+        });
+
+        function confirmDeletion() {
+            return confirm("Are you sure you want to delete this education record? This action cannot be undone.");
         }
     </script>
     <script src="script/sidenav.js"></script>

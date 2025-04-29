@@ -149,7 +149,7 @@ body{
 }
 
 /* Apply hover effect ONLY to Jobs, Profile, History, and Companies */
-.ul-links li a[href="index.html"], 
+.ul-links li a[href="index.php"], 
 .ul-links li a[href="dashboard.html"], 
 .ul-links li a[href="history.html"], 
 .ul-links li a[href="companies.html"] {
@@ -157,7 +157,7 @@ body{
   margin-bottom: 3px;
 }
 
-.ul-links li a[href="index.html"]:hover, 
+.ul-links li a[href="index.php"]:hover, 
 .ul-links li a[href="dashboard.html"]:hover, 
 .ul-links li a[href="history.html"]:hover, 
 .ul-links li a[href="companies.html"]:hover {

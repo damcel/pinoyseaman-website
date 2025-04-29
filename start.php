@@ -11,7 +11,7 @@
     <main class="login-signup-main">
         <section>
             <div class="logo-start-container">
-                <a href="index.html" class="logo-start-link">
+                <a href="index.php" class="logo-start-link">
                     <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                 </a>
             </div>
@@ -23,7 +23,7 @@
                     </a>
                 </div>
                 <div class="employer-box">
-                    <a href="employer-login-signup.html">
+                    <a href="employer-login-signup.php">
                         <i class="fa-solid fa-briefcase"></i> Employer
                     </a>
                 </div>

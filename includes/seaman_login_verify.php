@@ -52,7 +52,7 @@ try {
         $action_stmt->bind_param("ss", $job_seeker_id, $ip_address);
         $action_stmt->execute();
 
-        header("Location: ../userprofile.html");
+        header("Location: ../userprofile.php");
         exit;
     } else {
         // Log the failed login attempt

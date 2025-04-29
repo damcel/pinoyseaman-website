@@ -1,3 +1,30 @@
+<?php
+session_start(); // Start the session
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['seeker_id'])) {
+    // Redirect to the login page with an error message
+    header("Location: user-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Fetch user details from the database
+$seekerId = $_SESSION['seeker_id'];
+$userQuery = "SELECT * FROM job_seeker WHERE email = ?";
+$stmt = $conn->prepare($userQuery);
+$stmt->bind_param("s", $seekerId);
+$stmt->execute();
+$userResult = $stmt->get_result();
+$user = $userResult->fetch_assoc();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +59,7 @@
                 </a>
               </li>
               <li class="separator">
-                <a href="userprofile.html">
+                <a href="userprofile.php">
                   <!-- SVG Icon -->
                   <i class="fa-regular fa-user"></i><span>Profile</span>
                 </a>
@@ -80,7 +107,7 @@
                 <!-- Dropdown Menu -->
                 <div class="dropdown" id="dropdownMenu">
                     <a href="saved.html" class="prfl">Profile Settings</a>
-                    <a href="index.php">Logout</a>
+                    <a href="includes/logout.php">Logout</a>
                 </div>
             </div>
         </section>
@@ -101,13 +128,21 @@
                 <!-- Added Header Section -->
                 <div class="profile-header">
                     <i class="fa-solid fa-user"></i>
-                    <h5>Daniel Pagcaliwangan, 24</h5>
-                    <a href="mailto:pagcaliwangan11@gmail.com">
-                        <i class="fa-solid fa-envelope"></i> pagcaliwangan11@gmail.com
+                    <h3>
+                        <?php 
+                        echo htmlspecialchars($user['first_name']); 
+                        if (!empty($user['middle_name'])) {
+                            echo ' ' . htmlspecialchars(substr($user['middle_name'], 0, 1)) . '.';
+                        }
+                        echo ' ' . htmlspecialchars($user['last_name']); 
+                        ?>
+                    </h3>
+                    <a href="mailto:<?php echo htmlspecialchars($user['email']); ?>">
+                        <i class="fa-solid fa-envelope"></i> <?php echo htmlspecialchars($user['email']); ?>
                     </a>
                     <a href="">
                         <i class="fa-solid fa-phone"></i> 
-                        <span>Not set</span>
+                        <span><?php echo htmlspecialchars($user['cellphone']) ?></span>
                     </a>
                 </div>
             
@@ -120,36 +155,57 @@
                             </div>
                         </label>
                         <input type="file" id="upload-photo" hidden>
-                        <p id="requirementStatus"></p> <!-- This will display the selected status, default is "Interested" -->
+                        <p id="jobStatusText">Interested</p> <!-- This will display the selected status, default is "Interested" -->
                     </div>
                     
                     <div class="profile-details">
                         <div class="details-section">
                             <h4>Details</h4>
-                            <p><strong>Address:</strong> Lipa City</p>
+                            <p><strong>Address:</strong> <?php echo !empty($user['address']) ? htmlspecialchars($user['address']) : 'N/A'; ?></p>
                             <p><strong>Planned status:</strong> Availability</p>
-                            <p><strong>Gender:</strong></p>
-                            <p><strong>Date of birth:</strong> 26 Aug 2000 (24 years old)</p>
-                            <p><strong>Place of birth:</strong></p>
-                            <p><strong>Marital status:</strong></p>
-                            <p><strong>Religion:</strong></p>
-                            <p><strong>Nationality:</strong></p>
-                            <p><strong>Level of English:</strong> Not set</p>
+                            <p><strong>Gender:</strong> <?php echo !empty($user['gender']) ? htmlspecialchars($user['gender']) : 'N/A'; ?></p>
+                            <?php
+                            $dob = !empty($user['birthday']) ? $user['birthday'] : null;
+                            if ($dob) {
+                                $birthDate = new DateTime($dob);
+                                $currentDate = new DateTime();
+                                $age = $currentDate->diff($birthDate)->y;
+                                echo '<p><strong>Date of birth:</strong> ' . htmlspecialchars($birthDate->format('d M Y')) . ' (' . $age . ' years old)</p>';
+                            } else {
+                                echo '<p><strong>Date of birth:</strong> N/A</p>';
+                            }
+                            ?>
+                            <p><strong>Place of birth:</strong> <?php echo !empty($user['place_of_birth']) ? htmlspecialchars($user['place_of_birth']) : 'N/A'; ?></p>
+                            <p><strong>Marital status:</strong> <?php echo !empty($user['marital_status']) ? htmlspecialchars($user['marital_status']) : 'N/A'; ?></p>
+                            <p><strong>Religion:</strong> <?php echo !empty($user['religion']) ? htmlspecialchars($user['religion']) : 'N/A'; ?></p>
+                            <p><strong>Nationality:</strong> <?php echo !empty($user['nationality']) ? htmlspecialchars($user['nationality']) : 'N/A'; ?></p>
+                            <p><strong>Level of English:</strong> <?php echo !empty($user['english_level']) ? htmlspecialchars($user['english_level']) : 'N/A'; ?></p>
                         </div>
                         <div class="details-section">
                             <h4>Last Employment</h4>
-                            <p><strong>Rank:</strong> N/A</p>
+                            <p><strong>Rank:</strong> <?php echo !empty($user['rank']) ? htmlspecialchars($user['rank']) : 'N/A'; ?></p>
                             <p><strong>Vessel:</strong> N/A</p>
                             <p><strong>Type:</strong> N/A</p>
                             <p><strong>Duration:</strong> N/A</p>
                         </div>
-                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-information-modal">
+                        <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </div>
                 </div>
             </section>
-            
+
+            <?php
+            // Fetch education details from the database
+            $educationQuery = "SELECT id, school_name, field_of_study, educ_level, from_date, to_date, attachment_url 
+                            FROM seaman_educ 
+                            WHERE email = ?";
+            $educationStmt = $conn->prepare($educationQuery);
+            $educationStmt->bind_param("s", $seekerId);
+            $educationStmt->execute();
+            $educationResult = $educationStmt->get_result();
+            ?>
+
             <section class="education-section">
                 <h2 class="header-info">Education</h2>
                 <div class="education-container">
@@ -165,24 +221,50 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="School">University of Batangas</td>
-                                <td data-label="Field of Study">Information Technology</td>
-                                <td data-label="Educational Level">Bachelor's Degree</td>
-                                <td data-label="Start Date">2020</td>
-                                <td data-label="End Date">2024</td>
-                                <td class="attachment-cell" data-label="Attachment">
-                                    <div class="attachment-content">
-                                        <span>taengbinasateasdasda</span>
-                                        <div class="attachment-icons">
-                                            <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-education">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
+                        <?php if ($educationResult->num_rows > 0): ?>
+                            <?php while ($education = $educationResult->fetch_assoc()): ?>
+                                <tr>
+                                    <td data-label="School"><?php echo htmlspecialchars($education['school_name']); ?></td>
+                                    <td data-label="Field of Study"><?php echo htmlspecialchars($education['field_of_study']); ?></td>
+                                    <td data-label="Educational Level"><?php echo htmlspecialchars($education['educ_level']); ?></td>
+                                    <td data-label="Start Date"><?php echo htmlspecialchars($education['from_date']); ?></td>
+                                    <td data-label="End Date"><?php echo htmlspecialchars($education['to_date']); ?></td>
+                                    <td class="attachment-cell" data-label="Attachment">
+                                        <div class="attachment-content">
+                                            <?php if (!empty($education['attachment_url'])): ?>
+                                                <a href="Uploads/Seaman/Education/<?php echo htmlspecialchars($education['attachment_url']); ?>" target="_blank" class="text-decoration-none">
+                                                    View Document
+                                                </a>
+                                            <?php else: ?>
+                                                <span>No Attachment</span>
+                                            <?php endif; ?>
+                                            <div class="attachment-icons">
+                                                <button 
+                                                    class="edit-education btn btn-outline-primary btn-sm" 
+                                                    type="button" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#edit-education"
+                                                    data-id="<?php echo $education['id']; ?>"
+                                                    data-school="<?php echo htmlspecialchars($education['school_name']); ?>"
+                                                    data-education-level="<?php echo htmlspecialchars($education['educ_level']); ?>"
+                                                    data-field-of-study="<?php echo htmlspecialchars($education['field_of_study']); ?>"
+                                                    data-from-date="<?php echo htmlspecialchars($education['from_date']); ?>"
+                                                    data-to-date="<?php echo htmlspecialchars($education['to_date']); ?>"
+                                                    data-attachment-url="<?php echo htmlspecialchars($education['attachment_url']); ?>"
+                                                >
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="text-center">No education records found.</td>
                             </tr>
-                        </tbody>                
+                        <?php endif; ?>
+                    </tbody>                
                     </table>          
                     <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#add-education">+ Add Education</button>
                 </div>
@@ -249,7 +331,7 @@
     </main>
 
     <!-- ✅ Bootstrap Modal -->
-    <section class="modal fade" id="edit-information-modal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <section class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -257,104 +339,120 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
+                <form id="editForm" action="includes/update_profile.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+
                 <section class="modal-body">
                     <div class="container-fluid">
-                        <form>
                         <div class="row g-3">
                             <!-- Name Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="firstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstName" value="Daniel">
+                                <label for="firstName" class="form-label">First name</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" autocomplete="off" value="<?php echo htmlspecialchars($user['first_name']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="middleName" class="form-label">Middle name</label>
-                            <input type="text" class="form-control" id="middleName">
+                                <label for="middleName" class="form-label">Middle name</label>
+                                <input type="text" class="form-control" name="middleName" id="middleName" value="<?php echo htmlspecialchars($user['middle_name']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="lastName" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="lastName" value="Pagcaliwangan">
+                                <label for="lastName" class="form-label">Last name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo htmlspecialchars($user['last_name']); ?>">
                             </div>
                     
                             <!-- Second Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="Address" class="form-label">Address</label>
-                            <select class="form-select" id="Address">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($user['address']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="placeOfBirth" class="form-label">Place of birth</label>
-                            <input type="text" class="form-control" id="placeOfBirth">
+                                <label for="placeOfBirth" class="form-label">Place of birth</label>
+                                <input type="text" class="form-control" id="placeOfBirth" name="placeOfBirth" value="<?php echo htmlspecialchars($user['place_of_birth']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="dob" class="form-label">Date of birth</label>
-                            <input type="date" class="form-control" id="dob" value="2000-08-26">
+                                <label for="dob" class="form-label">Date of birth</label>
+                                <input type="date" class="form-control" id="dob" name="dob" value="<?php echo htmlspecialchars($user['birthday']); ?>">
                             </div>
                     
                             <!-- Third Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="english level" class="form-label">Level of english</label>
-                            <select class="form-select" id="englishe level">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="englishLevel" class="form-label">Level of English</label>
+                                <select class="form-select" id="englishLevel" name="englishLevel">
+                                    <option value="Beginner" <?php echo ($user['english_level'] === 'Beginner') ? 'selected' : ''; ?>>Beginner</option>
+                                    <option value="Intermediate" <?php echo ($user['english_level'] === 'Intermediate') ? 'selected' : ''; ?>>Intermediate</option>
+                                    <option value="Advanced" <?php echo ($user['english_level'] === 'Advanced') ? 'selected' : ''; ?>>Advanced</option>
+                                    <option value="Fluent" <?php echo ($user['english_level'] === 'Fluent') ? 'selected' : ''; ?>>Fluent</option>
+                                </select>
                             </div>
                     
                             <!-- Fourth Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="gender" class="form-label">Gender</label>
-                            <select class="form-select" id="gender">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" name="gender">
+                                    <option selected disabled>Select from option</option>
+                                    <option value="Male" <?php echo ($user['gender'] === 'Male') ? 'selected' : ''; ?>>Male</option>
+                                    <option value="Female" <?php echo ($user['gender'] === 'Female') ? 'selected' : ''; ?>>Female</option>
+                                    <option value="Diverse" <?php echo ($user['gender'] === 'Diverse') ? 'selected' : ''; ?>>Diverse</option>
+                                </select>
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="maritalStatus" class="form-label">Marital status</label>
-                            <select class="form-select" id="maritalStatus">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="maritalStatus" class="form-label">Marital status</label>
+                                <select class="form-select" id="maritalStatus" name="maritalStatus">
+                                    <option selected disabled>Select marital status</option>
+                                    <option value="Single" <?php echo ($user['marital_status'] === 'Single') ? 'selected' : ''; ?>>Single</option>
+                                    <option value="Married" <?php echo ($user['marital_status'] === 'Married') ? 'selected' : ''; ?>>Married</option>
+                                    <option value="Divorced" <?php echo ($user['marital_status'] === 'Divorced') ? 'selected' : ''; ?>>Divorced</option>
+                                    <option value="Widowed" <?php echo ($user['marital_status'] === 'Widowed') ? 'selected' : ''; ?>>Widowed</option>
+                                </select>
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="nationality" class="form-label">Nationality</label>
-                            <select class="form-select" id="nationality">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="nationality" class="form-label">Nationality</label>
+                                <input type="text" class="form-control" id="nationality" name="nationality" value="<?php echo htmlspecialchars($user['nationality']); ?>">
                             </div>
                     
                             <!-- Fifth Row -->
                             <div class="col-md-4 col-sm-12">
-                            <label for="religion" class="form-label">Religion</label>
-                            <select class="form-select" id="religion">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="religion" class="form-label">Religion</label>
+                                <input type="text" class="form-control" id="religion" name="religion" value="<?php echo htmlspecialchars($user['religion']); ?>">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                            <label for="rank" class="form-label">Rank</label>
-                            <select class="form-select" id="rank">
-                                <option selected disabled></option>
-                            </select>
+                                <label for="rank" class="form-label">Rank</label>
+                                <select class="form-select" id="rank" name="rank">
+                                    <option selected disabled>Select Rank</option>
+                                    <?php
+                                    $rankQuery = "SELECT rank_name_shortcut FROM seaman_ranks";
+                                    $rankResult = $conn->query($rankQuery);
+                                    if ($rankResult->num_rows > 0) {
+                                        while ($rank = $rankResult->fetch_assoc()) {
+                                            $selected = ($user['rank'] === $rank['rank_name_shortcut']) ? 'selected' : '';
+                                            echo '<option value="' . htmlspecialchars($rank['rank_name_shortcut']) . '" ' . $selected . '>' . htmlspecialchars($rank['rank_name_shortcut']) . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
                             </div>
                     
-                           <!-- Job Status Row with Smaller Toggleable Buttons -->
+                            <!-- Job Status Row with Smaller Toggleable Buttons -->
                             <div class="col-md-6 col-sm-12">
-                                <label for="jobStatus" class="form-label">Requirements</label>
+                                <label for="jobStatus" class="form-label">Job status</label>
                                 <div class="btn-group" role="group" aria-label="Job Status">
-                                    <button type="button" class="btn btn-outline-primary btn-sm active" id="interestedBtn" onclick="toggleJobStatus(this)">Complete Requirements</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" id="notInterestedBtn" onclick="toggleJobStatus(this)">Incomplete Requirements</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm <?php echo ($user['job_status'] === 'Interested') ? 'active' : ''; ?>" id="interestedBtn" onclick="toggleJobStatus(this)">Interested</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm <?php echo ($user['job_status'] === 'Not Interested') ? 'active' : ''; ?>" id="notInterestedBtn" onclick="toggleJobStatus(this)">Not Interested</button>
                                 </div>
                             </div>
                     
                             <!-- Email Row -->
                             <div class="col-12">
-                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" id="password" placeholder="pinoyseaman password">
+                                <label for="password" class="form-label">Password (Leave blank if unchanged)</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" autocomplete="off">
                             </div>
                         </div>
-                        </form>
+                        
                     </div>                  
                 </section>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
+                </form>
             </div>
         </div>
     </section>
@@ -367,45 +465,50 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="educationForm" action="includes/add_education.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="mb-3">
                         <label for="school" class="form-label">School <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="school" placeholder="Enter school name">
+                        <input type="text" class="form-control" id="school" name="school" placeholder="Enter school name">
                     </div>
         
                     <div class="mb-3">
                         <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
+                        <input type="text" class="form-control" id="educationLevel" name="educationLevel" placeholder="e.g. Certification, Bachelor's">
                     </div>
         
                     <div class="mb-3">
                         <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
+                        <input type="text" class="form-control" id="fieldOfStudy" name="fieldOfStudy" placeholder="e.g. Information Technology">
                     </div>
         
                     <div class="row mb-3">
                     <div class="col">
                         <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="fromDate">
+                        <input type="date" class="form-control" id="fromDate" name="fromDate">
                     </div>
                     <div class="col">
                         <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="toDate">
+                        <input type="date" class="form-control" id="toDate" name="toDate">
                     </div>
                     </div>
         
                     <div class="mb-3">
                         <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                        <input type="file" class="form-control" id="documentUpload" name="documentUpload" accept=".pdf,.doc,.docx">
                     </div>
-                </form>                 
+                                
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div> 
+
+                </form> 
+
             </div>
         </div>
     </section>
@@ -416,51 +519,55 @@
         <div class="modal-dialog" style="max-width: 700px;">
             <div class="modal-content">
                 <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Education Information</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Education Information</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-        
-                <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="school" class="form-label">School <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="school" placeholder="Enter school name">
+
+                <form id="editEducationForm" action="includes/edit_education.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+                    <input type="hidden" name="educationId" id="educationId" value="">
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editSchool" class="form-label">School <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editSchool" name="school" value="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editEducationLevel" class="form-label">Education Level <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editEducationLevel" name="educationLevel" value="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editFieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editFieldOfStudy" name="fieldOfStudy" value="">
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="editFromDate" class="form-label">From <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="editFromDate" name="fromDate" value="">
+                            </div>
+                            <div class="col">
+                                <label for="editToDate" class="form-label">To <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="editToDate" name="toDate" value="">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editDocumentUpload" class="form-label">Add Document (PDF or Word)</label>
+                            <input type="file" class="form-control" id="editDocumentUpload" name="documentUpload" accept=".pdf,.doc,.docx">
+                            <small id="currentAttachment" class="form-text text-muted"></small>
+                        </div>
                     </div>
-        
-                    <div class="mb-3">
-                        <label for="educationLevel" class="form-label">Education level <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="educationLevel" placeholder="e.g. Certification, Bachelor's">
+
+                    <div class="modal-footer d-flex gap-3">
+                        <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                        <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                            <i class="fa-solid fa-trash me-2"></i>Delete
+                        </button>
                     </div>
-        
-                    <div class="mb-3">
-                        <label for="fieldOfStudy" class="form-label">Field of Study <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="fieldOfStudy" placeholder="e.g. Information Technology">
-                    </div>
-        
-                    <div class="row mb-3">
-                    <div class="col">
-                        <label for="fromDate" class="form-label">From <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="fromDate">
-                    </div>
-                    <div class="col">
-                        <label for="toDate" class="form-label">To <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="toDate">
-                    </div>
-                    </div>
-        
-                    <div class="mb-3">
-                        <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
-                    </div>
-                </form>                
-                </div>
-                <div class="modal-footer d-flex gap-3">
-                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
-                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
-                    </button>
-                </div>  
+                </form>
             </div>
         </div>
     </section>
@@ -630,7 +737,8 @@
                 </div>
             </div>
         </div>
-    </section>  
+    </section>       
+  
 
     <script>
         function toggleJobStatus(button) {
@@ -642,12 +750,47 @@
             button.classList.add('active');
     
             // Update the job status text based on the selected button
-            const requirementStatus = document.getElementById("requirementStatus");
+            const jobStatusText = document.getElementById("jobStatusText");
             if (button.id === "interestedBtn") {
-                requirementStatus.textContent = "Complete Requirements";
+                jobStatusText.textContent = "Interested";
             } else {
-                requirementStatus.textContent = "Incomplete Requirements";
+                jobStatusText.textContent = "Not Interested";
             }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const editButtons = document.querySelectorAll(".edit-education");
+            const educationIdInput = document.getElementById("educationId");
+            const schoolInput = document.getElementById("editSchool");
+            const educationLevelInput = document.getElementById("editEducationLevel");
+            const fieldOfStudyInput = document.getElementById("editFieldOfStudy");
+            const fromDateInput = document.getElementById("editFromDate");
+            const toDateInput = document.getElementById("editToDate");
+            const currentAttachment = document.getElementById("currentAttachment");
+
+            editButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    // Populate the modal fields with data from the button's data attributes
+                    educationIdInput.value = button.getAttribute("data-id");
+                    schoolInput.value = button.getAttribute("data-school");
+                    educationLevelInput.value = button.getAttribute("data-education-level");
+                    fieldOfStudyInput.value = button.getAttribute("data-field-of-study");
+                    fromDateInput.value = button.getAttribute("data-from-date");
+                    toDateInput.value = button.getAttribute("data-to-date");
+
+                    // Show the current attachment if it exists
+                    const attachmentUrl = button.getAttribute("data-attachment-url");
+                    if (attachmentUrl) {
+                        currentAttachment.textContent = `Current Attachment: ${attachmentUrl}`;
+                    } else {
+                        currentAttachment.textContent = "No attachment uploaded.";
+                    }
+                });
+            });
+        });
+
+        function confirmDeletion() {
+            return confirm("Are you sure you want to delete this education record? This action cannot be undone.");
         }
     </script>
     <script src="script/sidenav.js"></script>

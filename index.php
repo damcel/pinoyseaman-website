@@ -6,30 +6,56 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Home</title>
+    <style>
+        /* Alert Styles */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: #4caf50; /* Green for success */
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+            z-index: 1000;
+        }
+        .alert.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .alert.error {
+            background-color: #f44336; /* Red for error */
+        }
+    </style>
 </head>
 <body>
+    <!-- Alert Container -->
+    <div id="alert" class="alert"></div>
     <header>
         <nav class="main-nav">
             <div class="nav-left">
                 <div class="logo-container">
-                    <a href="index.html" class="logo-link">
+                    <a href="index.php" class="logo-link">
                         <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="job_search.html">Jobs</a></li>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="job_search.php">Jobs</a></li>
                     <li><a href="#">Explore Companies</a></li>
                     <li><a href="#">Contact us</a></li>
                     <li><a href="start.php" class="login-btn">Login</a></li>
-                    <li><a href="start.html" class="signup-btn">Sign up</a></li>
+                    <li><a href="start.php" class="signup-btn">Sign up</a></li>
                 </ul>
             </div>
 
              <!-- Moved Buttons Inside nav-links -->
              <div class="buttons">
                 <a href="start.php" class="login-btn">Login</a>
-                <a href="start.html" class="signup-btn">Sign up</a>
+                <a href="start.php" class="signup-btn">Sign up</a>
             </div>
     
             <!-- Burger Menu Button -->
@@ -308,7 +334,7 @@
 
                 ?>
         </div>
-        <a href="job_search.html">Search all jobs <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="job_search.php">Search all jobs <i class="fa-solid fa-arrow-right"></i></a>
     </section>
 
     <section class="ads-section">
@@ -401,5 +427,29 @@
     <script src="script/company-arrow.js"></script>
     <script src="script/nav-hover-effect.js"></script>
     <script src="script/ads-carousel.js"></script>
+    <script>
+        // Function to show alert
+        function showAlert(message, type = 'success') {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = message;
+            alertBox.className = `alert ${type} show`;
+
+            // Hide the alert after 3 seconds
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 3000);
+        }
+
+        // Check for query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        const type = urlParams.get('type'); // 'success' or 'error'
+
+        if (message) {
+            showAlert(message, type);
+            // Remove query parameters from the URL
+            history.replaceState(null, '', window.location.pathname);
+        }
+    </script>
 </body>
 </html>

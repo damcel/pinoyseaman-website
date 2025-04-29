@@ -113,10 +113,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $mail->send();
 
-            header("Location: ../alert.php?type=success&message=Registration successful! A confirmation email has been sent.");
+            header("Location: ../index.php?type=success&message=Registration successful! A confirmation email has been sent.");
             exit;
         } catch (Exception $e) {
-            header("Location: ../alert.php?type=error&message=Registration successful, but email sending failed: {$mail->ErrorInfo}");
+            header("Location: ../index.php?type=error&message=Registration successful, but email sending failed: {$mail->ErrorInfo}");
             exit;
         }
     } catch (PDOException $e) {

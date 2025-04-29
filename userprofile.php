@@ -24,6 +24,14 @@ $stmt->bind_param("s", $seekerId);
 $stmt->execute();
 $userResult = $stmt->get_result();
 $user = $userResult->fetch_assoc();
+
+// Fetch seaman documents from the database
+$documentsQuery = "SELECT * FROM seaman_documents WHERE seaman_email = ?";
+$documentsStmt = $conn->prepare($documentsQuery);
+$documentsStmt->bind_param("s", $seekerId);
+$documentsStmt->execute();
+$documentsResult = $documentsStmt->get_result();
+$document = $documentsResult->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -270,6 +278,11 @@ $user = $userResult->fetch_assoc();
                 </div>
             </section>
 
+            <?php
+
+
+            ?>
+
             <section class="experience-container">
                 <section class="box-container">  
                     <h2 class="header-info">Seafaring Experience</h2> 
@@ -277,7 +290,7 @@ $user = $userResult->fetch_assoc();
                         <div>
                             <div class="content-editIcon">
                                 <p class="experience-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    <?php echo !empty($user['seagoing_work']) ? nl2br(htmlspecialchars($user['seagoing_work'])) : 'N/A'; ?>
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-experience">
@@ -289,8 +302,8 @@ $user = $userResult->fetch_assoc();
                             <!-- Styled uploaded file box -->
                             <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                 <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                Resume_JohnDoe.pdf
+                                <a href="Uploads/Seaman/Seagoing/<?php echo htmlspecialchars($document['doc_url']) ?>" download class="text-decoration-none fw-medium text-dark">
+                                    <?php echo htmlspecialchars($document['doc_url']) ?>
                                 </a>
                             </div>
                         </div>
@@ -580,14 +593,16 @@ $user = $userResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Seaman Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="experienceForm" action="includes/add_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="medicalNotes" class="form-label">Sea Going Experience</label>
-                        <textarea id="medicalNotes" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="seagoinExp" class="form-label">Sea Going Experience</label>
+                        <textarea id="seagoinExp" name="seagoingExp" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
                     </div>
         
                     <!-- RIGHT side -->
@@ -598,16 +613,20 @@ $user = $userResult->fetch_assoc();
                             Drag and drop files here
                         </div>
                         <div>or</div>
-                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('fileInput').click()">Browse File</button>
+                        <input type="file" id="fileInput" name="documentUpload" style="display: none;">
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>  

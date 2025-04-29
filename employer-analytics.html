@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+     <link rel="stylesheet" href="css/dashboard.css">
     <title>dashboard jobs</title>
 </head>
 <body>
@@ -39,17 +40,17 @@
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="employer-analytics.html">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-business-time"></i><span>Analytics</span>
                 </a>
               </li>
               <li class="separator">
-                <a href="#">
+                <a href="account-plan.html">
                   <!-- SVG Icon -->
-                  <i class="fa-regular fa-building"></i><span>Advertise</span>
+                  <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
                 </a>
-              </li>   
+              </li>  
                 <div id="progress-main-container" class="progress-main-container">
                   <div class="complete-percentage">
                       <p>Complete your profile</p>
@@ -71,7 +72,7 @@
         <section class="header-container">
             <!-- Your existing saved and profile dropdown (unchanged) -->
             <div class="saved-ctn">
-              <a href="saved.html" class="saved-btn">
+              <a href="#" class="saved-btn">
                 <i class="fa-solid fa-book-bookmark"></i>
               </a>
             </div>
@@ -92,10 +93,8 @@
                         <h2>Job posts</h2>
                         <ul class="tab-list">
                         <li class="active-tab"><a href="employer-posting.html">Content</a></li>
-                        <li><a href="page-adds.html">Visitors</a></li>
-                        <li><a href="page-adds.html">Followers</a></li>
-                        <li><a href="page-adds.html">Leads</a></li>
-                        <li><a href="page-adds.html">Competitors</a></li>
+                        <li><a href="page-adds.html">Adds Banner</a></li>
+                        <li><a href="#">Visitors</a></li>
                         </ul>
                     </div>
                 </section>
@@ -143,7 +142,7 @@
                         <div class="metrics-header">
                           <h3>Metrics</h3>
                           <div class="metrics-dropdown">
-                            <button class="dropdown-toggle" onclick="toggleMetricDropdown()">Impression <span>&#9662;</span></button>
+                            <button class="dropdown-toggle" onclick="toggleMetricDropdown()">Impression</button>
                             <ul class="dropdown-list" id="metricDropdown">
                               <li>Impression</li>
                               <li>Applicant reached</li>

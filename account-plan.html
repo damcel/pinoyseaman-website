@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <title>Account Plan</title>
+    <style>
+         .account-plan-tab-container {
+      text-align: right;
+      margin-bottom: 2rem;
+    }
+
+    .account-plan-tab ul {
+      list-style: none;
+      display: inline-flex;
+      padding: 0;
+      margin: 0;
+      background: #1e2142;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .account-plan-tab ul li {
+    padding: 0.75rem 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    }
+
+    .account-plan-tab ul li:hover {
+    background-color: #ffffff;
+    transform: scale(1.05);
+    color: #1e2142;
+    }
+
+    .account-plan-tab ul li:nth-child(3) {
+      background-color: #fff;
+      color: #000;
+      font-weight: bold;
+      position: relative;
+    }
+
+    .account-plan-tab ul li:nth-child(3)::after {
+      content: 'Save 25%';
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background-color: gold;
+      color: #000;
+      font-size: 0.75rem;
+      padding: 0.2rem 10px;
+      border-radius: 5px;
+    }
+
+    .job-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .intro-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .intro-header h2 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .highlight {
+      background: yellow;
+      color: #0f1123;
+      padding: 0 0.3rem;
+      border-radius: 5px;
+    }
+
+    .intro-subtext{
+      color: #ccc;
+
+    }
+
+    .free-plan-promo {
+      background-color: #fff;
+      color: #000;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .free-plan-promo strong {
+      font-size: 1.2rem;
+    }
+
+    .free-plan-promo button {
+      margin-top: 1rem;
+      background-color: #ffd700;
+      padding: 0.5rem 1rem;
+      border: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .pricing-cards {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .pricing-box {
+      flex: 1;
+      background-color: #fff;
+      color: #000;
+      padding: 2rem;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .pricing-box.premium {
+      background-color: #001064;
+      color: #fff;
+    }
+
+    .pricing-box,
+.pricing-box.premium {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-box:hover,
+.pricing-box.premium:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.action-button,
+.premium .action-button {
+    border-style: none;
+  display: inline-block;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.premium .action-button:hover {
+  background-color: #e6c200;
+  transform: scale(1.05);
+}
+
+    .plan-header {
+      font-size: 0.9rem;
+      font-weight: bold;
+      background-color: #e0e0e0;
+      color: #000;
+      padding: 0.25rem 0.75rem;
+      border-radius: 5px;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .premium .plan-header {
+      background-color: #fff;
+      color: #001064;
+    }
+
+    .price {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .price span {
+      font-size: 1rem;
+      display: block;
+      font-weight: normal;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+
+    .features li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .features li span.icon {
+      font-weight: bold;
+    }
+
+    .features li.inactive span.icon {
+      color: red;
+    }
+
+    .action-button {
+      background-color: #000;
+      color: white;
+      padding: 0.75rem;
+      text-align: center;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .premium .action-button {
+      background-color: #ffd700;
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 0.5rem;
+      color: #ccc;
+    }
+
+    @media (max-width: 1024px) {
+  .job-list {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-cards {
+    flex-direction: column;
+  }
+
+  .account-plan-tab-container {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .intro-header h2 {
+    font-size: 2rem;
+  }
+
+  .price {
+    font-size: 2rem;
+  }
+
+  .account-plan-tab ul li {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .free-plan-promo strong {
+    font-size: 1rem;
+  }
+
+  .free-plan-promo button {
+    width: 100%;
+  }
+
+  .action-button,
+  .premium .action-button {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .pricing-box,
+  .pricing-box.premium {
+    padding: 1.5rem;
+  }
+}
+    </style>
+</head>
+<body>
+    <aside id="sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <button onclick="toggleSidebar()" id="toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul class="ul-links">
+                <div class="company-profile-card">
+                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+                </div>
+              <li>
+                <a href="employer-dashboard.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="employer-posting.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Job Post</span>
+                </a>
+              </li>
+              <li>
+                <a href="employer-analytics.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="account-plan.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
+                </a>
+              </li>
+                <div id="progress-main-container" class="progress-main-container">
+                  <div class="complete-percentage">
+                      <p>Complete your profile</p>
+                  </div>
+                  <div class="progress-container">
+                      <div class="progress-bar" id="progress-bar"></div>
+                      <p id="progress-text">0% Completed</p>
+                      <div class="incomplete-container">
+                          <h3>Incomplete Fields:</h3>
+                          <ul id="missing-fields"></ul>
+                      </div>
+                  </div>
+                </div>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-container">
+        <section class="header-container">
+            <div class="saved-ctn">
+                <a href="saved.html" class="saved-btn">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </a>
+            </div>
+            <div class="dropdown-container">
+                <button class="profile-btn" id="dpBtn">DP</button>
+                <!-- Dropdown Menu -->
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="#" class="prfl">Profile Settings</a>
+                    <a href="index.html">Logout</a>
+                </div>
+            </div>
+        </section>
+        <section class="account-plan-setup-container">
+            <section>
+                <div class="account-plan-tab-container">
+                    <nav class="account-plan-tab">
+                      <ul>
+                        <li>Monthly</li>
+                        <li>Quarterly</li>
+                        <li>Annually</li>
+                      </ul>
+                    </nav>
+                </div>
+            </section>
+            <section class="job-list">
+                <article class="intro-section">
+                  <div class="intro-header">
+                    <h2>Pick a plan that’s <span class="highlight">right for you</span></h2>
+                    <p class="intro-subtext">
+                      Pricing plans for businesses at every stage of growth.<br>
+                      Try our risk-free for 14 days. No credit card required.
+                    </p>
+                  </div>
+                  <div class="free-plan-promo">
+                    <strong>Try our 100% free Plan</strong>
+                    <p>Get started with our free plan and make 10 lookups per month absolutely free!</p>
+                    <button>Signup for Free</button>
+                    <p class="note">Payment Methods will be instructed after availing a subscription</p>
+                  </div>
+                </article>
+          
+                <article class="pricing-cards">
+                  <div class="pricing-box">
+                    <div>
+                      <div class="plan-header">Free</div>
+                      <div class="price">₱0.00<span>Subscription per Month</span></div>
+                      <ul class="features">
+                        <li class="inactive"><span class="icon">✖</span> Access to All Features</li>
+                        <li><span class="icon">✔</span> Limit to 5 Seafarer to search directly</li>
+                        <li class="inactive"><span class="icon">✖</span> Features Company Badge</li>
+                        <li class="inactive"><span class="icon">✖</span> Can post up to 5 Job openings</li>
+                        <li class="inactive"><span class="icon">✖</span> Notification via email</li>
+                        <li class="inactive"><span class="icon">✖</span> Priority job listings</li>
+                        <li class="inactive"><span class="icon">✖</span> Ads free</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div class="action-button">Youre on Free plan</div>
+                      <p class="note">No credit card required</p>
+                    </div>
+                  </div>
+          
+                  <div class="pricing-box premium">
+                    <div>
+                      <div class="plan-header">Premium</div>
+                      <div class="price">₱20,000<span>Subscription per Month</span></div>
+                      <ul class="features">
+                        <li><span class="icon">✔</span> Access to All Features</li>
+                        <li><span class="icon">✔</span> Unlimited search to top rank seafarers directly</li>
+                        <li><span class="icon">✔</span> Features Company Badge</li>
+                        <li><span class="icon">✔</span> Can post up to 30 Job openings</li>
+                        <li><span class="icon">✔</span> Notification via email</li>
+                        <li><span class="icon">✔</span> Priority job listings</li>
+                        <li><span class="icon">✔</span> Ads free</li>
+                      </ul>
+                    </div>
+                    <div>
+                        <button class="action-button" onclick="window.location.href='premium-account-manual.html';">
+                            Subscribe now
+                        </button>
+                      <p class="note">No credit card required</p>
+                    </div>
+                  </div>
+                </article>
+            </section>
+    </main>
+    <script src="script/sidenav.js"></script>
+    <script src="script/progress-bar.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+    <script src="script/currency-calendar.js"></script>
+</body>
+</html>

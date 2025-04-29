@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <title>dashboard jobs</title>
     <style>
 
 .company-card {
@@ -287,10 +287,10 @@
         <nav class="sidebar-nav">
             <div class="sidebar-header">
                 <div class="logo-container">
-                  <a href="dashboardjobs.html" class="logo-link">
-                      <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
-                  </a>
-              </div>
+                    <a href="dashboardjobs.html" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
                 <button onclick="toggleSidebar()" id="toggle-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
                         <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
@@ -298,9 +298,9 @@
                 </button>
             </div>
             <ul class="ul-links">
-              <div class="company-profile-card">
-                <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-              </div>  
+                <div class="company-profile-card">
+                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+                </div>
               <li>
                 <a href="employer-dashboard.html">
                   <!-- SVG Icon -->
@@ -314,17 +314,30 @@
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="employer-analytics.html">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-business-time"></i><span>Analytics</span>
                 </a>
               </li>
               <li class="separator">
-                <a href="#">
+                <a href="account-plan.html">
                   <!-- SVG Icon -->
-                  <i class="fa-regular fa-building"></i><span>Advertise</span>
+                  <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
                 </a>
               </li>
+                <div id="progress-main-container" class="progress-main-container">
+                  <div class="complete-percentage">
+                      <p>Complete your profile</p>
+                  </div>
+                  <div class="progress-container">
+                      <div class="progress-bar" id="progress-bar"></div>
+                      <p id="progress-text">0% Completed</p>
+                      <div class="incomplete-container">
+                          <h3>Incomplete Fields:</h3>
+                          <ul id="missing-fields"></ul>
+                      </div>
+                  </div>
+                </div>
             </ul>
         </nav>
     </aside>
@@ -350,15 +363,15 @@
             <div class="job-search-container">
                 <section class="job-posting-container">
                     <!-- Header Tabs -->
-                   <div class="post-header">
-                       <h2>Job posts</h2>
-                       <p class="subtext">Manage your page’s organic and paid content</p>
-                       <ul class="tab-list">
-                       <li><a href="employer-posting.html">Published</a></li>
-                       <li class="active-tab"><a href="page-adds.html">Page ads</a></li>
-                       </ul>
-                   </div>
-               </section>
+                    <div class="post-header">
+                        <h2>Job posts</h2>
+                        <ul class="tab-list">
+                        <li class="active-tab"><a href="employer-posting.html">Content</a></li>
+                        <li><a href="page-adds.html">Adds Banner</a></li>
+                        <li><a href="#">Visitors</a></li>
+                        </ul>
+                    </div>
+                </section>
 
                 <section class="dashboard-job-container">
                     <div class="page-ads-wrapper">
@@ -415,6 +428,7 @@
                     </div>
                 </section>
             </div>
+
             <div class="currency-date-aside">
                 <aside class="currency-container">
                     <div class="highlight-box">

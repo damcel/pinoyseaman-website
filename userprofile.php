@@ -614,7 +614,8 @@ $document = $documentsResult->fetch_assoc();
                         </div>
                         <div>or</div>
                         <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('fileInput').click()">Browse File</button>
-                        <input type="file" id="fileInput" name="documentUpload" style="display: none;">
+                        <input type="file" id="fileInput" name="documentUpload" style="display: none;" onchange="updateFileName()">
+                        <p id="selectedFileName" class="mt-2 text-muted"></p>
                         </div>
                     </div>
                     </div>
@@ -639,37 +640,48 @@ $document = $documentsResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Sea Going Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="editExperienceForm" action="includes/edit_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
-                    <!-- LEFT side -->
-                    <div class="col-md-6">
-                        <label for="medicalNotes" class="form-label">SeaFaring Experience</label>
-                        <textarea id="medicalNotes" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
-                    </div>
+                        <!-- LEFT side -->
+                        <div class="col-md-6">
+                            <label for="editSeagoingExp" class="form-label">SeaFaring Experience</label>
+                            <textarea id="editSeagoingExp" name="seagoingExp" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($user['seagoing_work']) ? htmlspecialchars($user['seagoing_work']) : ''; ?></textarea>
+                        </div>
         
-                    <!-- RIGHT side -->
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
-                            <div class="text-muted mb-2">
-                                <i class="fa fa-upload fa-2x mb-2"></i><br>
-                                Drag and drop files here
+                        <!-- RIGHT side -->
+                        <div class="col-md-6 d-flex align-items-center justify-content-center">
+                            <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
+                                <div class="text-muted mb-2">
+                                    <i class="fa fa-upload fa-2x mb-2"></i><br>
+                                    Drag and drop files here
+                                </div>
+                                <div>or</div>
+                                <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('editFileInput').click()">Browse File</button>
+                                <input type="file" id="editFileInput" name="documentUpload" style="display: none;" onchange="updateEditFileName()">
+                                <p id="editSelectedFileName" class="mt-2 text-muted">
+                                    <?php if (!empty($document['doc_url'])): ?>
+                                        Current File: <?php echo htmlspecialchars($document['doc_url']); ?>
+                                    <?php endif; ?>
+                                </p>
                             </div>
-                            <div>or</div>
-                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
                         </div>
                     </div>
-                    </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>
+                
+                </form>
+                
             </div>
         </div>
     </section>  
@@ -810,6 +822,17 @@ $document = $documentsResult->fetch_assoc();
 
         function confirmDeletion() {
             return confirm("Are you sure you want to delete this education record? This action cannot be undone.");
+        }
+
+        function updateFileName() {
+            const fileInput = document.getElementById('fileInput');
+            const fileNameDisplay = document.getElementById('selectedFileName');
+
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = `Selected File: ${fileInput.files[0].name}`;
+            } else {
+                fileNameDisplay.textContent = ''; // Clear the text if no file is selected
+            }
         }
     </script>
     <script src="script/sidenav.js"></script>

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle deletion
     if (isset($_POST['delete']) && $_POST['delete'] == 1) {
-        $typeOfDoc = "Seagoing Experience File";
+        $typeOfDoc = "Land-Based Experience File";
 
         // Fetch the file URL from the database
         $fetchQuery = "SELECT doc_url FROM seaman_documents WHERE seaman_email = ? AND type_of_doc = ?";
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($row) {
             // Delete the file from the server
-            $filePath = "../Uploads/Seaman/Seagoing/" . $row['doc_url'];
+            $filePath = "../Uploads/Seaman/Land-Based-Exp/" . $row['doc_url'];
             if (!empty($row['doc_url']) && file_exists($filePath)) {
                 unlink($filePath); // Delete the file
             }
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->execute()) {
                 // Clear the seagoing experience notes in the job_seeker table
-                $clearNotesQuery = "UPDATE job_seeker SET seagoing_work = NULL WHERE email = ?";
+                $clearNotesQuery = "UPDATE job_seeker SET non_seagoing_work = NULL WHERE email = ?";
                 $stmt = $conn->prepare($clearNotesQuery);
                 $stmt->bind_param("s", $seekerEmail);
                 $stmt->execute();
@@ -58,24 +58,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Retrieve and sanitize the seagoing experience notes
-    $editSeagoingExp = isset($_POST['editSeagoingExp']) ? filter_var(trim($_POST['editSeagoingExp']), FILTER_SANITIZE_STRING) : null;
+    $editlandBasedExp = isset($_POST['editlandBasedExp']) ? filter_var(trim($_POST['editlandBasedExp']), FILTER_SANITIZE_STRING) : null;
 
     // Handle file upload
     $attachmentUrl = null;
-    if (isset($_FILES['documentUpload']) && $_FILES['documentUpload']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = "../Uploads/Seaman/Seagoing/"; // Directory to store uploaded files
+    if (isset($_FILES['landdocumentUpload']) && $_FILES['landdocumentUpload']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = "../Uploads/Seaman/Land-Based-Exp/"; // Directory to store uploaded files
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true); // Create the directory if it doesn't exist
         }
 
-        $fileExtension = pathinfo($_FILES['documentUpload']['name'], PATHINFO_EXTENSION);
+        $fileExtension = pathinfo($_FILES['landdocumentUpload']['name'], PATHINFO_EXTENSION);
         $uniqueFileName = uniqid() . "_" . time() . "." . $fileExtension; // Generate a unique file name
         $filePath = $uploadDir . $uniqueFileName;
 
         // Check file type
         $allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-        if (in_array($_FILES['documentUpload']['type'], $allowedTypes)) {
-            if (move_uploaded_file($_FILES['documentUpload']['tmp_name'], $filePath)) {
+        if (in_array($_FILES['landdocumentUpload']['type'], $allowedTypes)) {
+            if (move_uploaded_file($_FILES['landdocumentUpload']['tmp_name'], $filePath)) {
                 $attachmentUrl = $uniqueFileName; // Save only the file name as the URL
             } else {
                 header("Location: ../userprofile.php?type=error&message=Failed to upload file.");
@@ -88,9 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update the seagoing experience notes in the job_seeker table
-    $updateQuery = "UPDATE job_seeker SET seagoing_work = ? WHERE email = ?";
+    $updateQuery = "UPDATE job_seeker SET non_seagoing_work = ? WHERE email = ?";
     $stmt = $conn->prepare($updateQuery);
-    $stmt->bind_param("ss", $editSeagoingExp, $seekerEmail);
+    $stmt->bind_param("ss", $editlandBasedExp, $seekerEmail);
 
     if (!$stmt->execute()) {
         header("Location: ../userprofile.php?type=error&message=Failed to update seagoing experience.");
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // If a new file was uploaded, update the seaman_documents table
     if ($attachmentUrl) {
-        $typeOfDoc = "Seagoing Experience File";
+        $typeOfDoc = "Land-Based Experience File";
 
         // Check if a previous file exists for this user
         $checkQuery = "SELECT doc_url FROM seaman_documents WHERE seaman_email = ? AND type_of_doc = ?";
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows > 0) {
             // Delete the old file
             $row = $result->fetch_assoc();
-            $oldFilePath = "../Uploads/Seaman/Seagoing/" . $row['doc_url'];
+            $oldFilePath = "../Uploads/Seaman/Land-Based-Exp/" . $row['doc_url'];
             if (file_exists($oldFilePath)) {
                 unlink($oldFilePath);
             }

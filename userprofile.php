@@ -26,7 +26,7 @@ $userResult = $stmt->get_result();
 $user = $userResult->fetch_assoc();
 
 // Fetch seaman documents from the database
-$documentsQuery = "SELECT * FROM seaman_documents WHERE seaman_email = ?";
+$documentsQuery = "SELECT * FROM seaman_documents WHERE seaman_email = ? AND type_of_doc = 'Seagoing Experience File'";
 $documentsStmt = $conn->prepare($documentsQuery);
 $documentsStmt->bind_param("s", $seekerId);
 $documentsStmt->execute();
@@ -310,6 +310,16 @@ $document = $documentsResult->fetch_assoc();
                         <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-experience">+ Add work experience</button>
                     </div>
                 </section>
+
+                <?php
+                // Fetch land-based work experience documents
+                $landDocumentsQuery = "SELECT doc_url FROM seaman_documents WHERE seaman_email = ? AND type_of_doc = 'Land-Based Experience File'";
+                $landDocumentsStmt = $conn->prepare($landDocumentsQuery);
+                $landDocumentsStmt->bind_param("s", $seekerId);
+                $landDocumentsStmt->execute();
+                $landDocumentsResult = $landDocumentsStmt->get_result();
+                $landDocument = $landDocumentsResult->fetch_assoc();
+                ?>
                 
         
                 <section class="box-container">
@@ -318,7 +328,7 @@ $document = $documentsResult->fetch_assoc();
                         <div>
                             <div class="content-editIcon">
                                 <p class="experience-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    <?php echo !empty($user['non_seagoing_work']) ? nl2br(htmlspecialchars($user['non_seagoing_work'])) : 'N/A'; ?>
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-land-experience">
@@ -330,8 +340,8 @@ $document = $documentsResult->fetch_assoc();
                             <!-- Styled uploaded file box -->
                             <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                 <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                Resume_JohnDoe.pdf
+                                <a href="Uploads/Seaman/Land-Based-Exp/<?php echo htmlspecialchars($document['doc_url']) ?>" download class="text-decoration-none fw-medium text-dark">
+                                    <?php echo htmlspecialchars($landDocument['doc_url']) ?>
                                 </a>
                             </div>
                         </div>
@@ -649,7 +659,7 @@ $document = $documentsResult->fetch_assoc();
                         <!-- LEFT side -->
                         <div class="col-md-6">
                             <label for="editSeagoingExp" class="form-label">SeaFaring Experience</label>
-                            <textarea id="editSeagoingExp" name="seagoingExp" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($user['seagoing_work']) ? htmlspecialchars($user['seagoing_work']) : ''; ?></textarea>
+                            <textarea id="editSeagoingExp" name="editSeagoingExp" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($user['seagoing_work']) ? htmlspecialchars($user['seagoing_work']) : ''; ?></textarea>
                         </div>
         
                         <!-- RIGHT side -->
@@ -695,14 +705,16 @@ $document = $documentsResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Land-base Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="landExperienceForm" action="includes/add_land_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="land-base-experience" class="form-label">Land-base Experience</label>
-                        <textarea id="land-base-experience" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="landBasedExp" class="form-label">Land-base Experience</label>
+                        <textarea id="landBasedExp" name="landBasedExp" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
                     </div>
         
                     <!-- RIGHT side -->
@@ -713,21 +725,25 @@ $document = $documentsResult->fetch_assoc();
                             Drag and drop files here
                         </div>
                         <div>or</div>
-                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('landfileInput').click()">Browse File</button>
+                        <input type="file" id="landfileInput" name="landdocumentUpload" style="display: none;" onchange="updatelandFileName()">
+                        <p id="selectedlandFileName" class="mt-2 text-muted"></p>
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div>
+
+                </form>
             </div>
         </div>
     </section>  
 
-    <!--landbase experience modal -->
+    <!--edit landbase experience modal -->
     <section class="modal fade" id="edit-land-experience" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 700px;">
             <div class="modal-content">
@@ -735,14 +751,16 @@ $document = $documentsResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Land-base Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="editLandExperienceForm" action="includes/edit_land_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="land-base-experience" class="form-label">Land-base Experience</label>
-                        <textarea id="land-base-experience" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="editlandBasedExp" class="form-label">Land-base Experience</label>
+                        <textarea id="editlandBasedExp" name="editlandBasedExp" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($user['non_seagoing_work']) ? htmlspecialchars($user['non_seagoing_work']) : ''; ?></textarea>
                     </div>
         
                     <!-- RIGHT side -->
@@ -753,19 +771,28 @@ $document = $documentsResult->fetch_assoc();
                                 Drag and drop files here
                             </div>
                             <div>or</div>
-                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                            <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('editlandFileInput').click()">Browse File</button>
+                            <input type="file" id="editlandFileInput" name="landdocumentUpload" style="display: none;" onchange="updateEditFileName()">
+                            <p id="editSelectedlandFileName" class="mt-2 text-muted">
+                                <?php if (!empty($landDocument['doc_url'])): ?>
+                                    Current File: <?php echo htmlspecialchars($landDocument['doc_url']); ?>
+                                <?php endif; ?>
+                            </p>
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>       
@@ -821,12 +848,23 @@ $document = $documentsResult->fetch_assoc();
         });
 
         function confirmDeletion() {
-            return confirm("Are you sure you want to delete this education record? This action cannot be undone.");
+            return confirm("Are you sure you want to delete this record? This action cannot be undone.");
         }
 
         function updateFileName() {
             const fileInput = document.getElementById('fileInput');
             const fileNameDisplay = document.getElementById('selectedFileName');
+
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = `Selected File: ${fileInput.files[0].name}`;
+            } else {
+                fileNameDisplay.textContent = ''; // Clear the text if no file is selected
+            }
+        }
+
+        function updatelandFileName() {
+            const fileInput = document.getElementById('landfileInput');
+            const fileNameDisplay = document.getElementById('selectedlandFileName');
 
             if (fileInput.files.length > 0) {
                 fileNameDisplay.textContent = `Selected File: ${fileInput.files[0].name}`;

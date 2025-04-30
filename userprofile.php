@@ -155,16 +155,28 @@ $document = $documentsResult->fetch_assoc();
                 </div>
             
                 <div class="profile-container">
-                    <div class="profile-picture">
-                        <label for="upload-photo">
-                            <div class="upload-box">
-                                <p>Upload your photo</p>
-                                <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                            </div>
-                        </label>
-                        <input type="file" id="upload-photo" hidden>
-                        <p id="jobStatusText">Interested</p> <!-- This will display the selected status, default is "Interested" -->
-                    </div>
+                <div class="profile-picture">
+    <?php if (!empty($user['user_photo'])): ?>
+        <!-- Display the user's photo -->
+        <img src="Uploads/Seaman/User-Photo/<?php echo htmlspecialchars($user['user_photo']); ?>" alt="User Photo" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+        <!-- Add a button to change the photo -->
+        <button class="btn btn-outline-primary mt-2" onclick="document.getElementById('upload-photo').click()">Change Photo</button>
+        <form id="uploadPhotoForm" action="includes/upload_user_photo.php" method="POST" enctype="multipart/form-data" style="display: none;">
+            <input type="file" id="upload-photo" name="userPhoto" onchange="document.getElementById('uploadPhotoForm').submit();">
+        </form>
+    <?php else: ?>
+        <!-- Show the upload form if no photo exists -->
+        <form id="uploadPhotoForm" action="includes/upload_user_photo.php" method="POST" enctype="multipart/form-data">
+            <label for="upload-photo">
+                <div class="upload-box">
+                    <p>Upload your photo</p>
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                </div>
+            </label>
+            <input type="file" id="upload-photo" name="userPhoto" hidden onchange="document.getElementById('uploadPhotoForm').submit();">
+        </form>
+    <?php endif; ?>
+</div>
                     
                     <div class="profile-details">
                         <div class="details-section">

@@ -275,6 +275,24 @@ include 'db.php';
                 </div>
             </section>
 
+            <?php
+            // Fetch Visa data for the logged-in user
+            $visaQuery = "SELECT svd. id, svd.visa_no, svd.visa_issued, svd.visa_valid, svd.visa_url, svl.visa_type 
+                        FROM seaman_visa_docs svd
+                        INNER JOIN seaman_visa_list svl ON svd.visa_type_id = svl.id
+                        WHERE svd.seaman_email = ?";
+            $stmt = $conn->prepare($visaQuery);
+            $stmt->bind_param("s", $seekerId);
+            $stmt->execute();
+            $visaResult = $stmt->get_result();
+            $visaRecords = [];
+            if ($visaResult && $visaResult->num_rows > 0) {
+                while ($row = $visaResult->fetch_assoc()) {
+                    $visaRecords[] = $row;
+                }
+            }
+            ?>
+
             <section class="education-section">
                 <h2 class="header-info">Visa</h2>
                 <div class="visa-container">
@@ -283,30 +301,50 @@ include 'db.php';
                             <tr>
                                 <th>Type</th>
                                 <th>Number</th>
-                                <th>Country</th>
+                                <th>Country Visa</th>
                                 <th>Date Issue</th>
                                 <th>Expiry Date</th>
                                 <th>Attachment</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="Type">Visa</td>
-                                <td data-label="Number">Number</td>
-                                <td data-label="Country">Country</td>
-                                <td data-label="Date Issue">2020</td>
-                                <td data-label="Expiry Date">2024</td>
-                                <td class="attachment-cell" data-label="Attachment">
-                                    <div class="attachment-content">
-                                        <span>attachment</span>
-                                        <div class="attachment-icons">
-                                            <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-visa">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            <?php if (!empty($visaRecords)): ?>
+                                <?php foreach ($visaRecords as $visa): ?>
+                                    <tr>
+                                        <td data-label="Type">Visa</td>
+                                        <td data-label="Number"><?php echo htmlspecialchars($visa['visa_no']); ?></td>
+                                        <td data-label="Country"><?php echo htmlspecialchars($visa['visa_type']); ?></td>
+                                        <td data-label="Date Issue"><?php echo htmlspecialchars($visa['visa_issued']); ?></td>
+                                        <td data-label="Expiry Date"><?php echo htmlspecialchars($visa['visa_valid']); ?></td>
+                                        <td class="attachment-cell" data-label="Attachment">
+                                            <div class="attachment-content">
+                                                <?php if (!empty($visa['visa_url'])): ?>
+                                                    <a href="Uploads/Seaman/Visa/<?php echo htmlspecialchars($visa['visa_url']); ?>" target="_blank" class="text-decoration-none">
+                                                        View Document
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span>No Attachment</span>
+                                                <?php endif; ?>
+                                                <div class="attachment-icons">
+                                                    <button class="edit-visa" type="button" data-bs-toggle="modal" data-bs-target="#edit-visa"
+                                                        data-id="<?php echo htmlspecialchars($visa['id']); ?>"
+                                                        data-type="<?php echo htmlspecialchars($visa['visa_type']); ?>"
+                                                        data-number="<?php echo htmlspecialchars($visa['visa_no']); ?>"
+                                                        data-issued="<?php echo htmlspecialchars($visa['visa_issued']); ?>"
+                                                        data-valid="<?php echo htmlspecialchars($visa['visa_valid']); ?>"
+                                                        data-url="<?php echo htmlspecialchars($visa['visa_url']); ?>">
+                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6" class="text-center">No Visa records found. Add now!</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>                
                     </table>            
                     <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-visa">+ Add Document</button>
@@ -551,43 +589,62 @@ include 'db.php';
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="country" class="form-label">Country<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="country" placeholder="Philippines">
-                    </div>
+
+                <form action="includes/add_visa.php" method="POST" enctype="multipart/form-data">
+
+                    <?php
+                    // Fetch visa types from the seaman_visa_list table
+                    $visaTypesQuery = "SELECT id, visa_type FROM seaman_visa_list";
+                    $visaTypesResult = $conn->query($visaTypesQuery);
+                    $visaTypes = [];
+                    if ($visaTypesResult && $visaTypesResult->num_rows > 0) {
+                        while ($row = $visaTypesResult->fetch_assoc()) {
+                            $visaTypes[] = $row;
+                        }
+                    }
+                    ?>
         
                     <div class="mb-3">
                         <label for="visaType" class="form-label">Visa Type<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="visaType" placeholder="American Visa">
+                        <select class="form-control" id="visaType" name="visaType" required>
+                            <option value="" disabled selected>Select Visa Type</option>
+                            <?php foreach ($visaTypes as $visa): ?>
+                                <option value="<?php echo htmlspecialchars($visa['id']); ?>">
+                                    <?php echo htmlspecialchars($visa['visa_type']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="visaNumber" class="form-label">Visa Number<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="visaNumber" placeholder="123-456-789">
+                        <input type="text" class="form-control" id="visaNumber" name="visaNumber" placeholder="123-456-789">
                     </div>
         
                     <div class="row mb-3">
                     <div class="col">
-                        <label for="fromDate" class="form-label">Start date: <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="fromDate">
+                        <label for="visaFromDate" class="form-label">Start date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="visaFromDate" name="visaFromDate">
                     </div>
                     <div class="col">
-                        <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="toDate">
+                        <label for="visaToDate" class="form-label">End Date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="visaToDate" name="visaToDate">
                     </div>
                     </div>
         
                     <div class="mb-3">
-                        <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                        <label for="visaDocumentUpload" class="form-label">Add Document (PDF or Word)</label>
+                        <input type="file" class="form-control" id="visaDocumentUpload" name="visaDocumentUpload" accept=".pdf,.doc,.docx">
                     </div>
-                </form>                 
+                                
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div> 
+
+                </form> 
+
             </div>
         </div>
     </section>
@@ -601,48 +658,58 @@ include 'db.php';
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Visa</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/edit_visa.php" method="POST" enctype="multipart/form-data">
         
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="country" class="form-label">Country<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="country" placeholder="Philippines">
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="visaType" class="form-label">Visa Type<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="visaType" placeholder="American visa">
-                        </div>
+                    <input type="hidden" id="editVisaId" name="visaId">
+                    <div class="mb-3">
+                        <label for="editVisaType" class="form-label">Visa Type<span class="text-danger">*</span></label>
+                        <select class="form-control" id="editVisaType" name="visaType" required>
+                            <option value="" disabled>Select Visa Type</option>
+                            <?php foreach ($visaTypes as $visa): ?>
+                                <option value="<?php echo htmlspecialchars($visa['visa_type']); ?>">
+                                    <?php echo htmlspecialchars($visa['visa_type']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
             
-                        <div class="mb-3">
-                            <label for="visaNumber" class="form-label">Visa Number:<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="visaNumber" placeholder="123-456-789">
-                        </div>
-            
-                        <div class="row mb-3">
+                    <div class="mb-3">
+                        <label for="editVisaNumber" class="form-label">Visa Number:<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editVisaNumber" name="visaNumber" placeholder="123-456-789">
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col">
-                            <label for="fromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="fromDate">
+                            <label for="editVisaFromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="editVisaFromDate" name="visaFromDate">
                         </div>
                         <div class="col">
-                            <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="toDate">
+                            <label for="editVisaToDate" class="form-label">End Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="editVisaToDate" name="visaToDate">
                         </div>
-                        </div>
+                    </div>
             
-                        <div class="mb-3">
-                            <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                            <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
-                        </div>
-                    </form>                               
+                    <div class="mb-3">
+                        <label for="editVisaDocumentUpload" class="form-label">Add Document (PDF or Word)</label>
+                        <input type="file" class="form-control" id="editVisaDocumentUpload" name="visaDocumentUpload" accept=".pdf,.doc,.docx">
+                        <small class="form-text text-muted">
+                            Current File: <span id="currentVisaFile"></span>
+                        </small>
+                    </div>                     
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" class="btn btn-outline-danger flex-fill py-2" name="delete" value="1" onclick="return confirmDeletion();">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>  
+
+                </form>
+
             </div>
         </div>
     </section>
@@ -657,6 +724,31 @@ include 'db.php';
         function confirmDeletion() {
             return confirm("Are you sure you want to delete this record? This action cannot be undone.");
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const editVisaButtons = document.querySelectorAll(".edit-visa");
+            const editVisaModal = document.getElementById("edit-visa");
+
+            editVisaButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const visaId = this.getAttribute("data-id");
+                    const visaType = this.getAttribute("data-type");
+                    const visaNumber = this.getAttribute("data-number");
+                    const visaIssued = this.getAttribute("data-issued");
+                    const visaValid = this.getAttribute("data-valid");
+                    const visaUrl = this.getAttribute("data-url");
+
+                    // Populate modal fields
+                    document.getElementById("editVisaId").value = visaId;
+                    document.getElementById("editVisaType").value = visaType;
+                    document.getElementById("editVisaNumber").value = visaNumber;
+                    document.getElementById("editVisaFromDate").value = visaIssued;
+                    document.getElementById("editVisaToDate").value = visaValid;
+                    document.getElementById("currentVisaFile").textContent = visaUrl ? visaUrl : "No file uploaded";
+                });
+            });
+        });
+
     </script>
 </body>
 </html>

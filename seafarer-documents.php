@@ -1,3 +1,37 @@
+<?php
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: user-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['seeker_id'])) {
+    // Redirect to the login page with an error message
+    header("Location: user-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,6 +119,30 @@
             </div>
         </section>
 
+        <?php
+        // Include the database connection
+        include 'db.php';
+
+        // Fetch Seaman Book data for the logged-in user
+        $seekerId = $_SESSION['seeker_id'];
+        $seamanBookQuery = "SELECT sbook_no, sbook_country, sbook_issued, sbook_valid FROM job_seeker WHERE email = ?";
+        $stmt = $conn->prepare($seamanBookQuery);
+        $stmt->bind_param("s", $seekerId);
+        $stmt->execute();
+        $seamanBookResult = $stmt->get_result();
+        $seamanBook = $seamanBookResult->fetch_assoc();
+
+        // Fetch education details from the database
+        $sBookQuery = "SELECT * 
+                FROM seaman_documents
+                WHERE seaman_email = ? AND type_of_doc = 'Seaman Book'";
+        $sBookStmt = $conn->prepare($sBookQuery);
+        $sBookStmt->bind_param("s", $seekerId);
+        $sBookStmt->execute();
+        $sBookResult = $sBookStmt->get_result();
+        $sBookAttachment = $sBookResult->fetch_assoc();
+        ?>
+
         <section class="profile-setup-container">
             <section class="profile-settings">
                 <div class="tabs-container">
@@ -112,28 +170,62 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="Type">Seamans Book</td>
-                                <td data-label="Number">Number</td>
-                                <td data-label="Country">Country</td>
-                                <td data-label="Date Issue">2020</td>
-                                <td data-label="Expiry Date">2024</td>
-                                <td class="attachment-cell" data-label="Attachment">
-                                    <div class="attachment-content">
-                                        <span>attachment</span>
+                            <?php if (!empty($seamanBook)): ?>
+                                <tr>
+                                    <td data-label="Type">Seaman Book</td>
+                                    <td data-label="Number"><?php echo !empty($seamanBook['sbook_no']) ? htmlspecialchars($seamanBook['sbook_no']) : 'N/A'; ?></td>
+                                    <td data-label="Country"><?php echo !empty($seamanBook['sbook_country']) ? htmlspecialchars($seamanBook['sbook_country']) : 'N/A'; ?></td>
+                                    <td data-label="Date Issue"><?php echo !empty($seamanBook['sbook_issued']) ? htmlspecialchars($seamanBook['sbook_issued']) : 'N/A'; ?></td>
+                                    <td data-label="Expiry Date"><?php echo !empty($seamanBook['sbook_valid']) ? htmlspecialchars($seamanBook['sbook_valid']) : 'N/A'; ?></td>
+                                    <td class="attachment-cell" data-label="Actions">
+                                        <?php if (!empty($sBookAttachment['doc_url'])): ?>
+                                            <a href="Uploads/Seaman/SBook/<?php echo htmlspecialchars($sBookAttachment['doc_url']); ?>" target="_blank" class="text-decoration-none">
+                                                View Document
+                                            </a>
+                                        <?php else: ?>
+                                            <span>No Attachment</span>
+                                        <?php endif; ?>
                                         <div class="attachment-icons">
                                             <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-seamans-book">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6" class="text-center">No Seaman Book records found. Add now!</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>                
                     </table>      
                     <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-seamans-book">+ Add Document</button>      
                 </div>
             </section>
+
+            <?php
+            // Include the database connection
+            include 'db.php';
+
+            // Fetch Seaman Book data for the logged-in user
+            $seekerId = $_SESSION['seeker_id'];
+            $passportQuery = "SELECT passport_no, passport_country, passport_issued, passport_valid FROM job_seeker WHERE email = ?";
+            $stmt = $conn->prepare($passportQuery);
+            $stmt->bind_param("s", $seekerId);
+            $stmt->execute();
+            $passportResult = $stmt->get_result();
+            $passport = $passportResult->fetch_assoc();
+
+            // Fetch education details from the database
+            $passportQuery = "SELECT * 
+                    FROM seaman_documents
+                    WHERE seaman_email = ? AND type_of_doc = 'Seaman Passport'";
+            $passportStmt = $conn->prepare($passportQuery);
+            $passportStmt->bind_param("s", $seekerId);
+            $passportStmt->execute();
+            $passportResult = $passportStmt->get_result();
+            $passportAttachment = $passportResult->fetch_assoc();
+            ?>
 
             <section class="education-section">
                 <h2 class="header-info">Passport</h2>
@@ -150,24 +242,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="Type">Passport</td>
-                                <td data-label="Number">Number</td>
-                                <td data-label="Country">Country</td>
-                                <td data-label="Date Issue">2020</td>
-                                <td data-label="Expiry Date">2024</td>
-                                <td class="attachment-cell" data-label="Attachment">
-                                    <div class="attachment-content">
-                                        <span>attachment</span>
+                            <?php if (!empty($passport)): ?>
+                                <tr>
+                                    <td data-label="Type">Passport</td>
+                                    <td data-label="Number"><?php echo !empty($passport['passport_no']) ? htmlspecialchars($passport['passport_no']) : 'N/A'; ?></td>
+                                    <td data-label="Country"><?php echo !empty($passport['passport_country']) ? htmlspecialchars($passport['passport_country']) : 'N/A'; ?></td>
+                                    <td data-label="Date Issue"><?php echo !empty($passport['passport_issued']) ? htmlspecialchars($passport['passport_issued']) : 'N/A'; ?></td>
+                                    <td data-label="Expiry Date"><?php echo !empty($passport['passport_valid']) ? htmlspecialchars($passport['passport_valid']) : 'N/A'; ?></td>
+                                    <td class="attachment-cell" data-label="Actions">
+                                        <?php if (!empty($passportAttachment['doc_url'])): ?>
+                                            <a href="Uploads/Seaman/Passport/<?php echo htmlspecialchars($passportAttachment['doc_url']); ?>" target="_blank" class="text-decoration-none">
+                                                View Document
+                                            </a>
+                                        <?php else: ?>
+                                            <span>No Attachment</span>
+                                        <?php endif; ?>
                                         <div class="attachment-icons">
                                             <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-passport">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>                
+                                    </td>
+                                </tr>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6" class="text-center">No Seaman Book records found. Add now!</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>              
                     </table>            
                     <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-passport">+ Add Document</button>
                 </div>
@@ -220,39 +322,45 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Seamans Book</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/add_SBook.php" method="POST" enctype="multipart/form-data">
+
                 <div class="modal-body">
-                <form>
+                
                     <div class="mb-3">
                         <label for="country" class="form-label">Country<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="country" placeholder="Philippines">
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Philippines">
                     </div>
         
                     <div class="mb-3">
                         <label for="seamanNumber" class="form-label">Seamans Book ID:<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="seamanNumber" placeholder="123-456-789">
+                        <input type="text" class="form-control" id="seamanNumber" name="seamanNumber" placeholder="123-456-789">
                     </div>
         
                     <div class="row mb-3">
                     <div class="col">
-                        <label for="fromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="fromDate">
+                        <label for="fromDate" class="form-label">Issuance Date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="fromDate" id="fromDate">
                     </div>
                     <div class="col">
-                        <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="toDate">
+                        <label for="toDate" class="form-label">Expiration Date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="toDate" id="toDate">
                     </div>
                     </div>
         
                     <div class="mb-3">
                         <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                        <input type="file" class="form-control" id="documentUpload" name="documentUpload" accept=".pdf,.doc,.docx">
                     </div>
-                </form>                 
+                             
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div> 
+
+                </form>    
+
             </div>
         </div>
     </section>
@@ -266,43 +374,56 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Seamans Book</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/edit_SBook.php" method="POST" enctype="multipart/form-data">
         
                 <div class="modal-body">
-                    <form>
+                    
                         <div class="mb-3">
-                            <label for="country" class="form-label">Country<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="country" placeholder="Philippines">
+                            <label for="editCountry" class="form-label">Country<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editCountry" name="editCountry" placeholder="Philippines" value="<?php echo !empty($seamanBook['sbook_country']) ? htmlspecialchars($seamanBook['sbook_country']) : ''; ?>">
                         </div>
             
                         <div class="mb-3">
-                            <label for="seamanNumber" class="form-label">Seamans Book ID:<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="seamanNumber" placeholder="123-456-789">
+                            <label for="editseamanNumber" class="form-label">Seamans Book ID:<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editseamanNumber" name="editseamanNumber" placeholder="123-456-789" value="<?php echo !empty($seamanBook['sbook_no']) ? htmlspecialchars($seamanBook['sbook_no']) : ''; ?>">
                         </div>
             
                         <div class="row mb-3">
                         <div class="col">
-                            <label for="fromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="fromDate">
+                            <label for="editfromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="editfromDate" name="editfromDate" value="<?php echo !empty($seamanBook['sbook_issued']) ? htmlspecialchars($seamanBook['sbook_issued']) : ''; ?>">
                         </div>
                         <div class="col">
-                            <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="toDate">
+                            <label for="edittoDate" class="form-label">End Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="edittoDate" name="edittoDate" value="<?php echo !empty($seamanBook['sbook_valid']) ? htmlspecialchars($seamanBook['sbook_valid']) : ''; ?>">
                         </div>
                         </div>
             
                         <div class="mb-3">
-                            <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                            <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                            <label for="editDocumentUpload" class="form-label">Add Document (PDF or Word)</label>
+                            <input type="file" class="form-control" id="editDocumentUpload" name="editDocumentUpload" accept=".pdf,.doc,.docx">
+                            <small class="form-text text-muted">
+                                <?php if (!empty($sBookAttachment['doc_url'])): ?>
+                                    Current File: 
+                                    <a href="Uploads/Seaman/SBook/<?php echo htmlspecialchars($sBookAttachment['doc_url']); ?>" target="_blank">View Document</a>
+                                <?php else: ?>
+                                    No file uploaded.
+                                <?php endif; ?>
+                            </small>
                         </div>
-                    </form>                               
+                                                  
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>  
+
+                </form> 
+
             </div>
         </div>
     </section>
@@ -315,39 +436,45 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Passport</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/add_passport.php" method="POST" enctype="multipart/form-data">
+
                 <div class="modal-body">
-                <form>
+                
                     <div class="mb-3">
-                        <label for="country" class="form-label">Country<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="country" placeholder="Philippines">
+                        <label for="passportCountry" class="form-label">Country<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="passportCountry" name="passportCountry" placeholder="Philippines">
                     </div>
         
                     <div class="mb-3">
                         <label for="passportID" class="form-label">Passport ID:<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="passportID" placeholder="123-456-789">
+                        <input type="text" class="form-control" id="passportID" name="passportID" placeholder="123-456-789">
                     </div>
         
                     <div class="row mb-3">
                     <div class="col">
-                        <label for="fromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="fromDate">
+                        <label for="passportFromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="passportFromDate" name="passportFromDate">
                     </div>
                     <div class="col">
-                        <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" id="toDate">
+                        <label for="passportToDate" class="form-label">End Date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="passportToDate" name="passportToDate">
                     </div>
                     </div>
         
                     <div class="mb-3">
-                        <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                        <label for="passportDocumentUpload" class="form-label">Add Document (PDF or Word)</label>
+                        <input type="file" class="form-control" id="passportDocumentUpload" name="passportDocumentUpload" accept=".pdf,.doc,.docx">
                     </div>
-                </form>                 
+                                 
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div> 
+
+                </form>
+
             </div>
         </div>
     </section>
@@ -361,43 +488,56 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Passport</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/edit_passport.php" method="POST" enctype="multipart/form-data">
         
                 <div class="modal-body">
-                    <form>
+                    
                         <div class="mb-3">
-                            <label for="country" class="form-label">Country<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="country" placeholder="Philippines">
+                            <label for="editPassCountry" class="form-label">Country<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editPassCountry" name="editPassCountry" placeholder="Philippines" value="<?php echo !empty($passport['passport_country']) ? htmlspecialchars($passport['passport_country']) : ''; ?>">
                         </div>
             
                         <div class="mb-3">
-                            <label for="passportID" class="form-label">Passport ID:<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="passportID" placeholder="123-456-789">
+                            <label for="editPassportID" class="form-label">Passport ID:<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editPassportID" name="editPassportID" placeholder="123-456-789" value="<?php echo !empty($passport['passport_no']) ? htmlspecialchars($passport['passport_no']) : ''; ?>">
                         </div>
             
                         <div class="row mb-3">
                         <div class="col">
-                            <label for="fromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="fromDate">
+                            <label for="editPassFromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="editPassFromDate" name="editPassFromDate" value="<?php echo !empty($passport['passport_issued']) ? htmlspecialchars($passport['passport_issued']) : ''; ?>">
                         </div>
                         <div class="col">
-                            <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="toDate">
+                            <label for="editPassToDate" class="form-label">End Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="editPassToDate" name="editPassToDate" value="<?php echo !empty($passport['passport_valid']) ? htmlspecialchars($passport['passport_valid']) : ''; ?>">
                         </div>
                         </div>
             
                         <div class="mb-3">
-                            <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                            <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                            <label for="editPassDocumentUpload" class="form-label">Add Document (PDF or Word)</label>
+                            <input type="file" class="form-control" id="editPassDocumentUpload" name="editPassDocumentUpload" accept=".pdf,.doc,.docx">
+                            <small class="form-text text-muted">
+                                <?php if (!empty($passportAttachment['doc_url'])): ?>
+                                    Current File: 
+                                    <a href="Uploads/Seaman/Passport/<?php echo htmlspecialchars($passportAttachment['doc_url']); ?>" target="_blank">View Document</a>
+                                <?php else: ?>
+                                    No file uploaded.
+                                <?php endif; ?>
+                            </small>
                         </div>
-                    </form>                               
+                                                
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
-                </div>  
+                </div> 
+                
+                </form>   
+
             </div>
         </div>
     </section>
@@ -513,5 +653,10 @@
      <!-- Bootstrap JS with Popper (near the end of body) -->
      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+    <script>
+        function confirmDeletion() {
+            return confirm("Are you sure you want to delete this record? This action cannot be undone.");
+        }
+    </script>
 </body>
 </html>

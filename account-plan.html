@@ -82,7 +82,10 @@
     }
 
     .intro-subtext{
-      color: #ccc;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #e4dede;
 
     }
 
@@ -98,7 +101,7 @@
       font-size: 1.2rem;
     }
 
-    .free-plan-promo button {
+    .free-plan-promo div {
       margin-top: 1rem;
       background-color: #ffd700;
       padding: 0.5rem 1rem;
@@ -256,7 +259,7 @@
     font-size: 1rem;
   }
 
-  .free-plan-promo button {
+  .free-plan-promo div {
     width: 100%;
   }
 
@@ -335,18 +338,18 @@
 
     <main class="dashboard-container">
         <section class="header-container">
+            <!-- Your existing saved and profile dropdown (unchanged) -->
             <div class="saved-ctn">
-                <a href="saved.html" class="saved-btn">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </a>
+              <a href="#" class="saved-btn">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </a>
             </div>
             <div class="dropdown-container">
-                <button class="profile-btn" id="dpBtn">DP</button>
-                <!-- Dropdown Menu -->
-                <div class="dropdown" id="dropdownMenu">
-                    <a href="#" class="prfl">Profile Settings</a>
-                    <a href="index.html">Logout</a>
-                </div>
+              <button class="profile-btn" id="dpBtn">DP</button>
+              <div class="dropdown" id="dropdownMenu">
+                <a href="employer-settings.html" class="prfl">Settings</a>
+                <a href="index.php">Logout</a>
+              </div>
             </div>
         </section>
         <section class="account-plan-setup-container">
@@ -371,9 +374,9 @@
                     </p>
                   </div>
                   <div class="free-plan-promo">
-                    <strong>Try our 100% free Plan</strong>
+                    <strong>100% free Plan</strong>
                     <p>Get started with our free plan and make 10 lookups per month absolutely free!</p>
-                    <button>Signup for Free</button>
+                    <div>Limited Access to applicant</div>
                     <p class="note">Payment Methods will be instructed after availing a subscription</p>
                   </div>
                 </article>
@@ -394,7 +397,7 @@
                       </ul>
                     </div>
                     <div>
-                      <div class="action-button">Youre on Free plan</div>
+                      <div class="action-button">Free plan</div>
                       <p class="note">No credit card required</p>
                     </div>
                   </div>

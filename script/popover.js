@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
             content: `
                 <div class="popover-contact-content">
                     <p><strong>Phone:</strong> <a href="tel:+639202012915">(+63) 920 2012 915</a></p>
-                    <p><strong>Email:</strong> <a href="mailto:FilomanSeman@pinoy.ph">FilomanSeman@pinoy.ph</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:FilomanSeman@pinoy.ph"><i class="fa-solid fa-envelope"></i>FilomanSeman@pinoy.ph</a></p>
                 </div>
             `
         });

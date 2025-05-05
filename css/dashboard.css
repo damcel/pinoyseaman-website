@@ -722,35 +722,57 @@ body{
   border-radius: 8px;
 }
 
+.profile-information{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.applicant-profile{
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.view-btn{
+  font-size: 14px;
+  align-items: center;
+  display: flex;
+  gap: 5px;
+  color: #FEFEFE;
+  background-color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  border-style: none;
+  padding: 2px 8px 2px 8px;
+  }
+
+  .view-btn:hover{
+    color: black; 
+    background-color:#939999;
+    border-radius: 5px;
+  }
+
+  .important-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
 .applicant-card-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 15px;
   }
 
-  .applicant-profile-card {
-    display: flex;
-    justify-content: space-between;
-background: white;
-border-radius: 10px;
-padding: 15px;
-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.applicant-profile-card h3 {
-margin-bottom: 5px;
-}
-
 .applicant-profile-card p {
 font-size: 14px;
+font-weight: 500;
+margin: 0;
 color: #555;
-margin-bottom: 3px;
-font-family: 'Poppins';
-}
-
-.applicant-profile{
-  display: flex;
-  gap: 10px;
 }
 
 .applicant-profile img{
@@ -894,6 +916,13 @@ gap: 30px;
 flex-wrap: wrap;
 }
 
+.employer-view-profile-details{
+  flex-grow: 1;
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
 .details-section {
 flex: 1;
 }
@@ -916,6 +945,14 @@ font-weight: bold;
 margin-bottom: 10px;
 color: #404142;
 }
+
+.header-info-modal{
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #404142;
+  }
 
 .education-container, .seamans-book-container, 
 .passport-container, .visa-container {
@@ -946,6 +983,7 @@ word-wrap: break-word;
 .table-content th{
 font-weight: 600;
 font-size: 16px;
+align-content: baseline;
 }
 
 .table-content td {
@@ -1137,8 +1175,7 @@ margin-top: 10px;
 .company-search-main-container {
   margin: min(60px, 7%);
   margin-top: min(30px, 7%);
-  padding: 30px;
-  position: relative; /* Ensure positioning for "See more" */
+  padding: 0 30px;
 }
 
 .company-search-container{
@@ -1159,7 +1196,7 @@ margin-top: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 8px;
-}
+} 
 
 .search-box input {
   flex-grow: 1;
@@ -1235,21 +1272,20 @@ margin-top: 10px;
 }
 
 /* See More Button */
-.see-more button{
-  position: absolute;
-  bottom: 15px;
-  right: 20px;
+.see-more {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.see-more button {
+  text-decoration: none;
+  color: #2121CE;
   font-size: 14px;
   font-weight: bold;
   background: none;
   border: none;
   cursor: pointer;
   transition: transform 0.3s ease-in-out; /* Smooth scaling effect */
-}
-
-.see-more button {
-  text-decoration: none;
-  color: #2121CE;
 }
 
 .see-more button:hover {
@@ -1938,7 +1974,7 @@ input:checked + .slider:before {
   .display-card {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   border-radius: 12px;
   min-width: 200px;
   flex: 1;
@@ -2209,18 +2245,19 @@ input:checked + .slider:before {
 
   .view-all {
   text-align: right;
-  margin-top: 10px;
   }
 
-  .view-all a {
-  color: #2a00ff;
-  font-weight: bold;
-  font-size: 12px;
-  text-decoration: none;
+  .view-all button {
+    all: unset; /* resets default button styles */
+    color: #2a00ff;
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
   }
-
-  .view-all a:hover {
-  text-decoration: underline;
+  
+  .view-all button:hover {
+    text-decoration: underline;
   }
 
   /* ----------------- modal styling ---------------------*/
@@ -2236,23 +2273,17 @@ input:checked + .slider:before {
   padding: 15px;
   }
 
-  .modal-profile-card {
-  padding: 1.5rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
   .user-profile-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.5rem;
   align-items: flex-start; /* Aligns button to top */
   }
   .profile-pic img{
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   background: #d3d3d3;
   border-radius: 12px;
   }
@@ -2267,8 +2298,8 @@ input:checked + .slider:before {
 
   .info-pair {
   display: flex;
-  gap: 6px;
-  align-items: center;
+  flex-direction: column;
+  gap: 3px;
   font-size: 14px;
   margin: 2px 0;
   }
@@ -2279,7 +2310,13 @@ input:checked + .slider:before {
   font-size: 14px;
   }
 
+  .info-pair h5{
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+
   .info-pair label {
+  font-size: 15px;
   color: #212529;
   font-weight: 500;
   }
@@ -2287,23 +2324,36 @@ input:checked + .slider:before {
   color: #6c757d;
   margin: 2px 0;
   }
-  .requirements-badge {
-  display: inline-block;
-  background: #e0f0ff;
-  color: #0a66c2;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
+
+  .name-rank {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* prevent stretch if parent is flex */
   }
-  .info-icon {
-  background: #0a66c2;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 50%;
-  font-size: 12px;
-  margin-left: 6px;
+  
+  .rank-bg {
+    align-content: center;
+    display: inline-block;          /* Ensures it only wraps content */
+    background-color: #1E3A8A; /* navy */
+    border-radius: 10px;
+    padding: 5px 10px;
+    color: white;
+    margin-top: 5px;
   }
+  
+  .rank-bg span {
+    display: inline-flex;           /* Keeps icon + text inline and aligned */
+    align-items: center;
+    gap: 8px;                       /* Adds space between icon and text */
+    font-weight: bold;
+    white-space: nowrap;           /* Prevents text wrap */
+  }
+
+  .rank-bg i {
+    color: #ffffff; /* match icon to text color */
+  font-size: 1rem;      /* Prevents text wrap */
+  }
+
   .contact-btn {
   padding: 6px 16px;
   background: #0d6efd;
@@ -2321,9 +2371,9 @@ input:checked + .slider:before {
   font-weight: bold;
   }
   .experience-section {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   border-top: 1px solid #dee2e6;
   border-bottom: 1px solid #dee2e6;
   padding: 1rem 0;
@@ -2389,6 +2439,7 @@ input:checked + .slider:before {
   .popover-contact-content a {
       color: #007bff;
       text-decoration: none;
+      display: block;
   }
 
   .popover-contact-content a:hover {
@@ -2623,7 +2674,6 @@ input:checked + .slider:before {
    .form-control, textarea {
     width: 100%;
     padding: 10px;
-    margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
@@ -2686,6 +2736,18 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 .uploaded-file-box a:hover {
 color: #0d6efd;
 text-decoration: underline;
+}
+
+.download-wrapper a{
+  color: red;
+}
+
+.download-wrapper a:hover{
+  color: gray;
+}
+
+.education-section-modal{
+  margin-bottom: 20px;
 }
 /*----------------------------------- responsive ---------------------------------- */
 
@@ -2802,6 +2864,10 @@ text-decoration: underline;
     justify-content: space-evenly;
 }
 
+.company-profile-card {
+  display: none;
+}
+
 }
 
 @media (max-width: 1024px) {
@@ -2820,7 +2886,11 @@ text-decoration: underline;
 /* Tablet View */
 @media (max-width: 768px) {
 
-  .profile-setup-container, .profile-section, .education-section, .experience-container, .compe-cert-container, .job-list-container, .top-info-container, .account-plan-setup-container{
+  .employer-view-profile-details{
+    gap: 10px;
+  }
+
+  .profile-setup-container, .profile-section, .education-section, .experience-container, .compe-cert-container, .job-list-container, .top-info-container, .account-plan-setup-container, .education-section-modal{
     padding: 5px;
     margin: 10px;
     margin-bottom: 80px;
@@ -2928,6 +2998,10 @@ text-decoration: underline;
     margin-right: 12px;
     flex-basis: 50%;
   }
+  .company-profile-card {
+    display: none;
+  }
+  
 }
 
 /* Mobile View */
@@ -2958,6 +3032,7 @@ text-decoration: underline;
       font-weight: bold;
       color: #555;
       margin-bottom: 5px;
+      font-size: 18px;
   }
 
   .attachment-icons {
@@ -2967,4 +3042,8 @@ text-decoration: underline;
   .company-list {
     grid-template-columns: 1fr; /* 1 column on mobile */
 }
+.company-profile-card {
+  display: none;
+}
+
 }

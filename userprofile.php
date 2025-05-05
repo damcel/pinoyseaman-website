@@ -1,6 +1,21 @@
 <?php
 session_start(); // Start the session
 
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: user-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
 // Prevent caching of the page
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -24,6 +39,14 @@ $stmt->bind_param("s", $seekerId);
 $stmt->execute();
 $userResult = $stmt->get_result();
 $user = $userResult->fetch_assoc();
+
+// Fetch seaman documents from the database
+$documentsQuery = "SELECT * FROM seaman_documents WHERE seaman_email = ? AND type_of_doc = 'Seagoing Experience File'";
+$documentsStmt = $conn->prepare($documentsQuery);
+$documentsStmt->bind_param("s", $seekerId);
+$documentsStmt->execute();
+$documentsResult = $documentsStmt->get_result();
+$document = $documentsResult->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +63,7 @@ $user = $userResult->fetch_assoc();
         <nav class="sidebar-nav">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <a href="dashboardjobs.html" class="logo-link">
+                    <a href="dashboardjobs.php" class="logo-link">
                         <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
@@ -53,7 +76,7 @@ $user = $userResult->fetch_assoc();
             <ul class="ul-links">
               <li class="menu-title">MENU</li>
               <li>
-                <a href="dashboardjobs.html">
+                <a href="dashboardjobs.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-briefcase"></i><span>Jobs</span>
                 </a>
@@ -117,8 +140,8 @@ $user = $userResult->fetch_assoc();
                 <div class="tabs-container">
                     <nav class="tabs">
                         <ul>
-                            <li class="tab active"><a href="userprofile.html">Account Setting</a></li>
-                            <li class="tab"><a href="seafarer-documents.html">Passport & Seamans book</a></li>
+                            <li class="tab active"><a href="userprofile.php">Account Setting</a></li>
+                            <li class="tab"><a href="seafarer-documents.php">Passport & Seamans book</a></li>
                             <li class="tab"><a href="competency-certificate.html">Competency & Certificates</a></li>
                         </ul>
                     </nav>
@@ -148,14 +171,26 @@ $user = $userResult->fetch_assoc();
             
                 <div class="profile-container">
                     <div class="profile-picture">
-                        <label for="upload-photo">
-                            <div class="upload-box">
-                                <p>Upload your photo</p>
-                                <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                            </div>
-                        </label>
-                        <input type="file" id="upload-photo" hidden>
-                        <p id="jobStatusText">Interested</p> <!-- This will display the selected status, default is "Interested" -->
+                        <?php if (!empty($user['user_photo'])): ?>
+                            <!-- Display the user's photo -->
+                            <img src="Uploads/Seaman/User-Photo/<?php echo htmlspecialchars($user['user_photo']); ?>" alt="User Photo" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                            <!-- Add a button to change the photo -->
+                            <button class="btn btn-outline-primary mt-2" onclick="document.getElementById('upload-photo').click()">Change Photo</button>
+                            <form id="uploadPhotoForm" action="includes/upload_user_photo.php" method="POST" enctype="multipart/form-data" style="display: none;">
+                                <input type="file" id="upload-photo" name="userPhoto" onchange="document.getElementById('uploadPhotoForm').submit();">
+                            </form>
+                        <?php else: ?>
+                            <!-- Show the upload form if no photo exists -->
+                            <form id="uploadPhotoForm" action="includes/upload_user_photo.php" method="POST" enctype="multipart/form-data">
+                                <label for="upload-photo">
+                                    <div class="upload-box">
+                                        <p>Upload your photo</p>
+                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                    </div>
+                                </label>
+                                <input type="file" id="upload-photo" name="userPhoto" hidden onchange="document.getElementById('uploadPhotoForm').submit();">
+                            </form>
+                        <?php endif; ?>
                     </div>
                     
                     <div class="profile-details">
@@ -270,6 +305,11 @@ $user = $userResult->fetch_assoc();
                 </div>
             </section>
 
+            <?php
+
+
+            ?>
+
             <section class="experience-container">
                 <section class="box-container">  
                     <h2 class="header-info">Seafaring Experience</h2> 
@@ -277,7 +317,7 @@ $user = $userResult->fetch_assoc();
                         <div>
                             <div class="content-editIcon">
                                 <p class="experience-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    <?php echo !empty($user['seagoing_work']) ? nl2br(htmlspecialchars($user['seagoing_work'])) : 'N/A'; ?>
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-experience">
@@ -289,14 +329,24 @@ $user = $userResult->fetch_assoc();
                             <!-- Styled uploaded file box -->
                             <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                 <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                Resume_JohnDoe.pdf
+                                <a href="Uploads/Seaman/Seagoing/<?php echo htmlspecialchars($document['doc_url']) ?>" download class="text-decoration-none fw-medium text-dark">
+                                    <?php echo htmlspecialchars($document['doc_url']) ?>
                                 </a>
                             </div>
                         </div>
                         <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-experience">+ Add work experience</button>
                     </div>
                 </section>
+
+                <?php
+                // Fetch land-based work experience documents
+                $landDocumentsQuery = "SELECT doc_url FROM seaman_documents WHERE seaman_email = ? AND type_of_doc = 'Land-Based Experience File'";
+                $landDocumentsStmt = $conn->prepare($landDocumentsQuery);
+                $landDocumentsStmt->bind_param("s", $seekerId);
+                $landDocumentsStmt->execute();
+                $landDocumentsResult = $landDocumentsStmt->get_result();
+                $landDocument = $landDocumentsResult->fetch_assoc();
+                ?>
                 
         
                 <section class="box-container">
@@ -305,7 +355,7 @@ $user = $userResult->fetch_assoc();
                         <div>
                             <div class="content-editIcon">
                                 <p class="experience-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    <?php echo !empty($user['non_seagoing_work']) ? nl2br(htmlspecialchars($user['non_seagoing_work'])) : 'N/A'; ?>
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-land-experience">
@@ -317,8 +367,8 @@ $user = $userResult->fetch_assoc();
                             <!-- Styled uploaded file box -->
                             <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                 <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                Resume_JohnDoe.pdf
+                                <a href="Uploads/Seaman/Land-Based-Exp/<?php echo htmlspecialchars($document['doc_url']) ?>" download class="text-decoration-none fw-medium text-dark">
+                                    <?php echo htmlspecialchars($landDocument['doc_url']) ?>
                                 </a>
                             </div>
                         </div>
@@ -580,14 +630,16 @@ $user = $userResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Seaman Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="experienceForm" action="includes/add_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="medicalNotes" class="form-label">Sea Going Experience</label>
-                        <textarea id="medicalNotes" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="seagoinExp" class="form-label">Sea Going Experience</label>
+                        <textarea id="seagoinExp" name="seagoingExp" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
                     </div>
         
                     <!-- RIGHT side -->
@@ -598,16 +650,21 @@ $user = $userResult->fetch_assoc();
                             Drag and drop files here
                         </div>
                         <div>or</div>
-                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('fileInput').click()">Browse File</button>
+                        <input type="file" id="fileInput" name="documentUpload" style="display: none;" onchange="updateFileName()">
+                        <p id="selectedFileName" class="mt-2 text-muted"></p>
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>  
@@ -620,37 +677,48 @@ $user = $userResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Sea Going Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="editExperienceForm" action="includes/edit_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
-                    <!-- LEFT side -->
-                    <div class="col-md-6">
-                        <label for="medicalNotes" class="form-label">SeaFaring Experience</label>
-                        <textarea id="medicalNotes" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
-                    </div>
+                        <!-- LEFT side -->
+                        <div class="col-md-6">
+                            <label for="editSeagoingExp" class="form-label">SeaFaring Experience</label>
+                            <textarea id="editSeagoingExp" name="editSeagoingExp" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($user['seagoing_work']) ? htmlspecialchars($user['seagoing_work']) : ''; ?></textarea>
+                        </div>
         
-                    <!-- RIGHT side -->
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
-                            <div class="text-muted mb-2">
-                                <i class="fa fa-upload fa-2x mb-2"></i><br>
-                                Drag and drop files here
+                        <!-- RIGHT side -->
+                        <div class="col-md-6 d-flex align-items-center justify-content-center">
+                            <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
+                                <div class="text-muted mb-2">
+                                    <i class="fa fa-upload fa-2x mb-2"></i><br>
+                                    Drag and drop files here
+                                </div>
+                                <div>or</div>
+                                <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('editFileInput').click()">Browse File</button>
+                                <input type="file" id="editFileInput" name="documentUpload" style="display: none;" onchange="updateEditFileName()">
+                                <p id="editSelectedFileName" class="mt-2 text-muted">
+                                    <?php if (!empty($document['doc_url'])): ?>
+                                        Current File: <?php echo htmlspecialchars($document['doc_url']); ?>
+                                    <?php endif; ?>
+                                </p>
                             </div>
-                            <div>or</div>
-                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
                         </div>
                     </div>
-                    </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>
+                
+                </form>
+                
             </div>
         </div>
     </section>  
@@ -664,14 +732,16 @@ $user = $userResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Land-base Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="landExperienceForm" action="includes/add_land_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="land-base-experience" class="form-label">Land-base Experience</label>
-                        <textarea id="land-base-experience" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="landBasedExp" class="form-label">Land-base Experience</label>
+                        <textarea id="landBasedExp" name="landBasedExp" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
                     </div>
         
                     <!-- RIGHT side -->
@@ -682,21 +752,25 @@ $user = $userResult->fetch_assoc();
                             Drag and drop files here
                         </div>
                         <div>or</div>
-                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('landfileInput').click()">Browse File</button>
+                        <input type="file" id="landfileInput" name="landdocumentUpload" style="display: none;" onchange="updatelandFileName()">
+                        <p id="selectedlandFileName" class="mt-2 text-muted"></p>
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div>
+
+                </form>
             </div>
         </div>
     </section>  
 
-    <!--landbase experience modal -->
+    <!--edit landbase experience modal -->
     <section class="modal fade" id="edit-land-experience" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 700px;">
             <div class="modal-content">
@@ -704,14 +778,16 @@ $user = $userResult->fetch_assoc();
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Land-base Experience</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form id="editLandExperienceForm" action="includes/edit_land_experience.php" method="POST" enctype="multipart/form-data" autocomplete="off">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="land-base-experience" class="form-label">Land-base Experience</label>
-                        <textarea id="land-base-experience" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="editlandBasedExp" class="form-label">Land-base Experience</label>
+                        <textarea id="editlandBasedExp" name="editlandBasedExp" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($user['non_seagoing_work']) ? htmlspecialchars($user['non_seagoing_work']) : ''; ?></textarea>
                     </div>
         
                     <!-- RIGHT side -->
@@ -722,19 +798,28 @@ $user = $userResult->fetch_assoc();
                                 Drag and drop files here
                             </div>
                             <div>or</div>
-                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                            <button type="button" class="btn btn-primary mt-2" onclick="document.getElementById('editlandFileInput').click()">Browse File</button>
+                            <input type="file" id="editlandFileInput" name="landdocumentUpload" style="display: none;" onchange="updateEditFileName()">
+                            <p id="editSelectedlandFileName" class="mt-2 text-muted">
+                                <?php if (!empty($landDocument['doc_url'])): ?>
+                                    Current File: <?php echo htmlspecialchars($landDocument['doc_url']); ?>
+                                <?php endif; ?>
+                            </p>
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" name="delete" value="1" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion();">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>       
@@ -790,8 +875,44 @@ $user = $userResult->fetch_assoc();
         });
 
         function confirmDeletion() {
-            return confirm("Are you sure you want to delete this education record? This action cannot be undone.");
+            return confirm("Are you sure you want to delete this record? This action cannot be undone.");
         }
+
+        function updateFileName() {
+            const fileInput = document.getElementById('fileInput');
+            const fileNameDisplay = document.getElementById('selectedFileName');
+
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = `Selected File: ${fileInput.files[0].name}`;
+            } else {
+                fileNameDisplay.textContent = ''; // Clear the text if no file is selected
+            }
+        }
+
+        function updatelandFileName() {
+            const fileInput = document.getElementById('landfileInput');
+            const fileNameDisplay = document.getElementById('selectedlandFileName');
+
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = `Selected File: ${fileInput.files[0].name}`;
+            } else {
+                fileNameDisplay.textContent = ''; // Clear the text if no file is selected
+            }
+        }
+
+        // Set the session timeout duration (in milliseconds)
+        const sessionTimeout = 900000; // 15 minutes
+        const warningTime = 840000; // 14 minutes (1 minute before timeout)
+
+        // Show a warning before the session times out
+        setTimeout(() => {
+            alert("Your session will expire in 1 minute. Please save your work.");
+        }, warningTime);
+
+        // Redirect to the login page after the session times out
+        setTimeout(() => {
+            window.location.href = "user-login-signup.php?type=error&message=Session timed out. Please log in again.";
+        }, sessionTimeout);
     </script>
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>

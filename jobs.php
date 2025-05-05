@@ -284,7 +284,7 @@ $job = $jobResult->fetch_assoc();
     <script src="script/nav-hover-effect.js"></script>
     <script>
         function redirectToDashboard() {
-            window.location.href = 'dashboardjobs.html';
+            window.location.href = 'dashboardjobs.php';
         }
     </script>
 </body>

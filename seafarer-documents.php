@@ -47,7 +47,7 @@ include 'db.php';
         <nav class="sidebar-nav">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <a href="dashboardjobs.html" class="logo-link">
+                    <a href="dashboardjobs.php" class="logo-link">
                         <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
@@ -60,7 +60,7 @@ include 'db.php';
             <ul class="ul-links">
               <li class="menu-title">MENU</li>
               <li>
-                <a href="dashboardjobs.html">
+                <a href="dashboardjobs.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-briefcase"></i><span>Jobs</span>
                 </a>

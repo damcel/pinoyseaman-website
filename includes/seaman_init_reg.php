@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Notify admin
             $mail->clearAddresses();
-            $mail->addAddress('filoseaman@gmail.com');
+            $mail->addAddress('admin@pinoyseaman.com');
             $mail->Subject = 'New Seaman Registration';
             $mail->Body = "
                 <p>A new seaman has registered on PinoySeaman:</p>

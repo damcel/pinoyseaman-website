@@ -244,7 +244,13 @@ $seekerEmail = $_SESSION['seeker_id'];
                                         </div>
                                         
                                         <section class="user-submit-form">
-                                            <form class="row align-items-end g-2">
+                                            <form action="includes/seaman_apply.php" class="row align-items-end g-2"
+                                                data-job-code="<?php echo htmlspecialchars($job['code']); ?>"
+                                                data-company-code="<?php echo htmlspecialchars($job['company_code']); ?>"
+                                                data-job-title="<?php echo htmlspecialchars($job['job_title']); ?>"
+                                                data-company-name="<?php echo htmlspecialchars($job['company']); ?>"
+                                                data-company-email="<?php echo htmlspecialchars($job['email']); ?>">
+
                                                 <!-- CV/Resume Upload UI -->
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label fw-semibold">CV/Resume<span class="text-danger">*</span></label>
@@ -259,16 +265,8 @@ $seekerEmail = $_SESSION['seeker_id'];
                                                 </div>
 
                                                 <!-- Your existing form fields -->
-                                                <div class="col-8">
-                                                    <label for="email" class="form-label small text-muted">Email</label><span class="text-danger">*</span>
-                                                    <input type="email" id="email" class="form-control" placeholder="Enter your email">
-                                                </div>
-                                                <div class="col-8">
-                                                    <label for="password" class="form-label small text-muted">Password</label><span class="text-danger">*</span>
-                                                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
-                                                </div>
-                                                <div class="col-4 d-flex align-items-end">
-                                                    <button type="submit" class="btn btn-danger w-100 fw-bold">Apply</button>
+                                                <div class="col-12 d-flex justify-content-center">
+                                                    <button type="submit" class="btn btn-danger w-100 fw-bold">Apply Now!</button>
                                                 </div>
                                             </form>
                                         </section>
@@ -449,6 +447,40 @@ $seekerEmail = $_SESSION['seeker_id'];
                 });
             });
         });
+
+        document.querySelector('.user-submit-form form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            // Add additional fields from data attributes
+            formData.append('job_code', this.dataset.jobCode);
+            formData.append('company_code', this.dataset.companyCode);
+            formData.append('job_title', this.dataset.jobTitle);
+            formData.append('company_name', this.dataset.companyName);
+            formData.append('company_email', this.dataset.companyEmail);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Show success message
+                    alert(data.message);
+                    // Optionally redirect or refresh
+                    window.location.href = '../dashboardjobs.php';
+                } else {
+                    // Show error message
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during submission.');
+            });
+        });
+
     </script>
 </body>
 </html>

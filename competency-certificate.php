@@ -263,7 +263,7 @@ include 'db.php';
                             <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                 <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
                                 <a href="Uploads/Seaman/Competence/<?php echo htmlspecialchars($competenceResult['doc_url']) ?>" download class="text-decoration-none fw-medium text-dark">
-                                    <?php echo !empty($competenceResult['competence']) ? htmlspecialchars($competenceResult['competence']) : 'Upload file now!'; ?>
+                                    <?php echo !empty($competenceResult['doc_url']) ? htmlspecialchars($competenceResult['doc_url']) : 'Upload file now!'; ?>
                                 </a>
                             </div>
                         </div>
@@ -273,6 +273,25 @@ include 'db.php';
                 </div>
             </section>
 
+
+            <?php
+
+            // Database connection
+            require_once "db.php";
+
+            // Fetch the certificate type from the database
+            $seekerEmail = $_SESSION['seeker_id'];
+            $meritsQuery = "SELECT js.merits, sd.*
+                        FROM job_seeker js
+                        JOIN seaman_documents sd ON js.email = sd.seaman_email
+                        WHERE js.email = ? AND sd.type_of_doc = 'Merits Document' LIMIT 1";
+            $stmt = $conn->prepare($meritsQuery);
+            $stmt->bind_param("s", $seekerEmail);
+            $stmt->execute();
+            $meritsResult = $stmt->get_result()->fetch_assoc();
+
+            ?>
+
             <section class="compe-cert-container">
                 <div class="box-container">  
                     <h2 class="header-info">Merits</h2> 
@@ -280,7 +299,7 @@ include 'db.php';
                         <div>
                             <div class="content-editIcon">
                                 <p class="experience-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    <?php echo !empty($meritsResult['merits']) ? htmlspecialchars($meritsResult['merits']) : 'N/A'; ?>
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-merits">
@@ -292,8 +311,8 @@ include 'db.php';
                             <!-- Styled uploaded file box -->
                             <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                 <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                Resume_JohnDoe.pdf
+                                <a href="Uploads/Seaman/Merits/<?php echo htmlspecialchars($meritsResult['doc_url']) ?>" download class="text-decoration-none fw-medium text-dark">
+                                    <?php echo !empty($meritsResult['doc_url']) ? htmlspecialchars($meritsResult['doc_url']) : 'Upload file now!'; ?>
                                 </a>
                             </div>
                         </div>
@@ -409,34 +428,42 @@ include 'db.php';
                 <h1 class="modal-title fs-5" id="exampleModalLabel">MERITS</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/add_seaman_merits.php" method="POST" enctype="multipart/form-data">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
                         <label for="merits" class="form-label">Insert Merits</label>
-                        <textarea id="merits" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <textarea id="merits" name="merits" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
                     </div>
-        
+
                     <!-- RIGHT side -->
                     <div class="col-md-6 d-flex align-items-center justify-content-center">
                         <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
-                        <div class="text-muted mb-2">
-                            <i class="fa fa-upload fa-2x mb-2"></i><br>
-                            Drag and drop files here
-                        </div>
-                        <div>or</div>
-                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                            <div class="text-muted mb-2">
+                                <i class="fa fa-upload fa-2x mb-2"></i><br>
+                                Drag and drop files here
+                            </div>
+                            <div>or</div>
+                            <button type="button" class="btn btn-primary mt-2" id="merits-browse-btn">Browse File</button>
+                            <!-- File input for file upload -->
+                            <input type="file" id="merits-file-upload" name="merits_file_upload" class="d-none" accept=".pdf,.doc,.docx">
+                            <!-- Display the selected file name -->
+                            <div id="merits-file-name" class="mt-2 text-muted">No file selected</div>
                         </div>
                     </div>
-                    </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>  
@@ -449,14 +476,16 @@ include 'db.php';
                 <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE MERITS</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/edit_seaman_merits.php" method="POST" enctype="multipart/form-data">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="merits" class="form-label">Edit merits</label>
-                        <textarea id="merits" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="editMerits" class="form-label">Edit merits</label>
+                        <textarea id="editMerits" name="editMerits" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($meritsResult['merits']) ? htmlspecialchars($meritsResult['merits']) : 'N/A'; ?></textarea>
                     </div>
         
                     <!-- RIGHT side -->
@@ -467,19 +496,26 @@ include 'db.php';
                                 Drag and drop files here
                             </div>
                             <div>or</div>
-                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                            <button type="button" class="btn btn-primary mt-2" id="merits-edit-browse-btn">Browse File</button>
+                            <!-- File input for file upload -->
+                            <input type="file" id="merits_edit_file_upload" name="merits_edit_file_upload" class="d-none" accept=".pdf,.doc,.docx">
+                            <!-- Display the selected file name -->
+                            <div id="merits-edit-file-name" class="mt-2 text-muted"><?php echo htmlspecialchars($meritsResult['doc_url']) ?></div>
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" class="btn btn-outline-danger flex-fill py-2" name="delete" value="1" onclick="return confirmDeletion()">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>
@@ -697,6 +733,15 @@ include 'db.php';
             document.getElementById("file-name").textContent = fileName; // Display the selected file name
         });
 
+        document.getElementById("merits-browse-btn").addEventListener("click", function() {
+            document.getElementById("merits-file-upload").click(); // Trigger file input
+        });
+
+        document.getElementById("merits-file-upload").addEventListener("change", function() {
+            var fileName = this.files.length > 0 ? this.files[0].name : "No file selected";
+            document.getElementById("merits-file-name").textContent = fileName; // Display the selected file name
+        });
+
         document.getElementById("edit-browse-btn").addEventListener("click", function() {
             document.getElementById("edit_file_upload").click(); // Trigger file input
         });
@@ -704,6 +749,15 @@ include 'db.php';
         document.getElementById("edit_file_upload").addEventListener("change", function() {
             var fileName = this.files.length > 0 ? this.files[0].name : "No file selected";
             document.getElementById("edit-file-name").textContent = fileName; // Display the selected file name
+        });
+
+        document.getElementById("merits-edit-browse-btn").addEventListener("click", function() {
+            document.getElementById("merits_edit_file_upload").click(); // Trigger file input
+        });
+
+        document.getElementById("merits_edit_file_upload").addEventListener("change", function() {
+            var fileName = this.files.length > 0 ? this.files[0].name : "No file selected";
+            document.getElementById("merits-edit-file-name").textContent = fileName; // Display the selected file name
         });
 
     </script>

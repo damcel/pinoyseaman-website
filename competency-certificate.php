@@ -225,6 +225,24 @@ include 'db.php';
                 </div>
             </section>
 
+            <?php
+
+            // Database connection
+            require_once "db.php";
+
+            // Fetch the certificate type from the database
+            $seekerEmail = $_SESSION['seeker_id'];
+            $competenceQuery = "SELECT js.competence, sd.*
+                          FROM job_seeker js
+                          JOIN seaman_documents sd ON js.email = sd.seaman_email
+                          WHERE js.email = ? AND sd.type_of_doc = 'Competence Document' LIMIT 1";
+            $stmt = $conn->prepare($competenceQuery);
+            $stmt->bind_param("s", $seekerEmail);
+            $stmt->execute();
+            $competenceResult = $stmt->get_result()->fetch_assoc();
+
+            ?>
+
             <section class="compe-cert-container">
                 <div class="box-container">  
                     <h2 class="header-info">Competence</h2> 
@@ -232,7 +250,7 @@ include 'db.php';
                         <div>
                             <div class="content-editIcon">
                                 <p class="experience-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    <?php echo !empty($competenceResult['competence']) ? htmlspecialchars($competenceResult['competence']) : 'N/A'; ?>
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-competence">
@@ -244,43 +262,13 @@ include 'db.php';
                             <!-- Styled uploaded file box -->
                             <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                 <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                Resume_JohnDoe.pdf
+                                <a href="Uploads/Seaman/Competence/<?php echo htmlspecialchars($competenceResult['doc_url']) ?>" download class="text-decoration-none fw-medium text-dark">
+                                    <?php echo !empty($competenceResult['competence']) ? htmlspecialchars($competenceResult['competence']) : 'Upload file now!'; ?>
                                 </a>
                             </div>
                         </div>
                         <hr>
                         <button class="add-cv-btn" data-bs-toggle="modal" data-bs-target="#add-competence">+ Add Document</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="compe-cert-container">
-                <div class="box-container">  
-                    <h2 class="header-info">Certificate</h2> 
-                    <div class="certificate-box">
-                        <div>
-                            <div class="content-editIcon">
-                                <p class="experience-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                </p>
-                                <span class="edit-wrapper">
-                                    <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-certificate">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                </span>
-                            </div>
-                    
-                            <!-- Styled uploaded file box -->
-                            <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
-                                <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                Resume_JohnDoe.pdf
-                                </a>
-                            </div>
-                        </div>
-                        <hr>
-                        <button class="add-cv-btn" data-bs-toggle="modal" data-bs-target="#add-certificate">+ Add Document</button>
                     </div>
                 </div>
             </section>
@@ -318,42 +306,46 @@ include 'db.php';
 
     </main>
     
-    <!------------------------- ADD COMPETENCE  ---------------------->
+    <!------------------------- ADD COMPETENCE  ----------------------> 
     <section class="modal fade" id="add-competence" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 700px;">
             <div class="modal-content">
                 <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">COMPETENCE</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">COMPETENCE</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-        
-                <div class="modal-body">
-                <form>
-                    <div class="row g-3">
-                    <!-- LEFT side -->
-                    <div class="col-md-6">
-                        <label for="competence" class="form-label">Insert Competence</label>
-                        <textarea id="competence" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
-                    </div>
-        
-                    <!-- RIGHT side -->
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
-                        <div class="text-muted mb-2">
-                            <i class="fa fa-upload fa-2x mb-2"></i><br>
-                            Drag and drop files here
+
+                <form action="includes/add_seaman_competence.php" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- LEFT side -->
+                            <div class="col-md-6">
+                                <label for="competence" class="form-label">Insert Competence</label>
+                                <textarea id="competence" name="competence" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                            </div>
+
+                            <!-- RIGHT side -->
+                            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
+                                    <div class="text-muted mb-2">
+                                        <i class="fa fa-upload fa-2x mb-2"></i><br>
+                                        Drag and drop files here
+                                    </div>
+                                    <div>or</div>
+                                    <button type="button" class="btn btn-primary mt-2" id="browse-btn">Browse File</button>
+                                    <!-- File input for file upload -->
+                                    <input type="file" id="file-upload" name="file_upload" class="d-none" accept=".pdf,.doc,.docx">
+                                    <!-- Display the selected file name -->
+                                    <div id="file-name" class="mt-2 text-muted">No file selected</div>
+                                </div>
+                            </div>
                         </div>
-                        <div>or</div>
-                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
-                        </div>
                     </div>
+                    <div class="modal-footer d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
+                        <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
-                </div>
-                <div class="modal-footer d-flex gap-3 mt-4">
-                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
-                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                </div>
             </div>
         </div>
     </section>  
@@ -366,17 +358,18 @@ include 'db.php';
                 <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE COMPETENCE</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/edit_seaman_competence.php" method="POST" enctype="multipart/form-data">
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
-                        <label for="competence" class="form-label">Edit Competence</label>
-                        <textarea id="competence" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
+                        <label for="editCompetence" class="form-label">Edit Competence</label>
+                        <textarea id="editCompetence" name="editCompetence" class="form-control" rows="10" placeholder="Enter notes..."><?php echo !empty($competenceResult['competence']) ? htmlspecialchars($competenceResult['competence']) : 'N/A'; ?></textarea>
                     </div>
-        
-                    <!-- RIGHT side -->
+
                     <div class="col-md-6 d-flex align-items-center justify-content-center">
                         <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
                             <div class="text-muted mb-2">
@@ -384,52 +377,11 @@ include 'db.php';
                                 Drag and drop files here
                             </div>
                             <div>or</div>
-                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
-                        </div>
-                    </div>
-                    </div>
-                </form>
-                </div>
-                <div class="modal-footer d-flex gap-3 mt-4">
-                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
-                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-     <!------------------------- ADD CERTIFICATE  ---------------------->
-     <section class="modal fade" id="add-certificate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 700px;">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">CERTIFICATE</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form>
-        
-                <div class="modal-body">
-                
-                    <div class="row g-3">
-                    <!-- LEFT side -->
-                    <div class="col-md-6">
-                        <label for="certificate" class="form-label">Insert Certificate</label>
-                        <textarea id="certificate" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
-                    </div>
-        
-                    <!-- RIGHT side -->
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
-                        <div class="text-muted mb-2">
-                            <i class="fa fa-upload fa-2x mb-2"></i><br>
-                            Drag and drop files here
-                        </div>
-                        <div>or</div>
-                        <button type="button" class="btn btn-primary mt-2">Browse File</button>
+                            <button type="button" class="btn btn-primary mt-2" id="edit-browse-btn">Browse File</button>
+                            <!-- File input for file upload -->
+                            <input type="file" id="edit_file_upload" name="edit_file_upload" class="d-none" accept=".pdf,.doc,.docx">
+                            <!-- Display the selected file name -->
+                            <div id="edit-file-name" class="mt-2 text-muted"><?php echo htmlspecialchars($competenceResult['doc_url']) ?></div>
                         </div>
                     </div>
                     </div>
@@ -438,53 +390,13 @@ include 'db.php';
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                </div>
-
-                </form>
-
-            </div>
-        </div>
-    </section>  
-
-    <!------------------------ EDIT CERTIFICATE  ---------------------->
-    <section class="modal fade" id="edit-certificate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 700px;">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE CERTIFICATE</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-        
-                <div class="modal-body">
-                <form>
-                    <div class="row g-3">
-                    <!-- LEFT side -->
-                    <div class="col-md-6">
-                        <label for="certificate" class="form-label">Edit Certificate</label>
-                        <textarea id="certificate" class="form-control" rows="10" placeholder="Enter notes..."></textarea>
-                    </div>
-        
-                    <!-- RIGHT side -->
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="border border-2 border-dashed rounded p-4 text-center w-100" style="min-height: 220px;">
-                            <div class="text-muted mb-2">
-                                <i class="fa fa-upload fa-2x mb-2"></i><br>
-                                Drag and drop files here
-                            </div>
-                            <div>or</div>
-                            <button type="button" class="btn btn-primary mt-2">Browse File</button>
-                        </div>
-                    </div>
-                    </div>
-                </form>
-                </div>
-                <div class="modal-footer d-flex gap-3 mt-4">
-                    <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
-                    <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" class="btn btn-outline-danger flex-fill py-2" name="delete" value="1" onclick="return confirmDeletion()">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>
@@ -752,7 +664,7 @@ include 'db.php';
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion()">
+                    <button type="submit" class="btn btn-outline-danger flex-fill py-2" name="delete" value="1" onclick="return confirmDeletion()">
                         <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>  
@@ -775,6 +687,25 @@ include 'db.php';
         function confirmDeletion() {
             return confirm("Are you sure you want to delete this record? This action cannot be undone.");
         }
+
+        document.getElementById("browse-btn").addEventListener("click", function() {
+            document.getElementById("file-upload").click(); // Trigger file input
+        });
+
+        document.getElementById("file-upload").addEventListener("change", function() {
+            var fileName = this.files.length > 0 ? this.files[0].name : "No file selected";
+            document.getElementById("file-name").textContent = fileName; // Display the selected file name
+        });
+
+        document.getElementById("edit-browse-btn").addEventListener("click", function() {
+            document.getElementById("edit_file_upload").click(); // Trigger file input
+        });
+
+        document.getElementById("edit_file_upload").addEventListener("change", function() {
+            var fileName = this.files.length > 0 ? this.files[0].name : "No file selected";
+            document.getElementById("edit-file-name").textContent = fileName; // Display the selected file name
+        });
+
     </script>
 
 </body>

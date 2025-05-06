@@ -4,11 +4,44 @@ require_once "../db.php";
 
 // Ensure user is authenticated
 if (!isset($_SESSION['seeker_id'])) {
-    header("Location: ../login.php");
-    exit();
+    header("Location: ../user-login-signup.php?type=error&message=You must log in to add education.");
+    exit;
 }
 
 $seaman_email = $_SESSION['seeker_id'];
+
+// Check for the delete action
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
+    // Delete the certificate
+    $deleteQuery = "DELETE FROM seaman_certificates WHERE seaman_email = ?";
+    $stmt = $conn->prepare($deleteQuery);
+    $stmt->bind_param("s", $seaman_email);
+    if ($stmt->execute()) {
+        // Optionally delete the file if it exists
+        $fileQuery = "SELECT file_path FROM seaman_certificates WHERE seaman_email = ?";
+        $stmtFile = $conn->prepare($fileQuery);
+        $stmtFile->bind_param("s", $seaman_email);
+        $stmtFile->execute();
+        $result = $stmtFile->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $oldFile = $row['file_path'];
+            if (!empty($oldFile) && file_exists("../Uploads/Seaman/Certificate/" . $oldFile)) {
+                unlink("../Uploads/Seaman/Certificate/" . $oldFile);  // Delete old file from server
+            }
+        }
+        $_SESSION['success'] = "Certificate deleted successfully.";
+    } else {
+        $_SESSION['error'] = "Failed to delete certificate.";
+    }
+
+    $stmt->close();
+    $conn->close();
+
+    // Redirect to the certificate page after deletion
+    header("Location: ../competency-certificate.php");
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cert_type_id = $_POST['edit_cert_type'];

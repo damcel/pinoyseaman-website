@@ -2283,7 +2283,7 @@ input:checked + .slider:before {
   }
   .profile-pic img{
   width: 120px;
-  height: 120px;
+  height: 100px;
   background: #d3d3d3;
   border-radius: 12px;
   }

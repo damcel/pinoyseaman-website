@@ -1,3 +1,37 @@
+<?php
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: user-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['seeker_id'])) {
+    // Redirect to the login page with an error message
+    header("Location: user-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,6 +152,25 @@
 
             <!-- certificate section -->
 
+            <?php
+
+            // Database connection
+            require_once "db.php";
+
+            // Fetch the certificate type from the database
+            $seekerEmail = $_SESSION['seeker_id'];
+            $certQuery = "SELECT sc.*, ct.type AS cert_type_name 
+                          FROM seaman_certificates sc
+                          JOIN certificate_types ct ON sc.cert_type_id = ct.id
+                          WHERE sc.seaman_email = ? LIMIT 1";
+            $stmt = $conn->prepare($certQuery);
+            $stmt->bind_param("s", $seekerEmail);
+            $stmt->execute();
+            $certResult = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            ?>
+
             <section class="education-section">
                 <h2 class="header-info">Certificate</h2>
                 <div class="passport-container">
@@ -133,23 +186,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="Type">Certificate</td>
-                                <td data-label="Number">123abc</td>
-                                <td data-label="Country">pelepens</td>
-                                <td data-label="Date Issue">2020</td>
-                                <td data-label="Expiry Date">2024</td>
-                                <td class="attachment-cell" data-label="Attachment">
-                                    <div class="attachment-content">
-                                        <span>attachment</span>
+                            <?php if (!empty($certResult)):  ?>
+
+                                <tr>
+                                    <td data-label="Type"><?php echo htmlspecialchars($certResult['cert_type_name']) ?></td>
+                                    <td data-label="Number"><?php echo htmlspecialchars($certResult['cert_number']) ?></td>
+                                    <td data-label="Country"><?php echo htmlspecialchars($certResult['country']) ?></td>
+                                    <td data-label="Date Issue"><?php echo htmlspecialchars($certResult['start_date']) ?></td>
+                                    <td data-label="Expiry Date">
+                                        <?php echo is_null($certResult['end_date']) ? 'No Expiry' : htmlspecialchars($certResult['end_date']); ?>
+                                    </td>
+                                    <td class="attachment-cell" data-label="Attachment">
+                                        <?php if (!empty($certResult['file_path'])): ?>
+                                            <a href="Uploads/Seaman/Certificate/<?php echo htmlspecialchars($certResult['file_path']); ?>" target="_blank" class="text-decoration-none">
+                                                View Document
+                                            </a>
+                                        <?php else: ?>
+                                            <span>No Attachment</span>
+                                        <?php endif; ?>
                                         <div class="attachment-icons">
                                             <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-certification">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                </tr>
+
+                            <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="text-center">No certificates found.</td>
                             </tr>
+                            <?php endif; ?>
+
+                            
                         </tbody>                
                     </table>            
                     <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-certification">+ Add Document</button>
@@ -593,54 +662,103 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Update Certificate</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/edit_seaman_cert.php" method="POST" enctype="multipart/form-data">
         
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="Document-type" class="form-label">Document Type<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="Document-type" placeholder="American visa">
-                        </div>
-            
-                        <div class="mb-3">
-                            <label for="document-number" class="form-label">Document Number:<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="document-number" placeholder="123-456-789">
-                        </div>
+                    
+                    <?php
+                    require_once "db.php";
 
-                        <div class="mb-3">
-                            <label for="country" class="form-label">Country<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="country" placeholder="Philippines">
+                    $selectedCertTypeId = null;
+
+                    if (isset($_SESSION['seeker_id'])) {
+                        $seaman_email = $_SESSION['seeker_id'];
+
+                        // Fetch the current cert_type_id for this seaman
+                        $stmt = $conn->prepare("SELECT cert_type_id FROM seaman_certificates WHERE seaman_email = ? LIMIT 1");
+                        $stmt->bind_param("s", $seaman_email);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        if ($result && $row = $result->fetch_assoc()) {
+                            $selectedCertTypeId = $row['cert_type_id'];
+                        }
+
+                        $stmt->close();
+                    }
+
+                    // Fetch all certificate types
+                    $certificateQuery = "SELECT id, type FROM certificate_types ORDER BY type ASC";
+                    $certificateResult = $conn->query($certificateQuery);
+                    ?>
+
+                    <div class="mb-3">
+                        <label for="edit_cert_type" class="form-label">Document Type<span class="text-danger">*</span></label>
+                        <select class="form-select" id="edit_cert_type" name="edit_cert_type" required>
+                            <option value="" disabled <?= $selectedCertTypeId === null ? 'selected' : '' ?>>Select document type...</option>
+                            <?php
+                            if ($certificateResult && $certificateResult->num_rows > 0) {
+                                while ($row = $certificateResult->fetch_assoc()) {
+                                    $selected = ($row['id'] == $selectedCertTypeId) ? 'selected' : '';
+                                    echo '<option value="' . htmlspecialchars($row['id']) . '" ' . $selected . '>'
+                                        . htmlspecialchars($row['type']) . '</option>';
+                                }
+                            } else {
+                                echo '<option value="" disabled>No certificate types found</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+        
+                    <div class="mb-3">
+                        <label for="editcertNumber" class="form-label">Document Number:<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editcertNumber" name="editcertNumber" placeholder="123-456-789" value="<?php echo htmlspecialchars($certResult['cert_number']) ?>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editcertCountry" class="form-label">Country<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editcertCountry" name="editcertCountry" placeholder="pelepens" value="<?php echo htmlspecialchars($certResult['country']) ?>">
+                    </div>
+        
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editcertfromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="editcertfromDate" name="editcertfromDate" value="<?php echo htmlspecialchars($certResult['start_date']) ?>">
                         </div>
-            
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="fromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="fromDate">
-                            </div>
-                            <div class="col">
-                                <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="toDateEdit">
-                            </div>
-                            <div class="col-12 mt-2">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="unlimitedCheckboxEdit">
-                                    <label class="form-check-label" for="unlimitedCheckboxEdit">Unlimited</label>                                    
-                                </div>
+                        <div class="col">
+                            <label for="editcerttoDateAdd" class="form-label">End Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="editcerttoDateAdd" name="editcerttoDateAdd" value="<?php echo htmlspecialchars($certResult['end_date']) ?>">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="editunlimitedCheckboxAdd" name="editunlimitedCheckboxAdd" 
+                                    <?php echo is_null($certResult['end_date']) ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="editunlimitedCheckboxAdd">No Expiry</label>
                             </div>
                         </div>
-            
-                        <div class="mb-3">
-                            <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                            <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
-                        </div>
-                    </form>                               
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="editcertUpload" class="form-label">Add Document (PDF or Word)</label>
+                        <input type="file" class="form-control" id="editcertUpload" name="editcertUpload" accept=".pdf,.doc,.docx">
+                        <small class="form-text text-muted">
+                            Current File: <span><?php echo htmlspecialchars($certResult['file_path']) ?></span>
+                        </small>
+                    </div>
+                                                  
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline-danger flex-fill py-2">
-                    <i class="fa-solid fa-trash me-2"></i>Delete
+                    <button type="submit" class="btn btn-outline-danger flex-fill py-2" onclick="return confirmDeletion()">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
                     </button>
                 </div>  
+
+                </form> 
+
             </div>
         </div>
     </section>
@@ -652,5 +770,12 @@
     <!-- Bootstrap JS with Popper (near the end of body) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        function confirmDeletion() {
+            return confirm("Are you sure you want to delete this record? This action cannot be undone.");
+        }
+    </script>
+
 </body>
 </html>

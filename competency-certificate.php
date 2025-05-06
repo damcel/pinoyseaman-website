@@ -116,6 +116,8 @@
                 </div>
             </section>
 
+            <!-- certificate section -->
+
             <section class="education-section">
                 <h2 class="header-info">Certificate</h2>
                 <div class="passport-container">
@@ -338,9 +340,11 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">CERTIFICATE</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form>
         
                 <div class="modal-body">
-                <form>
+                
                     <div class="row g-3">
                     <!-- LEFT side -->
                     <div class="col-md-6">
@@ -360,12 +364,15 @@
                         </div>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 <div class="modal-footer d-flex gap-3 mt-4">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>  
@@ -504,50 +511,76 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Certification</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/add_seaman_cert.php" method="POST" enctype="multipart/form-data">
+
                 <div class="modal-body">
-                <form>
+                
                     <div class="mb-3">
-                        <label for="Document type" class="form-label">Document Type<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Document type" placeholder="anting sa gigil certificate">
+                        <label for="cert_type" class="form-label">Document Type<span class="text-danger">*</span></label>
+                        <select class="form-select" id="cert_type" name="cert_type" required>
+                            <option value="" selected disabled>Select document type...</option>
+                            <?php
+
+                            // Database connection
+                            require_once "db.php";
+
+                            // Fetch certificate types from database
+                            $certificateQuery = "SELECT id, type FROM certificate_types ORDER BY type ASC";
+                            $certificateResult = $conn->query($certificateQuery);
+                            
+                            if ($certificateResult && $certificateResult->num_rows > 0) {
+                                while ($row = $certificateResult->fetch_assoc()) {
+                                    echo '<option value="' . htmlspecialchars($row['id']) . '">' 
+                                    . htmlspecialchars($row['type']) . '</option>';
+                                }
+                            } else {
+                                echo '<option value="" disabled>No certificate types found</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
         
                     <div class="mb-3">
-                        <label for="seamanNumber" class="form-label">Document Number:<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="seamanNumber" placeholder="123-456-789">
+                        <label for="certNumber" class="form-label">Document Number:<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="certNumber" name="certNumber" placeholder="123-456-789">
                     </div>
 
                     <div class="mb-3">
-                        <label for="Country" class="form-label">Country<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Country" placeholder="pelepens">
+                        <label for="certCountry" class="form-label">Country<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="certCountry" name="certCountry" placeholder="pelepens">
                     </div>
         
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="fromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="fromDate">
+                            <label for="certfromDate" class="form-label">Start Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="certfromDate" name="certfromDate">
                         </div>
                         <div class="col">
-                            <label for="toDate" class="form-label">End Date: <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="toDateAdd">
+                            <label for="certtoDate" class="form-label">End Date: <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="certtoDateAdd" name="certtoDateAdd">
                         </div>
                         <div class="col-12 mt-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="unlimitedCheckboxAdd">
-                                <label class="form-check-label" for="unlimitedCheckboxAdd">Unlimited</label>
+                                <input class="form-check-input" type="checkbox" id="unlimitedCheckboxAdd" name="unlimitedCheckboxAdd">
+                                <label class="form-check-label" for="unlimitedCheckboxAdd">No Expiry</label>
                             </div>
                         </div>
                     </div>
         
                     <div class="mb-3">
-                        <label for="documentUpload" class="form-label">Add Document (PDF or Word)</label>
-                        <input type="file" class="form-control" id="documentUpload" accept=".pdf,.doc,.docx">
+                        <label for="certUpload" class="form-label">Add Document (PDF or Word)</label>
+                        <input type="file" class="form-control" id="certUpload" name="certUpload" accept=".pdf,.doc,.docx">
                     </div>
-                </form>                 
+                                
                 </div>
                 <div class="modal-footer d-flex gap-3">
                     <button type="submit" class="btn btn-primary flex-fill py-2">Save</button>
                     <button type="button" class="btn btn-outline-secondary flex-fill py-2" data-bs-dismiss="modal">Cancel</button>
                 </div> 
+
+                </form> 
+
             </div>
         </div>
     </section>

@@ -142,7 +142,7 @@ $document = $documentsResult->fetch_assoc();
                         <ul>
                             <li class="tab active"><a href="userprofile.php">Account Setting</a></li>
                             <li class="tab"><a href="seafarer-documents.php">Passport & Seamans book</a></li>
-                            <li class="tab"><a href="competency-certificate.html">Competency & Certificates</a></li>
+                            <li class="tab"><a href="competency-certificate.php">Competency & Certificates</a></li>
                         </ul>
                     </nav>
                 </div>

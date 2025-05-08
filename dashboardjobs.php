@@ -123,16 +123,58 @@ $seekerEmail = $_SESSION['seeker_id'];
         </section>
 
         <section class="job-list-container">
+            
             <div class="job-search-container">
+            <form action="dashboardjobs.php" method="POST">
+
                 <section class="dashboard-search-container">
-                    <select class="search-select">
-                        <option selected>Select job</option>
+
+                    <select class="search-select" name="job_type">
+                        <option value="" <?php echo empty($_POST['job_type']) ? 'selected' : ''; ?>>Select job</option>
+                        <?php
+                        // Include the database connection file
+                        include 'db.php';
+
+                        // Query to fetch jobs from the seaman_jobs table in ascending order
+                        $jobQuery = "SELECT DISTINCT job FROM seaman_jobs ORDER BY job ASC";
+                        $jobResult = $conn->query($jobQuery);
+
+                        if ($jobResult && $jobResult->num_rows > 0) {
+                            while ($row = $jobResult->fetch_assoc()) {
+                                $job = htmlspecialchars($row['job']); // Escape special characters
+                                $selected = (isset($_POST['job_type']) && $_POST['job_type'] === $job) ? 'selected' : '';
+                                echo "<option value=\"$job\" $selected>$job</option>";
+                            }
+                        } else {
+                            echo "<option value=\"\">No jobs available</option>";
+                        }
+                        ?>
                     </select>
-                    <select class="search-select">
-                        <option selected>Select vessel type</option>
+
+                    <select class="search-select" name="vessel_type">
+                        <option selected value="" <?php echo empty($_POST['vessel_type']) ? 'selected' : ''; ?>>Select vessel type</option>
+                        <?php
+                        // Query to fetch vessel types from the vessel_types table in ascending order
+                        $typeQuery = "SELECT DISTINCT type FROM vessel_types ORDER BY type ASC";
+                        $typeResult = $conn->query($typeQuery);
+
+                        if ($typeResult && $typeResult->num_rows > 0) {
+                            while ($row = $typeResult->fetch_assoc()) {
+                                $type = htmlspecialchars($row['type']); // Escape special characters
+                                $selected = (isset($_POST['vessel_type']) && $_POST['vessel_type'] === $type) ? 'selected' : '';
+                                echo "<option value=\"$type\" $selected>$type</option>";
+                            }
+                        } else {
+                            echo "<option value=\"\">No types available</option>";
+                        }
+                        ?>
                     </select>
-                    <button class="dashboard-src-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                    <button type="submit" class="dashboard-src-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                
                 </section>
+                </form>
 
                 <?php
                 // Include the database connection file
@@ -342,87 +384,6 @@ $seekerEmail = $_SESSION['seeker_id'];
         </section>
 
     </main>
-
-    <!-- offcanva bootsrap -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanva-job" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="job-posting">
-                
-              
-                <h5 class="fw-bold">Tanker Vessel</h5>
-              
-                <div class="icon-text-group mb-4">
-                    <div class="icon-text-row">
-                      <i class="bi bi-person-fill"></i>
-                      <p>Rank</p>
-                    </div>
-                    <div class="icon-text-row">
-                      <i class="bi bi-truck-front-fill"></i>
-                      <p>Vessel type</p>
-                    </div>
-                    <div class="icon-text-row">
-                      <i class="bi bi-calendar2-week"></i>
-                      <p>Contract Length</p>
-                    </div>
-                    <div class="icon-text-row">
-                        <i class="bi bi-list-check"></i>
-                        <p>Job Requirements</p>
-                    </div>
-                    <div class="icon-text-row">
-                      <i class="bi bi-file-earmark-text"></i>
-                      <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque nulla cum
-                        corrupti doloremque, debitis, voluptatem deserunt provident fugiat magni
-                        numquam autem atque tenetur dolorum qui. Doloremque blanditiis commodi et
-                        deleniti.
-                      </p>
-                    </div>
-                </div>
-                
-                <section class="user-submit-form">
-                    <form class="row align-items-end g-2">
-                        <!-- CV/Resume Upload UI -->
-                        <div class="col-12 mb-3">
-                            <label class="form-label fw-semibold">CV/Resume<span class="text-danger">*</span></label>
-                            <div class="cv-upload-box">
-                            <label for="cvUpload" class="cv-upload-label">
-                                <span class="text-success fw-semibold">Choose file to upload</span> or drop here<br>
-                                <small class="text-muted">*.pdf, *.doc, *.docx, *.odt or *.txt 3MB max</small>
-                                <input type="file" id="cvUpload" name="cvUpload" accept=".pdf,.doc,.docx,.odt,.txt" hidden>
-                            </label>
-                            </div>
-                        </div>
-
-                        <!-- Your existing form fields -->
-                        <div class="col-8">
-                          <label for="email" class="form-label small text-muted">Email</label><span class="text-danger">*</span>
-                          <input type="email" id="email" class="form-control" placeholder="Enter your email">
-                        </div>
-                        <div class="col-8">
-                          <label for="password" class="form-label small text-muted">Password</label><span class="text-danger">*</span>
-                          <input type="password" id="password" class="form-control" placeholder="Enter your password">
-                        </div>
-                        <div class="col-4 d-flex align-items-end">
-                          <button type="submit" class="btn btn-danger w-100 fw-bold">Apply</button>
-                        </div>
-                    </form>
-                </section>
-              
-              
-                <div class="company-profile p-3 border rounded">
-                  <h6 class="fw-bold">AST SHIPPING COMPANY</h6>
-                  <p class="mb-1 text-muted">Profile</p>
-                  <p class="mb-1 text-muted">Phone</p>
-                  <p class="mb-1 text-muted">Email</p>
-                  <p class="mb-2 text-muted">Address</p>
-                  <a href="#" class="btn btn-outline-danger w-100">Direct Apply →</a>
-                </div>
-              </div>
-        </div>
-    </div>
     
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>

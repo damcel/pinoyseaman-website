@@ -1,3 +1,57 @@
+<?php
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: user-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['seeker_id'])) {
+    // Redirect to the login page with an error message
+    header("Location: user-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Fetch user details from the database
+$seekerEmail = $_SESSION['seeker_id'];
+
+$companyQuery = "SELECT * FROM employer 
+                 WHERE verify = 'y' 
+                 ORDER BY FIELD(member_type, 'Plan4', 'Plan3', 'Plan2', 'Plan1', 'FREE')";
+$companyResult = $conn->query($companyQuery);
+$companyCount = $companyResult->num_rows;
+$companyData = $companyResult->fetch_all(MYSQLI_ASSOC);
+
+$companyLogoPath = "company-logo/";
+$companyLogoDefault = "Logo-placeholder.png"; 
+
+// $jobCountQuery = "SELECT COUNT(*) as job_count FROM jobs
+//                   INNER JOIN employer ON jobs.company_code = employer.company_code
+//                   WHERE employer.verify = 'y' AND jobs.expiry > CURDATE()";
+// $jobCountResult = $conn->query($jobCountQuery);
+// $jobCountRow = $jobCountResult->fetch_assoc();
+// $jobCount = $jobCountRow['job_count'];  
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,72 +149,33 @@
         <section class="company-search-main-container">
             <h2>Explore Companies</h2>
             <section class="company-list">
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/german.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">58 Jobs</div>
-                </a>
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/marsa.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">42 Jobs</div>
-                </a>
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/scanmar_big.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">30 Jobs</div>
-                </a>
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">25 Jobs</div>
-                </a>
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">25 Jobs</div>
-                </a>
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">25 Jobs</div>
-                </a>
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">25 Jobs</div>
-                </a>
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
-                    <div class="company-name">
-                        <h3>Company name</h3>
-                    </div>
-                    <div class="company-job-count">25 Jobs</div>
-                </a>
+            <?php foreach ($companyData as $company): ?>
+                <?php
+                    $logoFile = !empty($company['logo']) && file_exists($companyLogoPath . $company['logo'])
+                                ? $companyLogoPath . $company['logo']
+                                : $companyLogoPath . $companyLogoDefault;
 
-                <a href="company-profile.html" class="company-card">
-                    <img src="company-logo/wil.jpg" alt="Company Logo" class="company-logo">
+                    // Get job count for this specific company
+                    $companyCode = $company['company_code'];
+                    $jobQuery = "SELECT COUNT(*) as job_total FROM jobs WHERE company_code = ? AND expiry > CURDATE()";
+                    $stmt = $conn->prepare($jobQuery);
+                    $stmt->bind_param("s", $companyCode);
+                    $stmt->execute();
+                    $jobResult = $stmt->get_result();
+                    $jobRow = $jobResult->fetch_assoc();
+                    $jobTotal = $jobRow['job_total'];
+                    $stmt->close();
+                ?>
+                <a href="company-profile.php?company_code=<?= urlencode($companyCode) ?>" class="company-card">
+                    <img src="<?= htmlspecialchars($logoFile) ?>" alt="Company Logo" class="company-logo">
                     <div class="company-name">
-                        <h3>Company name</h3>
+                        <h3><?= htmlspecialchars($company['company']) ?></h3>
                     </div>
-                    <div class="company-job-count">25 Jobs</div>
+                    <div class="company-job-count"><?= $jobTotal ?> Job<?= $jobTotal != 1 ? 's' : '' ?></div>
                 </a>
-                
+            <?php endforeach; ?>
             </section>
+
             <div class="see-more">
                 <button>See more</button>
             </div>

@@ -152,7 +152,7 @@ body{
 .ul-links li a[href="index.php"], 
 .ul-links li a[href="dashboard.html"], 
 .ul-links li a[href="history.php"], 
-.ul-links li a[href="companies.html"] {
+.ul-links li a[href="companies.php"] {
   transition: background-color 0.3s ease;
   margin-bottom: 3px;
 }
@@ -160,7 +160,7 @@ body{
 .ul-links li a[href="index.php"]:hover, 
 .ul-links li a[href="dashboard.html"]:hover, 
 .ul-links li a[href="history.php"]:hover, 
-.ul-links li a[href="companies.html"]:hover {
+.ul-links li a[href="companies.php"]:hover {
   background-color: var(--hover-clr);
   color: #FEFEFE;
 }

@@ -80,7 +80,7 @@ include 'db.php';
                 </a>
               </li>
               <li class="separator">
-                <a href="companies.html">
+                <a href="companies.php">
                   <!-- SVG Icon -->
                   <i class="fa-regular fa-building"></i><span>Companies</span>
                 </a>

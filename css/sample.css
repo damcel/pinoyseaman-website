@@ -151,7 +151,7 @@ body{
 /* Apply hover effect ONLY to Jobs, Profile, History, and Companies */
 .ul-links li a[href="index.php"], 
 .ul-links li a[href="dashboard.html"], 
-.ul-links li a[href="history.html"], 
+.ul-links li a[href="history.php"], 
 .ul-links li a[href="companies.html"] {
   transition: background-color 0.3s ease;
   margin-bottom: 3px;
@@ -159,7 +159,7 @@ body{
 
 .ul-links li a[href="index.php"]:hover, 
 .ul-links li a[href="dashboard.html"]:hover, 
-.ul-links li a[href="history.html"]:hover, 
+.ul-links li a[href="history.php"]:hover, 
 .ul-links li a[href="companies.html"]:hover {
   background-color: var(--hover-clr);
   color: #FEFEFE;
@@ -641,6 +641,21 @@ hr {
 }
 
 .viewed-btn i {
+  margin-left: 5px;
+}
+
+.not-viewed-btn {
+  background-color: #e0efff;
+  color: #f1ab5f;
+  font-size: 14px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.not-viewed-btn i {
   margin-left: 5px;
 }
 

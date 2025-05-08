@@ -90,7 +90,7 @@ $document = $documentsResult->fetch_assoc();
               
               <li class="menu-title">ANALYTICS</li>
               <li>
-                <a href="history.html">
+                <a href="history.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-business-time"></i><span>History</span>
                 </a>
@@ -120,13 +120,13 @@ $document = $documentsResult->fetch_assoc();
 
     <main class="dashboard-container">
         <section class="header-container">
-            <div class="saved-ctn">
+            <!-- <div class="saved-ctn">
                 <a href="saved.html" class="saved-btn">
                     <i class="fa-solid fa-book-bookmark"></i>
                 </a>
-            </div>
+            </div> -->
             <div class="dropdown-container">
-                <button class="profile-btn" id="dpBtn">DP</button>
+                <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
                 <!-- Dropdown Menu -->
                 <div class="dropdown" id="dropdownMenu">
                     <a href="saved.html" class="prfl">Profile Settings</a>

@@ -77,7 +77,7 @@ $seekerEmail = $_SESSION['seeker_id'];
               
               <li class="menu-title">ANALYTICS</li>
               <li>
-                <a href="history.html">
+                <a href="history.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-business-time"></i><span>History</span>
                 </a>
@@ -107,17 +107,17 @@ $seekerEmail = $_SESSION['seeker_id'];
     
     <main class="dashboard-container">
         <section class="header-container">
-            <div class="saved-ctn">
+            <!-- <div class="saved-ctn">
                 <a href="saved.html" class="saved-btn">
                     <i class="fa-solid fa-book-bookmark"></i>
                 </a>
-            </div>
+            </div> -->
             <div class="dropdown-container">
-                <button class="profile-btn" id="dpBtn">DP</button>
+                <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
                 <!-- Dropdown Menu -->
                 <div class="dropdown" id="dropdownMenu">
-                    <a href="#" class="prfl">Profile Settings</a>
-                    <a href="index.php">Logout</a>
+                    <a href="userprofile.php" class="prfl">Profile Settings</a>
+                    <a href="includes/logout.php">Logout</a>
                 </div>
             </div>
         </section>
@@ -234,9 +234,9 @@ $seekerEmail = $_SESSION['seeker_id'];
                                     </div>
                                     
                                     <div class="apply-container">
-                                        <button class="bookmark-btn">
+                                        <!-- <button class="bookmark-btn">
                                             <i class="fa-regular fa-bookmark"></i>
-                                        </button>
+                                        </button> -->
                                         <button class="apply-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanva-job-<?php echo $job['code']; ?>" aria-controls="offcanvasRight">Details & Apply</button>
                                     </div>
                                 </section>

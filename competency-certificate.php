@@ -92,7 +92,7 @@ include 'db.php';
               
               <li class="menu-title">ANALYTICS</li>
               <li>
-                <a href="history.html">
+                <a href="history.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-business-time"></i><span>History</span>
                 </a>
@@ -128,10 +128,10 @@ include 'db.php';
                 </a>
             </div>
             <div class="dropdown-container">
-                <button class="profile-btn" id="dpBtn">DP</button>
+                <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
                 <!-- Dropdown Menu -->
                 <div class="dropdown" id="dropdownMenu">
-                    <a href="#" class="prfl">Profile Settings</a>
+                    <a href="userprofile.php" class="prfl">Profile Settings</a>
                     <a href="#">Logout</a>
                 </div>
             </div>

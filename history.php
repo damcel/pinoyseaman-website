@@ -1,3 +1,54 @@
+<?php
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: user-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['seeker_id'])) {
+    // Redirect to the login page with an error message
+    header("Location: user-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Fetch user details from the database
+$seekerEmail = $_SESSION['seeker_id'];
+
+$applications = [];
+$sql = "SELECT ja.*, e.address FROM job_applicants AS ja
+        INNER JOIN employer AS e ON ja.company_code = e.company_code
+        WHERE ja.email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $seekerEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+
+while ($row = $result->fetch_assoc()) {
+    $applications[] = $row;
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,12 +187,41 @@
                     <nav class="tabs">
                         <ul>
                             <li class="tab active"><i class="fa-regular fa-bookmark"></i><a href="history.php">Applied</a></li>
-                            <li class="tab"><i class="fa-regular fa-circle-check"></i><a href="saved.html">Saved</a></li>
+                            <!-- <li class="tab"><i class="fa-regular fa-circle-check"></i><a href="saved.html">Saved</a></li> -->
                         </ul>
                     </nav>
                 </div>
             </section>
-            <p class="job-count">8 jobs</p>
+            <p class="job-count"><?= count($applications) ?> jobs</p>
+            <section class="job-list">
+            <?php if (count($applications) > 0): ?>
+                <?php foreach ($applications as $application): ?>
+                    <article class="job-history-card" data-code="<?= $application['code'] ?>">
+                        <div>
+                            <h3><?= htmlspecialchars($application['job_hiring']) ?></h3>
+                            <p><?= htmlspecialchars($application['company']) ?></p>
+                            <p><?= htmlspecialchars($application['address']) ?></p>
+                            <p><?= htmlspecialchars(date("F j, Y", strtotime($application['date']))) ?></p>
+                            <?php if ($application['mark'] === 'Viewed'): ?>
+                                <button class="viewed-btn">Viewed by employer <i class="fa-solid fa-circle-check"></i></button>
+                            <?php else: ?>
+                                <button class="not-viewed-btn">Not viewed yet <i class="fa-solid fa-clock"></i></button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="menu-container">
+                            <button class="custom-menu-toggle" onclick="toggleMenu(this)"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            <div class="custom-dropdown">
+                                <button class="dropdown-item delete" onclick="deleteApplication(this)">Cancel application</button>
+                            </div>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>You have not applied to any jobs yet.</p>
+            <?php endif; ?>
+            </section>
+
+            <!-- <p class="job-count">8 jobs</p>
             <section class="job-list">
                     <article class="job-history-card">
                         <div>
@@ -233,7 +313,7 @@
                             </div>
                         </div>
                     </article>
-                </section>
+                </section> -->
         </section>
     </main>
     <script>
@@ -259,6 +339,34 @@
             });
           });
         });
+
+        function deleteApplication(button) {
+            const card = button.closest(".job-history-card");
+            const applicationCode = card.getAttribute("data-code");
+
+            if (!confirm("Are you sure you want to delete this application?")) return;
+
+            fetch("includes/seaman_delete_application.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `code=${encodeURIComponent(applicationCode)}`,
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === "success") {
+                    card.remove();
+                } else {
+                    alert("Failed to delete application.");
+                }
+            })
+            .catch(error => {
+                console.error("Error deleting:", error);
+                alert("Something went wrong.");
+            });
+        }
+
       </script>
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>

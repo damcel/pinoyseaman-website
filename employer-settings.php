@@ -157,13 +157,13 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         </label>
                       </div>
                   
-                      <div class="settings-item">
+                      <!-- <div class="settings-item">
                         <div>
                           <h2>Job list updates</h2>
                           <p>Your subscription to new jobs on the site</p>
                           <p>No alerts available.</p>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                 </section>
 
@@ -223,22 +223,22 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="includes/employer_update_email.php" method="POST">
                     <h2 class="text-center mb-4">Change Email</h2>
                   
                     <div class="mb-3">
-                      <label for="currentPassword" class="form-label fw-semibold">Current Email <span class="text-danger">*</span></label>
-                      <input type="password" class="form-control" id="currentPassword" placeholder="Current Email" required>
+                      <label for="currentEmail" class="form-label fw-semibold">Current Email <span class="text-danger">*</span></label>
+                      <input type="email" class="form-control" id="currentEmail" name="currentEmail" placeholder="Current Email" required>
                     </div>
                   
                     <div class="mb-3">
-                      <label for="newPassword" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-                      <input type="password" class="form-control" id="newPassword" placeholder="New Email" required>
+                      <label for="newEmail" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                      <input type="email" class="form-control" id="newEmail" name="newEmail" placeholder="New Email" required>
                     </div>
                   
                     <div class="mb-3">
-                      <label for="confirmPassword" class="form-label fw-semibold">Email confirmation <span class="text-danger">*</span></label>
-                      <input type="password" class="form-control" id="confirmPassword" placeholder="Email Confirmation" required>
+                      <label for="confirmEmail" class="form-label fw-semibold">Email confirmation <span class="text-danger">*</span></label>
+                      <input type="email" class="form-control" id="confirmEmail" name="confirmEmail" placeholder="Email Confirmation" required>
                     </div>
                   
                     <button type="submit" class="btn btn-primary w-100">Save</button>
@@ -323,22 +323,22 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="includes/employer_update_password.php" method="POST">
                     <h2 class="text-center mb-4">Change Password</h2>
                   
                     <div class="mb-3">
                       <label for="currentPassword" class="form-label fw-semibold">Current password <span class="text-danger">*</span></label>
-                      <input type="password" class="form-control" id="currentPassword" placeholder="Current Password" required>
+                      <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="Current Password" required>
                     </div>
                   
                     <div class="mb-3">
                       <label for="newPassword" class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
-                      <input type="password" class="form-control" id="newPassword" placeholder="New Password" required>
+                      <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="New Password" required>
                     </div>
                   
                     <div class="mb-3">
                       <label for="confirmPassword" class="form-label fw-semibold">Password confirmation <span class="text-danger">*</span></label>
-                      <input type="password" class="form-control" id="confirmPassword" placeholder="Password Confirmation" required>
+                      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Password Confirmation" required>
                     </div>
                   
                     <button type="submit" class="btn btn-primary w-100">Save</button>

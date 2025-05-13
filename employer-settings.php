@@ -1,3 +1,55 @@
+<?php
+session_name("employerSession");
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: employer-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['employer_email'])) {
+    // Redirect to the login page with an error message
+    header("Location: employer-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Fetch the verification status from the database
+$employerEmail = $_SESSION['employer_email'];
+$query = "SELECT * FROM employer WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $employerEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$verifyStatus = $row['verify'] ?? 'n'; // Default to 'n' if not found
+$isVerified = ($verifyStatus === 'y');
+
+$logoFilename = $row['logo'] ?? '';
+$logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename) 
+    ? "company-logo/" . htmlspecialchars($logoFilename) 
+    : "company-logo/Logo-placeholder.png";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,88 +61,26 @@
     <title>Profile Settings</title>
 </head>
 <body>
-    <aside id="sidebar">
-        <nav class="sidebar-nav">
-            <div class="sidebar-header">
-                <div class="logo-container">
-                    <a href="dashboardjobs.php" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
-                    </a>
-                </div>
-                <button onclick="toggleSidebar()" id="toggle-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
-                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
-                    </svg>
-                </button>
-            </div>
-            <ul class="ul-links">
-                <div class="company-profile-card">
-                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-                </div>
-              <li>
-                <a href="employer-dashboard.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="employer-posting.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-user"></i><span>Job Post</span>
-                </a>
-              </li>
-              <li>
-                <a href="employer-analytics.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="account-plan.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
-                </a>
-              </li>
-                <div id="progress-main-container" class="progress-main-container">
-                  <div class="complete-percentage">
-                      <p>Complete your profile</p>
-                  </div>
-                  <div class="progress-container">
-                      <div class="progress-bar" id="progress-bar"></div>
-                      <p id="progress-text">0% Completed</p>
-                      <div class="incomplete-container">
-                          <h3>Incomplete Fields:</h3>
-                          <ul id="missing-fields"></ul>
-                      </div>
-                  </div>
-                </div>
-            </ul>
-        </nav>
-    </aside>
+    
+    <!-- Sidebar -->
+    <?php include 'components/employer_aside.php'; ?>
     
     <main class="dashboard-container">
-        <section class="header-container">
-            <!-- Your existing saved and profile dropdown (unchanged) -->
-            <div class="saved-ctn">
-              <a href="#" class="saved-btn">
-                <i class="fa-solid fa-book-bookmark"></i>
-              </a>
+        <?php if (!$isVerified): ?>
+            <div class="text-center mt-5">
+                <h1>Your account is not yet verified.</h1>
+                <p>Please wait for the admin to verify your account. You will be notified via email once your account is verified.</p>
             </div>
-            <div class="dropdown-container">
-              <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
-              <div class="dropdown" id="dropdownMenu">
-                <a href="employer-settings.php" class="prfl">Settings</a>
-                <a href="includes/logout.php">Logout</a>
-              </div>
-            </div>
-        </section>
+        <?php else: ?>
+
+        <?php include 'components/employer_header.php'; ?>
 
         <section class="job-list-container">
             <div class="job-search-container">
                 <section class="company-profile-container">
                     <div class="company-cover">
                         <div class="company-profile-box">
-                            <img src="company-logo/german.jpg" alt="image">
+                            <img src="<?php echo $logoPath; ?>" alt="image">
                         </div>
                     </div>
                 
@@ -98,15 +88,8 @@
                         <!-- Moved Company Name, Rating, and Review Button inside company-info-box -->
                         <header class="company-header">
                             <div class="company-name">
-                                <h2>PinoySeaman</h2>
-                                <div class="rating">
-                                    <p class="star-rating">
-                                        <span class="rating-value">5.0</span> ⭐⭐⭐⭐⭐
-                                    </p>
-                                    <p class="review-count">
-                                        total rating from <a href="#" class="review-link">26 reviews</a>
-                                    </p>
-                                </div>
+                                <h2><?php echo htmlspecialchars($row['company']) ?></h2>
+                                
                             </div>
                             <button class="company-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-company-profile"><i class="fa-solid fa-pen-to-square"></i></button>
                         </header>
@@ -116,35 +99,33 @@
                         <dl class="company-details">
                             <div class="info-item">
                                 <dt>Website</dt>
-                                <dd><a href="https://www.pinoyseaman.com/index.php" target="_blank" rel="noopener noreferrer">pinoyseaman.com</a></dd>
+                                <dd><a href="<?php echo htmlspecialchars($row['website']) ?>" target="_blank" rel="noopener noreferrer"><?php echo htmlspecialchars($row['website']) ?></a></dd>
                             </div>
 
                             <div class="info-item">
                                 <dt>Contact Person</dt>
-                                <dd>Daniel Pagcaliwangan</dd>
+                                <dd><?php echo !empty($row['contact']) ? htmlspecialchars($row['contact']) : 'No assigned'; ?></dd>
                             </div>
                 
                             <div class="info-item">
                                 <dt>Phone</dt>
-                                <dd>09452733164</dd>
+                                <dd><?php echo !empty($row['phone']) ? htmlspecialchars($row['phone']) : 'No assigned'; ?></dd>
                             </div>
             
                             <div class="info-item">
                                 <dt>Email</dt>
-                                <dd>Pagcaliwangan11@gmail.com</dd>
+                                <dd><?php echo !empty($row['email']) ? htmlspecialchars($row['email']) : 'No assigned'; ?></dd>
                             </div>
                 
                             <div class="info-item">
                                 <dt>Address</dt>
-                                <dd>Scandic Palace, Emilia str, Makati City</dd>
+                                <dd><?php echo !empty($row['address']) ? htmlspecialchars($row['address']) : 'No assigned'; ?></dd>
                             </div>
                         </dl>
                 
                         <section class="company-description">
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos iste quia inventore nisi nulla quibusdam nobis, 
-                                aliquid quis autem minima, fugiat, veritatis esse architecto ab sapiente aut. Alias, iure minima.
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla omnis deleniti ipsum dicta fugiat, temporibus, quis obcaecati autem vel velit, iusto nisi alias illo. Quidem ipsa dolore ex aliquam eveniet.
+                                <?php echo !empty($row['company_profile']) ? nl2br(htmlspecialchars($row['company_profile'])) : 'No description available'; ?>
                             </p>
                         </section>
                     </article>
@@ -230,6 +211,8 @@
             </div>
         </section>
 
+        <?php endif; ?>
+
     </main>
 
     <!-- Modal -->
@@ -274,15 +257,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
+                <form action="includes/employer_update_profile.php" method="POST" auto-complete="off" enctype="multipart/form-data">
+
                 <section class="modal-body">
                     <div class="container-fluid">
-                        <form>
+                        
                             <div class="mb-3 text-center">
                                 <label for="jobImage" class="form-label d-block">Company Profile</label>
                                 <div class="upload-image">
-                                    <input type="file" id="jobImage" class="form-control d-none">
-                                    <div class="upload-box">
-                                        <p>Upload Vessel or Company Image</p>
+                                    <!-- File input -->
+                                    <input type="file" id="jobImage" name="company_logo" class="form-control d-none" accept=".jpg, .jpeg, .png">
+                                    <div class="upload-box" onclick="document.getElementById('jobImage').click();">
+                                        <p id="fileName">Upload Vessel or Company Image</p>
                                         <i class="fa-solid fa-arrow-up-from-bracket"></i>
                                     </div>
                                 </div>
@@ -291,49 +277,40 @@
                                 <!-- Name Row -->
                                 <div class="col-md-4 col-sm-12">
                                     <label for="companyName" class="form-label">Company Name:</label>
-                                    <input type="text" class="form-control" id="companyName" placeholder="pinoyseaman">
+                                    <input type="text" class="form-control" id="companyName" name="companyName" value="<?php echo htmlspecialchars($row['company']) ?>">
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <label for="website" class="form-label">Website:</label>
-                                    <input type="text" class="form-control" id="website" placeholder="pinoyseaman.com">
+                                    <label for="companyWebsite" class="form-label">Website:</label>
+                                    <input type="text" class="form-control" id="companyWebsite" name="companyWebsite" value="<?php echo htmlspecialchars($row['website']) ?>">
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <label for="contact-person" class="form-label">Contact Person:</label>
-                                    <input type="text" class="form-control" id="contact-person" placeholder="Danny Pagcaliwangan">
+                                    <label for="contactPerson" class="form-label">Contact Person:</label>
+                                    <input type="text" class="form-control" id="contactPerson" name="contactPerson" value="<?php echo htmlspecialchars($row['contact']) ?>">
                                 </div>
                         
                                 <!-- Second Row -->
-                                <div class="col-md-4 col-sm-12">
-                                    <label for="phone" class="form-label">Phone:</label>
-                                    <input type="number" class="form-control" id="phone" placeholder="09452733164">
+                                <div class="col-md-6 col-sm-12">
+                                    <label for="companyPhone" class="form-label">Phone:</label>
+                                    <input type="number" class="form-control" id="companyPhone" name="companyPhone" value="<?php echo htmlspecialchars($row['phone']) ?>">
                                 </div>
-                                <div class="col-md-4 col-sm-12">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="address" placeholder="Emilia Str, scandic palace">
-                                </div>
-                                <div class="col-md-4 col-sm-12">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="pagcaliwanganbigdick@gmail.com">    
+                                <div class="col-md-6 col-sm-12">
+                                    <label for="companyAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="companyAddress" name="companyAddress" value="<?php echo htmlspecialchars($row['address']) ?>">
                                 </div>
                         
                                 <div class="mb-3">
-                                    <label for="about-company" class="form-label">About Company</label>
-                                    <textarea class="form-control" id="about-company" rows="4">company profile and story</textarea>
-                                </div>
-                                    
-                                <!-- Email Row -->
-                                <div class="col-12">
-                                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" id="password" placeholder="pinoyseaman password">
+                                    <label for="aboutCompany" class="form-label">About Company</label>
+                                    <textarea class="form-control" id="aboutCompany" name="aboutCompany" rows="4" placeholder="Company profile and story"></textarea>
                                 </div>
                             </div>
-                        </form>
+                        
                     </div>                  
                 </section>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
+                </form>
             </div>
         </div>
     </section>
@@ -377,5 +354,20 @@
     <!-- Bootstrap JS with Popper (near the end of body) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.getElementById('jobImage');
+            const fileNameDisplay = document.getElementById('fileName');
+
+            // Listen for file selection
+            fileInput.addEventListener('change', function () {
+                if (fileInput.files.length > 0) {
+                    fileNameDisplay.textContent = fileInput.files[0].name; // Display the selected file name
+                } else {
+                    fileNameDisplay.textContent = 'Upload Vessel or Company Image'; // Reset if no file is selected
+                }
+            });
+        });
+    </script>
 </body>
 </html>

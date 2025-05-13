@@ -186,19 +186,43 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                 </tr>
                               </thead>
                               <tbody id="tableBody">
-                                <tr class="job-posted">
-                                    <td data-label="Job Title">Chief Engineer</td>
-                                    <td data-label="Vessel Type">Tanker</td>
-                                    <td data-label="Date Posted">12/12/2023</td>
-                                    <td data-label="Applicants">7</td>
-                                    <td>
-                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-recent-job">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                
-                              </tbody>
+    <?php
+    // Fetch the company code and email from the session
+    $companyCode = $row['company_code'];
+    $employerEmail = $row['email'];
+
+    // Query to fetch job posts for the company
+    $jobPostsQuery = "SELECT job_title, vessel, DATE_FORMAT(date_posted, '%m/%d/%Y') AS formatted_date, 
+                      (SELECT COUNT(*) FROM job_applicants WHERE job_applicants.job_code = jobs.code) AS applicant_count 
+                      FROM jobs 
+                      WHERE email = ? AND company_code = ? 
+                      ORDER BY date_posted DESC";
+    $jobPostsStmt = $conn->prepare($jobPostsQuery);
+    $jobPostsStmt->bind_param("ss", $employerEmail, $companyCode);
+    $jobPostsStmt->execute();
+    $jobPostsResult = $jobPostsStmt->get_result();
+
+    // Loop through the results and display them in the table
+    while ($jobPost = $jobPostsResult->fetch_assoc()) {
+        $jobTitle = htmlspecialchars($jobPost['job_title']);
+        $vesselType = htmlspecialchars($jobPost['vessel']);
+        $datePosted = htmlspecialchars($jobPost['formatted_date']);
+        $applicantCount = htmlspecialchars($jobPost['applicant_count']);
+
+        echo "<tr class='job-posted'>
+                <td data-label='Job Title'>$jobTitle</td>
+                <td data-label='Vessel Type'>$vesselType</td>
+                <td data-label='Date Posted'>$datePosted</td>
+                <td data-label='Applicants'>$applicantCount</td>
+                <td>
+                    <button class='profile-side-btn' type='button' data-bs-toggle='modal' data-bs-target='#edit-recent-job'>
+                        <i class='fa-solid fa-pen-to-square'></i>
+                    </button>
+                </td>
+              </tr>";
+    }
+    ?>
+</tbody>
                             </table>
                           </div>
                         </div>

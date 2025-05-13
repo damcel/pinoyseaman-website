@@ -10,6 +10,21 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php'; // Ensure PHPMailer is installed via Composer
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $recaptchaSecret = '6LcsKjIrAAAAAKLKhlob34wEVJxNK2nf9fZ8Fqam';
+    $recaptchaToken = $_POST['recaptcha_token'];
+
+    $recaptchaResponse = file_get_contents(
+        "https://www.google.com/recaptcha/api/siteverify?secret=$recaptchaSecret&response=$recaptchaToken"
+    );
+    $responseData = json_decode($recaptchaResponse);
+
+    if (!$responseData->success || $responseData->score < 0.5) {
+        // Score too low or failed
+        header("Location: ../employer-login-signup.php?type=error&message=reCAPTCHA verification failed. Please try again.");
+        exit;
+    }
+
     // Retrieving form data
     $first_name = trim($_POST["firstname"]);
     $last_name = trim($_POST["lastname"]);
@@ -36,6 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $newid = generateID(8);
     // $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Validate password strength
+    if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $companyPassword)) {
+        header("Location: ../employer-login-signup.php?type=error&message=Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.");
+        exit;
+    }
+
     $newpassword = md5($password); 
 
     try {
@@ -51,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $checkStmt->close();
 
         if ($recordExists > 0) {
-            header("Location: ../alert.php?type=error&message=This email is already registered.");
+            header("Location: ../employer-login-signup.php?type=error&message=This email is already registered.");
             exit;
         }
 
@@ -73,12 +95,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pdo = null;
         $stmt = null;
 
+        /* 
         // Send email using PHPMailer
         $mail = new PHPMailer(true);
 
         try {
             
-            $mail->isMail();
+            // $mail->isMail();
+
+            $mail->isSMTP();
+            $mail->Host = 'smtp-relay.brevo.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = '88d0c6002@smtp-brevo.com';
+            $mail->Password = 'ARnazdkms0EcBHVC';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
 
             // Sender and recipient settings
             $mail->setFrom('noreply@pinoyseaman.com', 'PinoySeaman');
@@ -119,11 +151,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../index.php?type=error&message=Registration successful, but email sending failed: {$mail->ErrorInfo}");
             exit;
         }
+        */
+
+        header("Location: ../employer-login-signup.php?type=success&message=Registration successful!");
+        exit;
     } catch (PDOException $e) {
-        header("Location: ../alert.php?type=error&message=Error: " . $e->getMessage());
+        header("Location: ../employer-login-signup.php?type=error&message=Error: " . $e->getMessage());
         exit;
     }
 } else {
-    header("Location: ../alert.php?type=error&message=Invalid request method.");
+    header("Location: ../employer-login-signup.php?type=error&message=Invalid request method.");
     exit;
 }

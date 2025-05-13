@@ -241,6 +241,86 @@
         text-decoration: underline;
     }
 
+    /* Modal Styles */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-content h3 {
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+    }
+
+    .modal-content p {
+        margin-bottom: 20px;
+        font-size: 1rem;
+    }
+
+    .modal-content .btn {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .modal-content .btn:hover {
+        background-color: #45a049;
+    }
+
+    /* Hidden state */
+    .hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* Visible state */
+    .visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Success and Error Styles */
+    .modal.success .modal-content {
+        border-left: 5px solid #4caf50;
+    }
+
+    .modal.error .modal-content {
+        border-left: 5px solid #f44336;
+    }
+
+    .modal.success .modal-content h3 {
+        color: #4caf50;
+    }
+
+    .modal.error .modal-content h3 {
+        color: #f44336;
+    }
+
     /* ----------- log in sign up back button END ------------------- */
 
 
@@ -339,6 +419,10 @@
                                 <input type="phone" placeholder="phone number" name="company_phone" required>
                             </div>
                             <div class="input-group">
+                                <i class='bx bx-hash'></i>
+                                <input type="text" placeholder="POEA Number" name="poea_num" required>
+                            </div>
+                            <div class="input-group">
                                 <i class='bx bxl-chrome'></i>
                                 <input type="text" placeholder="website url" name="company_website">
                             </div>
@@ -367,16 +451,17 @@
                 <!-- SIGN IN -->
                 <div class="col align-items-center flex-col sign-in">
                     <div class="form-wrapper align-items-center">
+                    <form action="includes/employer_login.php" method="POST">
                         <div class="form sign-in">
                             <div class="input-group">
                                 <i class='bx bxs-user'></i>
-                                <input type="text" placeholder="Employer ID">
+                                <input type="email" placeholder="Employer Email" name="employer_email" required>
                             </div>
                             <div class="input-group">
                                 <i class='bx bxs-lock-alt'></i>
-                                <input type="password" placeholder="Password">
+                                <input type="password" placeholder="Password" name="employer_password" required>
                             </div>
-                            <button onclick="window.location.href='employer-dashboard.html'">
+                            <button type="submit">
                                 Sign in
                             </button>
                             <p>
@@ -394,6 +479,7 @@
                                 <a href="index.php" class="back">Back</a>
                             </p>
                         </div>
+                    </form>
                     </div>
                     <div class="form-wrapper">
             
@@ -434,6 +520,15 @@
             <!-- END CONTENT SECTION -->
         </div>
     </main>
+    <!-- Alert Modal -->
+    <div id="alertModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="alertTitle">Notification</h3>
+            <p id="alertMessage"></p>
+            <button id="closeModal" class="btn">Close</button>
+        </div>
+    </div>
+
     <script>
         let container = document.getElementById('container')
 
@@ -445,6 +540,64 @@
         setTimeout(() => {
             container.classList.add('sign-in')
         }, 200)
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to show the modal
+            function showModal(type, message) {
+                const modal = document.getElementById('alertModal');
+                const modalTitle = document.getElementById('alertTitle');
+                const modalMessage = document.getElementById('alertMessage');
+
+                // Set the modal type and message
+                modal.classList.remove('success', 'error');
+                modal.classList.add(type);
+                modalTitle.textContent = type === 'success' ? 'Success' : 'Error';
+                modalMessage.textContent = message;
+
+                // Show the modal
+                modal.classList.remove('hidden');
+                modal.classList.add('visible');
+            }
+
+            // Function to hide the modal
+            function hideModal() {
+                const modal = document.getElementById('alertModal');
+                modal.classList.remove('visible');
+                modal.classList.add('hidden');
+            }
+
+            // Close modal on button click
+            document.getElementById('closeModal').addEventListener('click', hideModal);
+
+            // Check for query parameters in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type');
+            const message = urlParams.get('message');
+
+            if (type && message) {
+                showModal(type, message);
+            }
+
+            const form = document.querySelector('form[action="includes/employer_init_reg.php"]');
+            const passwordInput = document.querySelector('input[name="company_password"]');
+            const errorMessage = document.createElement('p');
+            errorMessage.style.color = 'red';
+            errorMessage.style.fontSize = '0.9rem';
+            passwordInput.parentNode.appendChild(errorMessage);
+
+            form.addEventListener('submit', function (e) {
+                const password = passwordInput.value;
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+                if (!passwordRegex.test(password)) {
+                    e.preventDefault();
+                    errorMessage.textContent = 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.';
+                } else {
+                    errorMessage.textContent = '';
+                }
+            });
+
+        });
     </script>
 </body>
 </html>

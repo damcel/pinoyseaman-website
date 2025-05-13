@@ -15,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $companyEmail = trim($_POST["company_email"]);
     $companyPhone = trim($_POST["company_phone"]);
     $companyWebsite = trim($_POST["company_website"]);
+    $companyPoea = trim($_POST["poea_num"]);
     $companyPassword = trim($_POST["company_password"]);
     $memberType = "FREE";
 
@@ -26,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $newid = generateID(8);
     // $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $newpassword = md5($password); 
+    $newpassword = md5($companyPassword); 
 
     function generateRNDID($plength)
     {
@@ -59,15 +60,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $checkStmt->close();
 
         if ($recordExists > 0) {
-            header("Location: ../alert.php?type=error&message=This email is already registered.");
+            header("Location: ../employer-login-signup.php?type=error&message=This email is already registered.");
             exit;
         }
 
         // Insert data into the database
-        $query = "INSERT INTO employer (id, company, email, phone, website, password, secret, member_type, company_code, date, date_registered) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        $query = "INSERT INTO employer (id, company, email, phone, website, password, secret, member_type, company_code, fax, date, date_registered) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssssss", $newid, $companyName, $companyEmail, $companyPhone, $companyWebsite, $newpassword, $companyPassword, $memberType, $rnd_id);
+        $stmt->bind_param("ssssssssss", $newid, $companyName, $companyEmail, $companyPhone, $companyWebsite, $newpassword, $companyPassword, $memberType, $rnd_id, $companyPoea);
         $stmt->execute();
         $stmt->close();
 
@@ -102,17 +103,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $mail->send();
 
-            header("Location: ../index.php?type=success&message=Registration successful!");
+            header("Location: ../employer-login-signup.php?type=success&message=Registration successful! We are now reviewing your registration. Please wait for admin approval.");
             exit;
         } catch (Exception $e) {
-            header("Location: ../index.php?type=error&message=Registration successful, but email sending failed: {$mail->ErrorInfo}");
+            header("Location: ../employer-login-signup.php?type=error&message=Registration successful, but email sending failed: {$mail->ErrorInfo}");
             exit;
         }
     } catch (PDOException $e) {
-        header("Location: ../alert.php?type=error&message=Error: " . $e->getMessage());
+        header("Location: ../employer-login-signup.php?type=error&message=Error: " . $e->getMessage());
         exit;
     }
 } else {
-    header("Location: ../alert.php?type=error&message=Invalid request method.");
+    header("Location: ../employer-login-signup.php?type=error&message=Invalid request method.");
     exit;
 }
+?>

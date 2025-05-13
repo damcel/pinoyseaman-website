@@ -1,0 +1,756 @@
+<?php
+session_name("employerSession");
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: employer-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['employer_email'])) {
+    // Redirect to the login page with an error message
+    header("Location: employer-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Fetch the verification status from the database
+$employerEmail = $_SESSION['employer_email'];
+$query = "SELECT * FROM employer WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $employerEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$verifyStatus = $row['verify'] ?? 'n'; // Default to 'n' if not found
+$isVerified = ($verifyStatus === 'y');
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+     <link rel="stylesheet" href="css/dashboard.css">
+    <title>Dashboard</title>
+ 
+</head>
+<body>
+    
+    <aside id="sidebar" <?php echo !$isVerified ? 'style="pointer-events: none; opacity: 0.5;"' : ''; ?>>
+        <nav class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <a href="dashboardjobs.php" class="logo-link">
+                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
+                <button onclick="toggleSidebar()" id="toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
+                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul class="ul-links">
+                <div class="company-profile-card">
+                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
+                </div>
+              <li>
+                <a href="employer-dashboard.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="employer-posting.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Job Post</span>
+                </a>
+              </li>
+              <li>
+                <a href="employer-analytics.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
+                </a>
+              </li>
+              <li class="separator">
+                <a href="account-plan.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
+                </a>
+              </li>
+                <div id="progress-main-container" class="progress-main-container">
+                  <div class="complete-percentage">
+                      <p>Complete your profile</p>
+                  </div>
+                  <div class="progress-container">
+                      <div class="progress-bar" id="progress-bar"></div>
+                      <p id="progress-text">0% Completed</p>
+                      <div class="incomplete-container">
+                          <h3>Incomplete Fields:</h3>
+                          <ul id="missing-fields"></ul>
+                      </div>
+                  </div>
+                </div>
+            </ul>
+        </nav>
+    </aside>
+    
+    <main class="dashboard-container">
+        <?php if (!$isVerified): ?>
+            <div class="text-center mt-5">
+                <h1>Your account is not yet verified.</h1>
+                <p>Please wait for the admin to verify your account. You will be notified via email once your account is verified.</p>
+            </div>
+        <?php else: ?>
+        <section class="header-container">
+            <!-- Your existing saved and profile dropdown (unchanged) -->
+            <div class="saved-ctn">
+              <a href="#" class="saved-btn">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </a>
+            </div>
+            <div class="dropdown-container">
+              <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
+              <div class="dropdown" id="dropdownMenu">
+                <a href="employer-settings.html" class="prfl">Settings</a>
+                <a href="includes/logout_employer.php">Logout</a>
+              </div>
+            </div>
+        </section>
+
+        <section class="top-info-container">
+            <div class="job-search-container"> 
+                <section class="job-posting-container">
+
+                    <!-- Create New Jobs Card -->
+                    <button class="display-card create-job open-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#jobPostModal">
+                        <div class="icon white"><i class="fa-solid fa-plus"></i></div>
+                        <div class="text">
+                            <div class="title white">POST NEW</div>
+                            <div class="subtitle white">job</div>
+                        </div>
+                    </button>
+                
+                    <!-- Job Seekdisplay-card -->
+                    <a href="applicant-list.html" class="display-card job-seeker">
+                        <div class="icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="text">
+                            <div class="title-seeker">JOB SEEKER</div>
+                            <div class="subtitle green">4 job applicant</div>
+                        </div>
+                    </a>
+                
+                    <!-- Total Jobs Card -->
+                    <a href="employer-posting.html" class="display-card total-jobs">
+                        <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="text">
+                            <div class="title-jobs">TOTAL JOBS</div>
+                            <div class="subtitle purple">6 job posted</div>
+                        </div>
+                    </a>
+
+                    <!-- Notification Card -->
+                    <a href="account-plan.html" class="display-card notification">
+                        <div class="icon"><i class="fa-solid fa-address-card"></i></div>
+                        <div class="text">
+                            <div class="title-notif">Account Plan</div>
+                            <div class="subtitle yellow">Free</div>
+                        </div>
+                    </a>
+        
+                </section>
+            </div>
+        </section>
+
+        <section class="job-list-container">
+            <div class="job-search-container">                  
+                <section class="dashboard-job-container">
+                    <div class="display-job-posted">
+                        <div class="project-summary">
+                          <div class="summary-header">
+                            <h3>Job Post Monitoring</h3>
+                            <div class="jobpost-dropdown">
+                              <button class="filter-btn" id="dropdownSelect">Recent Post <i class="fa-solid fa-angle-down"></i></button>
+                              <ul class="dropdown-menu" id="dropdownList">
+                                <li data-type="recent">Recent Job Post</li>
+                                <li data-type="all">Job Post List</li>
+                              </ul>
+                            </div>
+                          </div>
+                    
+                          <div class="table-responsive">
+                            <table class="summary-table" id="projectTable">
+                              <thead class="job-posted-header">
+                                <tr>
+                                  <th>Rank</th>
+                                  <th>Vessel Type</th>
+                                  <th>Date</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody id="tableBody">
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Vessel Type">Tanker</td>
+                                    <td data-label="Date">12/12/2023</td>
+                                    <td data-label="Status"><span class="badge rejected">Rejected</span></td>
+                                    <td>
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>                  
+                </section>
+
+                <section class="performance-tracker">
+                    <!-- Performance Tracker -->
+                    <div class="dashboard-card">
+                        <h3>Performance Tracker</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                        <div class="stats-container">
+                        <div class="stat-box">
+                            <strong>100</strong>
+                            <p>Search appearance<br><span class="positive">+100% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <p>Applicants<br><span class="neutral">0% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <p>Post Impression<br><span class="negative">-100% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>100</strong>
+                            <p>Job post visitors<br><span class="positive">+100% last 7 days</span></p>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="currency-date-aside">
+                <aside class="applicant-container">
+                    <div class="aside-header">
+                      <h2>New Applicant</h2>
+                      <span class="position-title">Position</span>
+                    </div>
+                  
+                    <section class="applicant-list">
+
+                        <!-- Applicants card -->
+                        <div class="applicant-card" data-bs-toggle="modal" data-bs-target="#applicantModal">
+                            <div class="info">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar">
+                            <div class="name-time">
+                                <p class="name">Daniel Pagcalinawan</p>
+                                <p class="time">Yesterday, 14:36</p>
+                            </div>
+                            </div>
+                            <span class="position-label">Chemical Tanker</span>
+                        </div>
+
+                            <!-- Applicants card-->
+                        <div class="applicant-card">
+                            <div class="info">
+                            <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Avatar">
+                            <div class="name-time">
+                                <p class="name">Laura Santos</p>
+                                <p class="time">Today, 08:49</p>
+                            </div>
+                            </div>
+                            <span class="position-label">Chemical Tanker</span>
+                        </div>
+
+                            <!-- Applicants card-->
+                        <div class="applicant-card">
+                            <div class="info">
+                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
+                            <div class="name-time">
+                                <p class="name">Daniel Pagcalinawan</p>
+                                <p class="time">Yesterday, 14:36</p>
+                            </div>
+                            </div>
+                            <span class="position-label">Chemical Tanker</span>
+                        </div>
+
+                          <!-- Applicants card-->
+                        <div class="applicant-card">
+                            <div class="info">
+                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
+                            <div class="name-time">
+                                <p class="name">Daniel Pagcalinawan</p>
+                                <p class="time">Yesterday, 14:36</p>
+                            </div>
+                            </div>
+                            <span class="position-label">Chemical Tanker</span>
+                        </div>
+
+
+                          <!-- Applicants card-->
+                        <div class="applicant-card">
+                            <div class="info">
+                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
+                            <div class="name-time">
+                                <p class="name">Daniel Pagcalinawan</p>
+                                <p class="time">Yesterday, 14:36</p>
+                            </div>
+                            </div>
+                            <span class="position-label">Chemical Tanker</span>
+                        </div>
+
+                          <!-- Applicants card-->
+                        <div class="applicant-card">
+                            <div class="info">
+                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
+                            <div class="name-time">
+                                <p class="name">Daniel Pagcalinawan</p>
+                                <p class="time">Yesterday, 14:36</p>
+                            </div>
+                            </div>
+                            <span class="position-label">Chemical Tanker</span>
+                        </div>
+
+                        <div class="view-all">
+                            <button type="button">View all<i class="fa-solid fa-angle-down"></i></button>
+                        </div>
+                    </section>
+                </aside>
+                                             
+                <aside class="calendar-container">
+                    <!-- Footer Section -->
+                    <footer class="page-footer">
+                        <ul class="footer-links">
+                        <li>About us</li>
+                        <li>Our Story</li>
+                        <li>Privacy & Terms</li>
+                        <li>Advertise</li>
+                        <li>Ad Choices</li>
+                        <li>Get in Touch</li>
+                        </ul>
+                        <div class="footer-branding">
+                            <img src="pinoyseaman-logo/alternativeHeaderLogo.png" alt="alternative-logo">
+                            <p>
+                                pinoyseaman.com © 2025
+                            </p>
+                        </div>
+                    </footer>
+                </aside>
+
+            </div>
+        </section>
+        
+        <?php endif; ?>
+
+    </main>
+
+    <!------------------- Show user applicant profile ------------------------>
+    <section class="modal fade" id="applicantModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Applicant Information</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add this inside the modal-body -->
+                    <section class="modal-profile-card">
+                        <div class="user-profile-header">
+                            <div class="profile-pic">
+                                <img src="company-logo/german.jpg" alt="">
+                            </div>
+                            <div class="user-profile-details">
+                                <h3>Juan Dela Cruz</h3>
+                            
+                                <div class="info-pair">
+                                <p class="text-muted">Rank:</p>
+                                <label>Cadet</label>
+                                </div>
+                            
+                                <div class="info-pair">
+                                <p class="text-muted">Vessel:</p>
+                                <label>Vessel type</label>
+                                </div>
+                            
+                                <span class="requirements-badge">
+                                Complete Requirements <span class="info-icon">✔</span>
+                                </span>
+                            </div>
+                          
+                            <button type="button" class="btn btn-secondary contact-btn" id="contactPopoverBtn">
+                                Contact
+                            </button>
+                        </div>
+                    
+                        <section class="education-section">
+                            <h2 class="header-info">Education</h2>
+                            <div class="education-container">
+                                <table class="table-content">
+                                    <thead>
+                                        <tr>
+                                            <th>School</th>
+                                            <th>Field of Study</th>
+                                            <th>Educational Level</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Attachment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="School">University of Batangas</td>
+                                            <td data-label="Field of Study">Information Technology</td>
+                                            <td data-label="Educational Level">Bachelor's Degree</td>
+                                            <td data-label="Start Date">2020</td>
+                                            <td data-label="End Date">2024</td>
+                                            <td class="attachment-cell" data-label="Attachment">
+                                                <div class="attachment-content">
+                                                    <span>taengbinasateasdasda</span>
+                                                    <div class="attachment-icons">
+                                                        <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></i></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>                
+                                </table>          
+                               </div>
+                        </section>               
+                    
+                        <section class="experience-section">
+                            <div>
+                                <h5>Seafaring Experience</h5>
+                                <p>Cadetship</p>
+                                <small>Mar 2025 – Apr 2025</small>
+                            </div>
+                            <div>
+                                <h5>Land-Based Work Experience</h5>
+                                <p>Cadetship</p>
+                                <small>Mar 2025 – Apr 2025</small>
+                            </div>
+                        </section>
+                    
+                        <section class="documents-grid">
+                            <div class="document-item">
+                              <strong>Seaman Book</strong><br>
+                              <small>SeamanBook.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/SeamanBook.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Competence</strong><br>
+                              <small>Competence.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/Competence.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Visas</strong><br>
+                              <small>SeamanVisa.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/SeamanVisa.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Certificate</strong><br>
+                              <small>Certificate.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/Certificate.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Passport</strong><br>
+                              <small>SeamanPassport.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/SeamanPassport.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                            <div class="document-item">
+                              <strong>Merits</strong><br>
+                              <small>Merits.pdf</small>
+                              <span class="download-icon">
+                                <a href="files/Merits.pdf" download>
+                                  <i class="fa-solid fa-download"></i>
+                                </a>
+                              </span>
+                            </div>
+                        </section>                          
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="downloadAllFiles()">Download All Files</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Edit recent job Modal -->
+    <section class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  
+        <!-- update / Delete recent job Modal -->
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between align-items-center">
+                    <h1 class="modal-title fs-5" id="jobPostModalLabel">Edit Job</h1>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn text-danger p-0" title="Delete Job" id="deleteJobBtn">
+                            <i class="fa-solid fa-trash-can fs-5"></i>
+                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <!-- HERE -->
+                    <form>
+                        <div class="mb-3 text-center">
+                            <label for="jobImage" class="form-label d-block">Job post image</label>
+                            <div class="upload-image">
+                                <input type="file" id="jobImage" class="form-control d-none">
+                                <div class="upload-box">
+                                    <p>Upload Vessel or Company Image</p>
+                                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="jobPostName" class="form-label">Job Title</label>
+                                <select class="form-select searchable-select" id="jobPostName">
+                                    <option disabled selected>Select job post</option>
+                                    <option value="Chief Engineer">Chief Engineer</option>
+                                    <option value="Messman">Messman</option>
+                                    <option value="Deck Man">Deck Man</option>
+                                    <option value="IT">IT</option>
+                                    <option value="Offshore Vessel">Offshore Vessel</option>
+                                    <option value="Fishing Vessel">Fishing Vessel</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="rank" class="form-label">Rank*</label>
+                                <input type="text" class="form-control" id="rank" value="Cadet">
+                            </div>
+                            <div class="col">
+                                <label for="contractLength" class="form-label">Contract Length*</label>
+                                <input type="text" class="form-control" id="contractLength" value="9 months">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="vesselType" class="form-label">Vessel type*</label>
+                                <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
+                            </div>
+                            <div class="col">
+                                <label for="jobRequirements" class="form-label">Job requirements*</label>
+                                <input type="text" class="form-control job-requirements-input" id="jobRequirements"
+                                    value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jobDescription" class="form-label">Job Description*</label>
+                            <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+        <!-- JOB POST Modal -->
+        <section class="modal fade" id="jobPostModal" tabindex="-1" aria-labelledby="jobPostModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="jobPostModalLabel">Create Job</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- HERE -->
+                        <form>
+                            <div class="mb-3 text-center">
+                                <label for="jobImage" class="form-label d-block">Job post image</label>
+                                <div class="upload-image">
+                                    <input type="file" id="jobImage" class="form-control d-none">
+                                    <div class="upload-box">
+                                        <p>Upload Vessel or Company Image</p>
+                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label for="jobPostName" class="form-label">Job Title</label>
+                                    <select class="form-select searchable-select" id="jobPostName">
+                                        <option disabled selected>Select job post</option>
+                                        <option value="Chief Engineer">Chief Engineer</option>
+                                        <option value="Messman">Messman</option>
+                                        <option value="Deck Man">Deck Man</option>
+                                        <option value="IT">IT</option>
+                                        <option value="Offshore Vessel">Offshore Vessel</option>
+                                        <option value="Fishing Vessel">Fishing Vessel</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="rank" class="form-label">Rank*</label>
+                                    <input type="text" class="form-control" id="rank" value="Cadet">
+                                </div>
+                                <div class="col">
+                                    <label for="contractLength" class="form-label">Contract Length*</label>
+                                    <input type="text" class="form-control" id="contractLength" value="9 months">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label for="vesselType" class="form-label">Vessel type*</label>
+                                    <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
+                                </div>
+                                <div class="col">
+                                    <label for="jobRequirements" class="form-label">Job requirements*</label>
+                                    <input type="text" class="form-control job-requirements-input" id="jobRequirements"
+                                        value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="jobDescription" class="form-label">Job Description*</label>
+                                <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" placeholder="Enter password" style="width: 50%;">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Post Job</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              const cards = document.querySelectorAll(".applicant-card");
+              const viewAllButton = document.querySelector(".view-all button");
+          
+              let isExpanded = false;
+          
+              function showLimitedCards() {
+                cards.forEach((card, index) => {
+                  card.style.display = index < 4 ? "flex" : "none";
+                });
+                viewAllButton.textContent = "View all →";
+                isExpanded = false;
+              }
+          
+              function showAllCards() {
+                cards.forEach(card => {
+                  card.style.display = "flex";
+                });
+                viewAllButton.textContent = "View less ↑";
+                isExpanded = true;
+              }
+          
+              // Initial state
+              showLimitedCards();
+          
+              viewAllButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                isExpanded ? showLimitedCards() : showAllCards();
+              });
+            });
+          </script>          
+          
+          
+    <script src="script/dashboard-drop-jobslist.js"></script>
+    <script src="script/sidenav.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
+    <!-- Bootstrap JS with Popper (near the end of body) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+    <script src="script/popover.js"></script>
+    
+</body>
+</html>

@@ -157,7 +157,7 @@
                         INNER JOIN employer e ON j.company_code = e.company_code
                         $whereSQL
                         ORDER BY 
-                            FIELD(e.member_type, 'Plan4', 'Plan3', 'Plan2', 'Plan1', 'free'), 
+                            FIELD(e.member_type, 'Plan4', 'Plan3', 'Plan2', 'Plan1', 'free', 'FREE'), 
                             j.date_posted DESC
                         LIMIT $offset, $jobsPerPage";
             $jobResult = $conn->query($jobQuery);

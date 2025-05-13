@@ -44,6 +44,11 @@ $row = $result->fetch_assoc();
 $verifyStatus = $row['verify'] ?? 'n'; // Default to 'n' if not found
 $isVerified = ($verifyStatus === 'y');
 
+$logoFilename = $row['logo'] ?? '';
+$logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename) 
+    ? "company-logo/" . htmlspecialchars($logoFilename) 
+    : "company-logo/Logo-placeholder.png";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,6 +57,8 @@ $isVerified = ($verifyStatus === 'y');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/css/bootstrap-select.min.css">
+    
      <link rel="stylesheet" href="css/dashboard.css">
     <title>Dashboard</title>
  
@@ -90,7 +97,25 @@ $isVerified = ($verifyStatus === 'y');
                         <div class="icon"><i class="fa-solid fa-users"></i></div>
                         <div class="text">
                             <div class="title-seeker">JOB SEEKER</div>
-                            <div class="subtitle green">4 job applicant</div>
+                            <div class="subtitle green">
+                                <?php
+                                // Fetch the company code from the employer's session
+                                $companyCode = $row['company_code'];
+                                $company_name = $row['company'];
+
+                                // Query to count job applicants for the company
+                                $applicantCountQuery = "SELECT COUNT(*) AS applicant_count FROM job_applicants WHERE company_code = ? AND company = ?";
+                                $applicantCountStmt = $conn->prepare($applicantCountQuery);
+                                $applicantCountStmt->bind_param("ss", $companyCode, $company_name);
+                                $applicantCountStmt->execute();
+                                $applicantCountResult = $applicantCountStmt->get_result();
+                                $applicantCountRow = $applicantCountResult->fetch_assoc();
+
+                                // Display the count dynamically
+                                $applicantCount = $applicantCountRow['applicant_count'] ?? 0;
+                                echo $applicantCount . " job applicant" . ($applicantCount != 1 ? "s" : "");
+                                ?>
+                            </div>
                         </div>
                     </a>
                 
@@ -99,7 +124,25 @@ $isVerified = ($verifyStatus === 'y');
                         <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
                         <div class="text">
                             <div class="title-jobs">TOTAL JOBS</div>
-                            <div class="subtitle purple">6 job posted</div>
+                            <div class="subtitle purple">
+                                <?php
+                                // Fetch the company code and email from the session
+                                $companyCode = $row['company_code'];
+                                $employerEmail = $row['email'];
+
+                                // Query to count total jobs for the company
+                                $jobCountQuery = "SELECT COUNT(*) AS job_count FROM jobs WHERE email = ? AND company_code = ?";
+                                $jobCountStmt = $conn->prepare($jobCountQuery);
+                                $jobCountStmt->bind_param("ss", $employerEmail, $companyCode);
+                                $jobCountStmt->execute();
+                                $jobCountResult = $jobCountStmt->get_result();
+                                $jobCountRow = $jobCountResult->fetch_assoc();
+
+                                // Display the count dynamically
+                                $jobCount = $jobCountRow['job_count'] ?? 0;
+                                echo $jobCount . " job" . ($jobCount != 1 ? "s" : "") . " posted";
+                                ?>
+                            </div>
                         </div>
                     </a>
 
@@ -108,7 +151,7 @@ $isVerified = ($verifyStatus === 'y');
                         <div class="icon"><i class="fa-solid fa-address-card"></i></div>
                         <div class="text">
                             <div class="title-notif">Account Plan</div>
-                            <div class="subtitle yellow">Free</div>
+                            <div class="subtitle yellow"><?php echo htmlspecialchars($row['member_type']) ?></div>
                         </div>
                     </a>
         
@@ -136,68 +179,25 @@ $isVerified = ($verifyStatus === 'y');
                             <table class="summary-table" id="projectTable">
                               <thead class="job-posted-header">
                                 <tr>
-                                  <th>Rank</th>
+                                  <th>Job Title</th>
                                   <th>Vessel Type</th>
-                                  <th>Date</th>
-                                  <th>Status</th>
+                                  <th>Date Posted</th>
+                                  <th>Applicants</th>
                                 </tr>
                               </thead>
                               <tbody id="tableBody">
                                 <tr class="job-posted">
-                                    <td data-label="Rank">Chief Engineer</td>
+                                    <td data-label="Job Title">Chief Engineer</td>
                                     <td data-label="Vessel Type">Tanker</td>
-                                    <td data-label="Date">12/12/2023</td>
-                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
+                                    <td data-label="Date Posted">12/12/2023</td>
+                                    <td data-label="Applicants">7</td>
                                     <td>
-                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
+                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-recent-job">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
                                     </td>
                                 </tr>
-                                <tr class="job-posted">
-                                    <td data-label="Rank">Chief Engineer</td>
-                                    <td data-label="Vessel Type">Tanker</td>
-                                    <td data-label="Date">12/12/2023</td>
-                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
-                                    <td>
-                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="job-posted">
-                                    <td data-label="Rank">Chief Engineer</td>
-                                    <td data-label="Vessel Type">Tanker</td>
-                                    <td data-label="Date">12/12/2023</td>
-                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
-                                    <td>
-                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="job-posted">
-                                    <td data-label="Rank">Chief Engineer</td>
-                                    <td data-label="Vessel Type">Tanker</td>
-                                    <td data-label="Date">12/12/2023</td>
-                                    <td data-label="Status"><span class="badge completed">Completed</span></td>
-                                    <td>
-                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="job-posted">
-                                    <td data-label="Rank">Chief Engineer</td>
-                                    <td data-label="Vessel Type">Tanker</td>
-                                    <td data-label="Date">12/12/2023</td>
-                                    <td data-label="Status"><span class="badge rejected">Rejected</span></td>
-                                    <td>
-                                        <button class="profile-side-btn" type="button" data-bs-toggle="modal" data-bs-target="#">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                
                               </tbody>
                             </table>
                           </div>
@@ -514,16 +514,6 @@ $isVerified = ($verifyStatus === 'y');
                 <div class="modal-body">
                     <!-- HERE -->
                     <form>
-                        <div class="mb-3 text-center">
-                            <label for="jobImage" class="form-label d-block">Job post image</label>
-                            <div class="upload-image">
-                                <input type="file" id="jobImage" class="form-control d-none">
-                                <div class="upload-box">
-                                    <p>Upload Vessel or Company Image</p>
-                                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="jobPostName" class="form-label">Job Title</label>
@@ -579,65 +569,94 @@ $isVerified = ($verifyStatus === 'y');
                         <h1 class="modal-title fs-5" id="jobPostModalLabel">Create Job</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
+                    <form action="includes/post_job.php" method="POST">
+
                     <div class="modal-body">
                         <!-- HERE -->
-                        <form>
-                            <div class="mb-3 text-center">
-                                <label for="jobImage" class="form-label d-block">Job post image</label>
-                                <div class="upload-image">
-                                    <input type="file" id="jobImage" class="form-control d-none">
-                                    <div class="upload-box">
-                                        <p>Upload Vessel or Company Image</p>
-                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                                    </div>
-                                </div>
-                            </div>
+                        
                             <div class="row mb-3">
+                                <?php
+                                // Fetch job titles dynamically
+                                $jobTitles = [];
+                                $jobQuery = "SELECT category, job FROM seaman_jobs"; // Replace 'job_table' with your actual table name
+                                $jobStmt = $conn->prepare($jobQuery);
+                                $jobStmt->execute();
+                                $jobResult = $jobStmt->get_result();
+
+                                while ($jobRow = $jobResult->fetch_assoc()) {
+                                    $jobTitles[] = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
+                                }
+                                ?>
                                 <div class="col">
                                     <label for="jobPostName" class="form-label">Job Title</label>
-                                    <select class="form-select searchable-select" id="jobPostName">
+                                    <select class="form-select searchable-select" id="jobPostName" name="jobPostName" data-live-search="true">
                                         <option disabled selected>Select job post</option>
-                                        <option value="Chief Engineer">Chief Engineer</option>
-                                        <option value="Messman">Messman</option>
-                                        <option value="Deck Man">Deck Man</option>
-                                        <option value="IT">IT</option>
-                                        <option value="Offshore Vessel">Offshore Vessel</option>
-                                        <option value="Fishing Vessel">Fishing Vessel</option>
+                                        <?php foreach ($jobTitles as $jobTitle): ?>
+                                            <option data-tokens="<?php echo $jobTitle; ?>" value="<?php echo $jobTitle; ?>"><?php echo $jobTitle; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <?php
+                                // Fetch job titles dynamically
+                                $rankTitles = [];
+                                $rankQuery = "SELECT rank_name, rank_name_shortcut FROM seaman_ranks"; // Replace 'job_table' with your actual table name
+                                $rankStmt = $conn->prepare($rankQuery);
+                                $rankStmt->execute();
+                                $rankResult = $rankStmt->get_result();
+
+                                while ($rankRow = $rankResult->fetch_assoc()) {
+                                    $rankTitles[] = htmlspecialchars($rankRow['rank_name'] . " - " . $rankRow['rank_name_shortcut']);
+                                }
+                                ?>
+                                <div class="col">
+                                    <label for="rank" class="form-label">Rank*</label>
+                                    <select class="form-select searchable-select" id="rank" name="rank" data-live-search="true">
+                                        <option disabled selected>Select job post</option>
+                                        <?php foreach ($rankTitles as $rankTitle): ?>
+                                            <option data-tokens="<?php echo $rankTitle; ?>" value="<?php echo $rankTitle; ?>"><?php echo $rankTitle; ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label for="rank" class="form-label">Rank*</label>
-                                    <input type="text" class="form-control" id="rank" value="Cadet">
-                                </div>
-                                <div class="col">
                                     <label for="contractLength" class="form-label">Contract Length*</label>
-                                    <input type="text" class="form-control" id="contractLength" value="9 months">
+                                    <input type="text" class="form-control" id="contractLength" name="contractLength">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
-                                    <label for="vesselType" class="form-label">Vessel type*</label>
-                                    <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
+                                    <label for="vesselType" class="form-label">Vessel Type*</label>
+                                    <select class="form-select" id="vesselType" name="vesselType">
+                                        <option disabled selected>Select vessel type</option>
+                                        <?php
+                                        // Fetch vessel types dynamically
+                                        $vesselTypesQuery = "SELECT type FROM vessel_types";
+                                        $vesselTypesStmt = $conn->prepare($vesselTypesQuery);
+                                        $vesselTypesStmt->execute();
+                                        $vesselTypesResult = $vesselTypesStmt->get_result();
+
+                                        while ($vesselTypeRow = $vesselTypesResult->fetch_assoc()) {
+                                            $vesselType = htmlspecialchars($vesselTypeRow['type']);
+                                            echo "<option value=\"$vesselType\">$vesselType</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <label for="jobRequirements" class="form-label">Job requirements*</label>
-                                    <input type="text" class="form-control job-requirements-input" id="jobRequirements"
-                                        value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
+                                    <input type="text" class="form-control job-requirements-input" id="jobRequirements" name="jobRequirements">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="jobDescription" class="form-label">Job Description*</label>
-                                <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
+                                <textarea class="form-control" id="jobDescription" name="jobDescription" rows="4"></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter password" style="width: 50%;">
-                            </div>
-                        </form>
+                        
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Post Job</button>
+                        <button type="submit" class="btn btn-primary">Post Job</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </section>
@@ -682,6 +701,7 @@ $isVerified = ($verifyStatus === 'y');
     <!-- Bootstrap JS with Popper (near the end of body) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src="script/popover.js"></script>
     
 </body>

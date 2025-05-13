@@ -1,3 +1,52 @@
+<?php
+session_name("employerSession");
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: employer-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['employer_email'])) {
+    // Redirect to the login page with an error message
+    header("Location: employer-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Fetch the verification status from the database
+$employerEmail = $_SESSION['employer_email'];
+$query = "SELECT * FROM employer WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $employerEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$logoFilename = $row['logo'] ?? '';
+$logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename) 
+    ? "company-logo/" . htmlspecialchars($logoFilename) 
+    : "company-logo/Logo-placeholder.png";
+
+?>
 <aside id="sidebar" <?php echo !$isVerified ? 'style="pointer-events: none; opacity: 0.5;"' : ''; ?>>
     <nav class="sidebar-nav">
         <div class="sidebar-header">

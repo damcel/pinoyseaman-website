@@ -304,85 +304,69 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
             <div class="currency-date-aside">
                 <aside class="applicant-container">
                     <div class="aside-header">
-                      <h2>New Applicant</h2>
-                      <span class="position-title">Position</span>
+                        <h2>New Applicant</h2>
+                        <span class="position-title">Position</span>
                     </div>
-                  
+
                     <section class="applicant-list">
+                        <?php
+                        error_reporting(E_ALL);
+                        ini_set('display_errors', 1);
+                        // Fetch applicants dynamically
+                        $applicantQuery = "
+                            SELECT 
+                                js.user_photo, 
+                                js.id AS job_seeker_id, 
+                                ja.job_code, 
+                                ja.date, 
+                                j.job_title,
+                                ja.name
+                            FROM 
+                                job_applicants ja
+                            INNER JOIN 
+                                job_seeker js ON ja.email = js.email
+                            INNER JOIN 
+                                jobs j ON ja.job_code = j.code
+                            WHERE 
+                                ja.company_code = ?
+                            ORDER BY 
+                                ja.date DESC
+                            LIMIT 6"; // Limit to 6 applicants for display
 
-                        <!-- Applicants card -->
-                        <div class="applicant-card" data-bs-toggle="modal" data-bs-target="#applicantModal">
-                            <div class="info">
-                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar">
-                            <div class="name-time">
-                                <p class="name">Daniel Pagcalinawan</p>
-                                <p class="time">Yesterday, 14:36</p>
-                            </div>
-                            </div>
-                            <span class="position-label">Chemical Tanker</span>
-                        </div>
+                        $applicantStmt = $conn->prepare($applicantQuery);
+                        $applicantStmt->bind_param("s", $companyCode); // Use the company code from the session
+                        $applicantStmt->execute();
+                        $applicantResult = $applicantStmt->get_result();
 
-                            <!-- Applicants card-->
-                        <div class="applicant-card">
-                            <div class="info">
-                            <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Avatar">
-                            <div class="name-time">
-                                <p class="name">Laura Santos</p>
-                                <p class="time">Today, 08:49</p>
-                            </div>
-                            </div>
-                            <span class="position-label">Chemical Tanker</span>
-                        </div>
+                        if ($applicantResult->num_rows > 0) {
+                            while ($applicant = $applicantResult->fetch_assoc()) {
+                                $userPhoto = !empty($applicant['user_photo']) && file_exists("Uploads/Seaman/User-Photo/" . $applicant['user_photo']) 
+                                    ? "Uploads/Seaman/User-Photo/" . htmlspecialchars($applicant['user_photo']) 
+                                    : "Uploads/Seaman/User-Photo/Portrait_Placeholder.png"; // Placeholder if no photo
+                                $jobSeekerId = htmlspecialchars($applicant['job_seeker_id']);
+                                $applicantName = htmlspecialchars($applicant['name']);
+                                $jobTitle = htmlspecialchars($applicant['job_title']);
+                                $dateApplied = date("F j, Y, g:i a", strtotime($applicant['date'])); // Format the date
 
-                            <!-- Applicants card-->
-                        <div class="applicant-card">
-                            <div class="info">
-                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
-                            <div class="name-time">
-                                <p class="name">Daniel Pagcalinawan</p>
-                                <p class="time">Yesterday, 14:36</p>
-                            </div>
-                            </div>
-                            <span class="position-label">Chemical Tanker</span>
-                        </div>
-
-                          <!-- Applicants card-->
-                        <div class="applicant-card">
-                            <div class="info">
-                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
-                            <div class="name-time">
-                                <p class="name">Daniel Pagcalinawan</p>
-                                <p class="time">Yesterday, 14:36</p>
-                            </div>
-                            </div>
-                            <span class="position-label">Chemical Tanker</span>
-                        </div>
-
-
-                          <!-- Applicants card-->
-                        <div class="applicant-card">
-                            <div class="info">
-                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
-                            <div class="name-time">
-                                <p class="name">Daniel Pagcalinawan</p>
-                                <p class="time">Yesterday, 14:36</p>
-                            </div>
-                            </div>
-                            <span class="position-label">Chemical Tanker</span>
-                        </div>
-
-                          <!-- Applicants card-->
-                        <div class="applicant-card">
-                            <div class="info">
-                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar">
-                            <div class="name-time">
-                                <p class="name">Daniel Pagcalinawan</p>
-                                <p class="time">Yesterday, 14:36</p>
-                            </div>
-                            </div>
-                            <span class="position-label">Chemical Tanker</span>
-                        </div>
-
+                                echo "
+                                <div class='applicant-card' data-bs-toggle='modal' data-bs-target='#applicantModal' data-job-seeker-id='$jobSeekerId'>
+                                    <div class='info'>
+                                        <img src='$userPhoto' alt='Avatar'>
+                                        <div class='details'>
+                                            <div class='name-time'>
+                                                <p class='name'>$applicantName</p>
+                                                <p class='time'>$dateApplied</p>
+                                            </div>
+                                            <span class='position-label'>$jobTitle</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>";
+                            }
+                        } else {
+                            echo "<p class='text-muted'>No new applicants found.</p>";
+                        }
+                        ?>
                         <div class="view-all">
                             <button type="button">View all<i class="fa-solid fa-angle-down"></i></button>
                         </div>

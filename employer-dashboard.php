@@ -32,6 +32,20 @@ if (!isset($_SESSION['employer_email'])) {
 // Include the database connection file
 include 'db.php';
 
+// Check if there is a success or error message
+if (isset($_GET['type']) && isset($_GET['message'])) {
+    $alertType = ($_GET['type'] === 'success') ? 'success' : 'error';
+    $message = htmlspecialchars($_GET['message']); // Sanitize the message
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const alertModalMessage = document.getElementById('alertModalMessage');
+            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+            alertModalMessage.textContent = '$message';
+            alertModal.show();
+        });
+    </script>";
+}
+
 // Fetch the verification status from the database
 $employerEmail = $_SESSION['employer_email'];
 $query = "SELECT * FROM employer WHERE email = ?";
@@ -83,12 +97,43 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
             <div class="job-search-container"> 
                 <section class="job-posting-container">
 
+                    <?php
+                    // Fetch the company code, email, and member type from the session or database
+                    $companyCode = $row['company_code'] ?? ''; // Ensure $row contains the company_code
+                    $employerEmail = $_SESSION['employer_email'] ?? '';
+                    $memberType = $row['member_type'] ?? '';
+
+                    // Fetch the count of jobs posted by the employer
+                    $jobCountQuery = "SELECT COUNT(*) AS job_count FROM jobs WHERE email = ? AND company_code = ?";
+                    $jobCountStmt = $conn->prepare($jobCountQuery);
+                    $jobCountStmt->bind_param("ss", $employerEmail, $companyCode);
+                    $jobCountStmt->execute();
+                    $jobCountResult = $jobCountStmt->get_result();
+                    $jobCountRow = $jobCountResult->fetch_assoc();
+                    $jobCount = $jobCountRow['job_count'] ?? 0;
+
+                    // Determine if the button should be disabled based on member type
+                    if (stripos($memberType, 'free') !== false) {
+                        // If member type contains "free", limit to 5 job postings
+                        $isDisabled = $jobCount >= 5 ? 'disabled' : '';
+                    } else {
+                        // Otherwise, allow unlimited job postings
+                        $isDisabled = '';
+                    }
+                    ?>
+
                     <!-- Create New Jobs Card -->
-                    <button class="display-card create-job open-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#jobPostModal">
+                    <button class="display-card create-job open-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#jobPostModal" <?php echo $isDisabled; ?>>
                         <div class="icon white"><i class="fa-solid fa-plus"></i></div>
                         <div class="text">
-                            <div class="title white">POST NEW</div>
-                            <div class="subtitle white">job</div>
+                            <?php if ($isDisabled): ?>
+                                <!-- <div class="title white">POST NEW</div>
+                                <div class="subtitle white">job</div> -->
+                                <p class="text-warning mt-2">You can only post up to 5 jobs. Upgrade to Premium plan for unlimited job postings!</p>
+                            <?php else: ?>
+                                <div class="title white">POST NEW</div>
+                                <div class="subtitle white">job</div>
+                            <?php endif; ?>
                         </div>
                     </button>
                 
@@ -166,13 +211,13 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <div class="project-summary">
                           <div class="summary-header">
                             <h3>Job Post Monitoring</h3>
-                            <div class="jobpost-dropdown">
+                            <!-- <div class="jobpost-dropdown">
                               <button class="filter-btn" id="dropdownSelect">Recent Post <i class="fa-solid fa-angle-down"></i></button>
                               <ul class="dropdown-menu" id="dropdownList">
                                 <li data-type="recent">Recent Job Post</li>
                                 <li data-type="all">Job Post List</li>
                               </ul>
-                            </div>
+                            </div> -->
                           </div>
                     
                           <div class="table-responsive">
@@ -185,44 +230,45 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                   <th>Applicants</th>
                                 </tr>
                               </thead>
-                              <tbody id="tableBody">
-    <?php
-    // Fetch the company code and email from the session
-    $companyCode = $row['company_code'];
-    $employerEmail = $row['email'];
+                                <tbody id="tableBody">
+                                    <?php
+                                    // Fetch the company code and email from the session
+                                    $companyCode = $row['company_code'];
+                                    $employerEmail = $row['email'];
 
-    // Query to fetch job posts for the company
-    $jobPostsQuery = "SELECT job_title, vessel, DATE_FORMAT(date_posted, '%m/%d/%Y') AS formatted_date, 
-                      (SELECT COUNT(*) FROM job_applicants WHERE job_applicants.job_code = jobs.code) AS applicant_count 
-                      FROM jobs 
-                      WHERE email = ? AND company_code = ? 
-                      ORDER BY date_posted DESC";
-    $jobPostsStmt = $conn->prepare($jobPostsQuery);
-    $jobPostsStmt->bind_param("ss", $employerEmail, $companyCode);
-    $jobPostsStmt->execute();
-    $jobPostsResult = $jobPostsStmt->get_result();
+                                    // Query to fetch job posts for the company
+                                    $jobPostsQuery = "SELECT jobs.code, job_title, vessel, DATE_FORMAT(date_posted, '%m/%d/%Y') AS formatted_date, 
+                                                    (SELECT COUNT(*) FROM job_applicants WHERE job_applicants.job_code = jobs.code) AS applicant_count 
+                                                    FROM jobs 
+                                                    WHERE email = ? AND company_code = ? 
+                                                    ORDER BY date_posted DESC";
+                                    $jobPostsStmt = $conn->prepare($jobPostsQuery);
+                                    $jobPostsStmt->bind_param("ss", $employerEmail, $companyCode);
+                                    $jobPostsStmt->execute();
+                                    $jobPostsResult = $jobPostsStmt->get_result();
 
-    // Loop through the results and display them in the table
-    while ($jobPost = $jobPostsResult->fetch_assoc()) {
-        $jobTitle = htmlspecialchars($jobPost['job_title']);
-        $vesselType = htmlspecialchars($jobPost['vessel']);
-        $datePosted = htmlspecialchars($jobPost['formatted_date']);
-        $applicantCount = htmlspecialchars($jobPost['applicant_count']);
+                                    // Loop through the results and display them in the table
+                                    while ($jobPost = $jobPostsResult->fetch_assoc()) {
+                                        $jobTitle = htmlspecialchars($jobPost['job_title']);
+                                        $vesselType = htmlspecialchars($jobPost['vessel']);
+                                        $datePosted = htmlspecialchars($jobPost['formatted_date']);
+                                        $applicantCount = htmlspecialchars($jobPost['applicant_count']);
+                                        $jobCode = htmlspecialchars($jobPost['code']);
 
-        echo "<tr class='job-posted'>
-                <td data-label='Job Title'>$jobTitle</td>
-                <td data-label='Vessel Type'>$vesselType</td>
-                <td data-label='Date Posted'>$datePosted</td>
-                <td data-label='Applicants'>$applicantCount</td>
-                <td>
-                    <button class='profile-side-btn' type='button' data-bs-toggle='modal' data-bs-target='#edit-recent-job'>
-                        <i class='fa-solid fa-pen-to-square'></i>
-                    </button>
-                </td>
-              </tr>";
-    }
-    ?>
-</tbody>
+                                        echo "<tr class='job-posted'>
+                                                <td data-label='Job Title'>$jobTitle</td>
+                                                <td data-label='Vessel Type'>$vesselType</td>
+                                                <td data-label='Date Posted'>$datePosted</td>
+                                                <td data-label='Applicants'>$applicantCount</td>
+                                                <td>
+                                                    <button class='profile-side-btn edit-job-btn' type='button' data-bs-toggle='modal' data-bs-target='#edit-recent-job' data-job-code='$jobCode'>
+                                                        <i class='fa-solid fa-pen-to-square'></i>
+                                                    </button>
+                                                </td>
+                                            </tr>";
+                                    }
+                                    ?>
+                                </tbody>
                             </table>
                           </div>
                         </div>
@@ -535,51 +581,91 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
+
+                <form action="includes/update_job.php" method="POST">
+                    <input type="hidden" id="editJobCode" name="job_code">
+
                 <div class="modal-body">
                     <!-- HERE -->
-                    <form>
+                    
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="jobPostName" class="form-label">Job Title</label>
-                                <select class="form-select searchable-select" id="jobPostName">
+                                <label for="editJobTitle" class="form-label">Job Title</label>
+                                <select class="form-select searchable-select" id="editJobTitle" name="editJobTitle">
                                     <option disabled selected>Select job post</option>
-                                    <option value="Chief Engineer">Chief Engineer</option>
-                                    <option value="Messman">Messman</option>
-                                    <option value="Deck Man">Deck Man</option>
-                                    <option value="IT">IT</option>
-                                    <option value="Offshore Vessel">Offshore Vessel</option>
-                                    <option value="Fishing Vessel">Fishing Vessel</option>
+                                    <?php
+                                    // Fetch job titles dynamically
+                                    $jobQuery = "SELECT category, job FROM seaman_jobs";
+                                    $jobStmt = $conn->prepare($jobQuery);
+                                    $jobStmt->execute();
+                                    $jobResult = $jobStmt->get_result();
+
+                                    while ($jobRow = $jobResult->fetch_assoc()) {
+                                        $jobTitle = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
+                                        echo "<option value=\"$jobTitle\">$jobTitle</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="rank" class="form-label">Rank*</label>
-                                <input type="text" class="form-control" id="rank" value="Cadet">
+                                <label for="editRank" class="form-label">Rank*</label>
+                                <select class="form-select searchable-select" id="editRank" name="editRank">
+                                    <option disabled selected>Select rank</option>
+                                    <?php
+                                    // Fetch rank titles dynamically
+                                    $rankQuery = "SELECT rank_name, rank_name_shortcut FROM seaman_ranks";
+                                    $rankStmt = $conn->prepare($rankQuery);
+                                    $rankStmt->execute();
+                                    $rankResult = $rankStmt->get_result();
+
+                                    while ($rankRow = $rankResult->fetch_assoc()) {
+                                        $rankTitle = htmlspecialchars($rankRow['rank_name'] . " - " . $rankRow['rank_name_shortcut']);
+                                        echo "<option value=\"$rankTitle\">$rankTitle</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="col">
-                                <label for="contractLength" class="form-label">Contract Length*</label>
-                                <input type="text" class="form-control" id="contractLength" value="9 months">
+                                <label for="editContractLength" class="form-label">Contract Length*</label>
+                                <input type="text" class="form-control" id="editContractLength" name="editContractLength">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="vesselType" class="form-label">Vessel type*</label>
-                                <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
+                                <label for="editVesselType" class="form-label">Vessel type*</label>
+                                <select class="form-select" id="editVesselType" name="editVesselType">
+                                    <option disabled selected>Select vessel type</option>
+                                    <?php
+                                    // Fetch vessel types dynamically
+                                    $vesselTypesQuery = "SELECT type FROM vessel_types";
+                                    $vesselTypesStmt = $conn->prepare($vesselTypesQuery);
+                                    $vesselTypesStmt->execute();
+                                    $vesselTypesResult = $vesselTypesStmt->get_result();
+
+                                    while ($vesselTypeRow = $vesselTypesResult->fetch_assoc()) {
+                                        $vesselType = htmlspecialchars($vesselTypeRow['type']);
+                                        echo "<option value=\"$vesselType\">$vesselType</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="col">
-                                <label for="jobRequirements" class="form-label">Job requirements*</label>
-                                <input type="text" class="form-control job-requirements-input" id="jobRequirements"
-                                    value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
+                                <label for="editJobRequirements" class="form-label">Job requirements*</label>
+                                <input type="text" class="form-control job-requirements-input" id="editJobRequirements" name="editJobRequirements">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="jobDescription" class="form-label">Job Description*</label>
-                            <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
+                            <label for="editJobDescription" class="form-label">Job Description*</label>
+                            <textarea class="form-control" id="editJobDescription" name="editJobDescription" rows="4"></textarea>
                         </div>
-                    </form>
+                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>
@@ -685,6 +771,25 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
             </div>
         </section>
 
+        
+        <!-- Modal Alert -->
+        <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel">Notification</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="alertModalMessage">
+                        <!-- Message will be dynamically inserted here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             document.addEventListener("DOMContentLoaded", () => {
               const cards = document.querySelectorAll(".applicant-card");
@@ -715,6 +820,63 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 e.preventDefault();
                 isExpanded ? showLimitedCards() : showAllCards();
               });
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const editButtons = document.querySelectorAll(".edit-job-btn");
+
+                editButtons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        const jobCode = this.getAttribute("data-job-code");
+
+                        if (!jobCode) {
+                            console.error("Job code is missing.");
+                            return;
+                        }
+
+                        // Fetch job details via AJAX
+                        fetch(`includes/get_job_details.php?job_code=${jobCode}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) {
+                                    console.error(data.error);
+                                    return;
+                                }
+                                // Populate the modal with job details
+                                document.getElementById("editJobTitle").value = data.job_title;
+                                document.getElementById("editRank").value = data.rank;
+                                document.getElementById("editContractLength").value = data.contract;
+                                document.getElementById("editVesselType").value = data.vessel;
+                                document.getElementById("editJobRequirements").value = data.requirements;
+                                document.getElementById("editJobDescription").value = data.job_description;
+                                document.getElementById("editJobCode").value = data.code; // Hidden input for job ID
+
+                                // Pre-select dropdown values
+                                const jobTitleSelect = document.getElementById("editJobTitle");
+                                const rankSelect = document.getElementById("editRank");
+                                const vesselTypeSelect = document.getElementById("editVesselType");
+
+                                Array.from(jobTitleSelect.options).forEach(option => {
+                                    if (option.value === data.job_title) {
+                                        option.selected = true;
+                                    }
+                                });
+
+                                Array.from(rankSelect.options).forEach(option => {
+                                    if (option.value === data.rank) {
+                                        option.selected = true;
+                                    }
+                                });
+
+                                Array.from(vesselTypeSelect.options).forEach(option => {
+                                    if (option.value === data.vessel) {
+                                        option.selected = true;
+                                    }
+                                });
+                            })
+                            .catch(error => console.error("Error fetching job details:", error));
+                    });
+                });
             });
           </script>          
           

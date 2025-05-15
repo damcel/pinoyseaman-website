@@ -165,7 +165,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     </a>
                 
                     <!-- Total Jobs Card -->
-                    <a href="employer-posting.html" class="display-card total-jobs">
+                    <a href="employer-posting.php" class="display-card total-jobs">
                         <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
                         <div class="text">
                             <div class="title-jobs">TOTAL JOBS</div>
@@ -400,156 +400,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
 
     </main>
 
-    <!------------------- Show user applicant profile ------------------------>
-    <section class="modal fade" id="applicantModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Applicant Information</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Add this inside the modal-body -->
-                    <section class="modal-profile-card">
-                        <div class="user-profile-header">
-                            <div class="profile-pic">
-                                <img src="company-logo/german.jpg" alt="">
-                            </div>
-                            <div class="user-profile-details">
-                                <h3>Juan Dela Cruz</h3>
-                            
-                                <div class="info-pair">
-                                <p class="text-muted">Rank:</p>
-                                <label>Cadet</label>
-                                </div>
-                            
-                                <div class="info-pair">
-                                <p class="text-muted">Vessel:</p>
-                                <label>Vessel type</label>
-                                </div>
-                            
-                                <span class="requirements-badge">
-                                Complete Requirements <span class="info-icon">✔</span>
-                                </span>
-                            </div>
-                          
-                            <button type="button" class="btn btn-secondary contact-btn" id="contactPopoverBtn">
-                                Contact
-                            </button>
-                        </div>
-                    
-                        <section class="education-section">
-                            <h2 class="header-info">Education</h2>
-                            <div class="education-container">
-                                <table class="table-content">
-                                    <thead>
-                                        <tr>
-                                            <th>School</th>
-                                            <th>Field of Study</th>
-                                            <th>Educational Level</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Attachment</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td data-label="School">University of Batangas</td>
-                                            <td data-label="Field of Study">Information Technology</td>
-                                            <td data-label="Educational Level">Bachelor's Degree</td>
-                                            <td data-label="Start Date">2020</td>
-                                            <td data-label="End Date">2024</td>
-                                            <td class="attachment-cell" data-label="Attachment">
-                                                <div class="attachment-content">
-                                                    <span>taengbinasateasdasda</span>
-                                                    <div class="attachment-icons">
-                                                        <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></i></a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>                
-                                </table>          
-                               </div>
-                        </section>               
-                    
-                        <section class="experience-section">
-                            <div>
-                                <h5>Seafaring Experience</h5>
-                                <p>Cadetship</p>
-                                <small>Mar 2025 – Apr 2025</small>
-                            </div>
-                            <div>
-                                <h5>Land-Based Work Experience</h5>
-                                <p>Cadetship</p>
-                                <small>Mar 2025 – Apr 2025</small>
-                            </div>
-                        </section>
-                    
-                        <section class="documents-grid">
-                            <div class="document-item">
-                              <strong>Seaman Book</strong><br>
-                              <small>SeamanBook.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/SeamanBook.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Competence</strong><br>
-                              <small>Competence.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/Competence.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Visas</strong><br>
-                              <small>SeamanVisa.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/SeamanVisa.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Certificate</strong><br>
-                              <small>Certificate.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/Certificate.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Passport</strong><br>
-                              <small>SeamanPassport.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/SeamanPassport.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="document-item">
-                              <strong>Merits</strong><br>
-                              <small>Merits.pdf</small>
-                              <span class="download-icon">
-                                <a href="files/Merits.pdf" download>
-                                  <i class="fa-solid fa-download"></i>
-                                </a>
-                              </span>
-                            </div>
-                        </section>                          
-                    </section>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="downloadAllFiles()">Download All Files</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    <?php include_once 'show_user_applicant_modal.php'; ?>
 
     <!-- Edit recent job Modal -->
     <section class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  
@@ -773,96 +624,6 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 </div>
             </div>
         </div>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              const cards = document.querySelectorAll(".applicant-card");
-              const viewAllButton = document.querySelector(".view-all button");
-          
-              let isExpanded = false;
-          
-              function showLimitedCards() {
-                cards.forEach((card, index) => {
-                  card.style.display = index < 4 ? "flex" : "none";
-                });
-                viewAllButton.textContent = "View all →";
-                isExpanded = false;
-              }
-          
-              function showAllCards() {
-                cards.forEach(card => {
-                  card.style.display = "flex";
-                });
-                viewAllButton.textContent = "View less ↑";
-                isExpanded = true;
-              }
-          
-              // Initial state
-              showLimitedCards();
-          
-              viewAllButton.addEventListener("click", (e) => {
-                e.preventDefault();
-                isExpanded ? showLimitedCards() : showAllCards();
-              });
-            });
-
-            document.addEventListener("DOMContentLoaded", function () {
-                const editButtons = document.querySelectorAll(".edit-job-btn");
-
-                editButtons.forEach(button => {
-                    button.addEventListener("click", function () {
-                        const jobCode = this.getAttribute("data-job-code");
-
-                        if (!jobCode) {
-                            console.error("Job code is missing.");
-                            return;
-                        }
-
-                        // Fetch job details via AJAX
-                        fetch(`includes/get_job_details.php?job_code=${jobCode}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.error) {
-                                    console.error(data.error);
-                                    return;
-                                }
-                                // Populate the modal with job details
-                                document.getElementById("editJobTitle").value = data.job_title;
-                                document.getElementById("editRank").value = data.rank;
-                                document.getElementById("editContractLength").value = data.contract;
-                                document.getElementById("editVesselType").value = data.vessel;
-                                document.getElementById("editJobRequirements").value = data.requirements;
-                                document.getElementById("editJobDescription").value = data.job_description;
-                                document.getElementById("editJobCode").value = data.code; // Hidden input for job ID
-
-                                // Pre-select dropdown values
-                                const jobTitleSelect = document.getElementById("editJobTitle");
-                                const rankSelect = document.getElementById("editRank");
-                                const vesselTypeSelect = document.getElementById("editVesselType");
-
-                                Array.from(jobTitleSelect.options).forEach(option => {
-                                    if (option.value === data.job_title) {
-                                        option.selected = true;
-                                    }
-                                });
-
-                                Array.from(rankSelect.options).forEach(option => {
-                                    if (option.value === data.rank) {
-                                        option.selected = true;
-                                    }
-                                });
-
-                                Array.from(vesselTypeSelect.options).forEach(option => {
-                                    if (option.value === data.vessel) {
-                                        option.selected = true;
-                                    }
-                                });
-                            })
-                            .catch(error => console.error("Error fetching job details:", error));
-                    });
-                });
-            });
-          </script>          
           
           
     <script src="script/dashboard-drop-jobslist.js"></script>
@@ -873,6 +634,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src="script/popover.js"></script>
+    <script src="script/employer_dashboard.js"></script>
     
 </body>
 </html>

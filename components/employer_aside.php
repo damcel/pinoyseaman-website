@@ -72,7 +72,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
             </a>
             </li>
             <li class="separator">
-            <a href="employer-posting.html">
+            <a href="employer-posting.php">
                 <!-- SVG Icon -->
                 <i class="fa-regular fa-user"></i><span>Job Post</span>
             </a>

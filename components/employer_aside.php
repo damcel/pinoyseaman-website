@@ -1,6 +1,4 @@
 <?php
-session_name("employerSession");
-session_start(); // Start the session
 
 // Set session timeout duration (e.g., 15 minutes = 900 seconds)
 $timeoutDuration = 1800; // 30 minutes

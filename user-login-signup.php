@@ -395,7 +395,7 @@
                                 <input type="checkbox" id="view" name="view">
                                 <label for="view">Allow Employer to view my profile and include me on manual job search.</label>
                             </div>
-                            <input type="hidden" name="recaptcha_token" id="recaptchaToken">
+                            <!-- <input type="hidden" name="recaptcha_token" id="recaptchaToken"> -->
                             <button type="submit">
                                 Sign up
                             </button>
@@ -476,7 +476,7 @@
             <!-- END CONTENT SECTION -->
         </div>
     </main>
-    <script src="https://www.google.com/recaptcha/api.js?render=6LcsKjIrAAAAADu-B6dIIu2PdPHt6VHjqvxVFMmt"></script>
+    <!-- <script src="https://www.google.com/recaptcha/api.js?render=6LcsKjIrAAAAADu-B6dIIu2PdPHt6VHjqvxVFMmt"></script> -->
 
     <script>
         let container = document.getElementById('container')
@@ -490,11 +490,11 @@
             container.classList.add('sign-in')
         }, 200)
 
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LcsKjIrAAAAADu-B6dIIu2PdPHt6VHjqvxVFMmt', {action: 'submit'}).then(function(token) {
-                document.getElementById('recaptchaToken').value = token;
-            });
-        });
+        // grecaptcha.ready(function() {
+        //     grecaptcha.execute('6LcsKjIrAAAAADu-B6dIIu2PdPHt6VHjqvxVFMmt', {action: 'submit'}).then(function(token) {
+        //         document.getElementById('recaptchaToken').value = token;
+        //     });
+        // });
 </script>
 
     </script>

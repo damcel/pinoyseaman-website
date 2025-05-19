@@ -46,9 +46,26 @@ if (isset($_GET['type']) && isset($_GET['message'])) {
     </script>";
 }
 
-// Fetch the verification status from the database
+// Fetch the verification status and job details from the database
 $employerEmail = $_SESSION['employer_email'];
-$query = "SELECT * FROM employer WHERE email = ?";
+$query = "
+    SELECT 
+        e.email, 
+        e.logo, 
+        e.verify, 
+        j.vessel, 
+        j.code, 
+        j.job_title, 
+        j.job_description, 
+        j.requirements, 
+        j.contract 
+    FROM 
+        employer e
+    LEFT JOIN 
+        jobs j ON e.email = j.email 
+    WHERE 
+        e.email = ? 
+        AND (j.expiry IS NULL OR j.expiry > NOW())";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $employerEmail);
 $stmt->execute();
@@ -81,20 +98,15 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     
     <main class="dashboard-container">
         <section class="header-container">
-            <!-- Your existing saved and profile dropdown (unchanged) -->
-            <div class="saved-ctn">
-              <a href="#" class="saved-btn">
-                <i class="fa-solid fa-book-bookmark"></i>
-              </a>
-            </div>
+            
             <div class="dropdown-container">
               <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
               <div class="dropdown" id="dropdownMenu">
                 <a href="employer-settings.php" class="prfl">Settings</a>
-                <a href="includes/logout.php">Logout</a>
+                <a href="includes/logout_employer.php">Logout</a>
               </div>
             </div>
-          </section>
+        </section>
 
         <section class="job-list-container">
             <div class="job-search-container">
@@ -123,59 +135,67 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         </div>
                     </div>
                 </section>
+
+                <?php
+                $employerEmail = $_SESSION['employer_email'];
+                $query = "
+                    SELECT 
+                        j.vessel, 
+                        j.code, 
+                        j.job_title, 
+                        j.job_description, 
+                        j.requirements, 
+                        j.contract,
+                        j.date_posted,
+                        j.expiry
+                    FROM 
+                        jobs j
+                    WHERE 
+                        j.email = ? 
+                        AND (j.expiry IS NULL OR j.expiry > NOW())
+                    ORDER BY j.date_posted DESC
+                ";
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("s", $employerEmail);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                $jobs = [];
+                while ($row = $result->fetch_assoc()) {
+                    $jobs[] = $row;
+                }
+                ?>
+
                 
                 <section class="dashboard-job-container">
-                    <!-- related job list -->
-                    <article class="job-details-container">
-                        <!-- cards for related job list -->
-                        <section class="employer-related-job">
-                            <div class="job-card">
-                                <div class="card-left">
-                                    <label class="job-title">Tanker</label>
-                                    <p class="posting-job-detail"><i class="fas fa-ship"></i>Cargo Ship</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-calendar"></i>Contract Length</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-file-word"></i>Job Requirement</p>
-                                    <label>Description</label>
-                                    <p class="job-posting-description">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo 
-                                    laboriosam numquam molestiae perspiciatis, eius ut exercitationem at?
-                                    </p>
-                                </div>
-                                <div class="card-right">
-                                    <button class="job-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-recent-job"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <img src="company-logo/marsa.jpg" alt="">
-                                    <button class="boost-btn">Boost Post</button>
-                                </div>
-                            </div>
-                        </section>
-                    </article>
-
-                    <!-- related job list -->
-                    <article class="job-details-container">
-                        <!-- cards for related job list -->
-                        <section class="employer-related-job">
-                            <div class="job-card">
-                                <div class="card-left">
-                                    <label class="job-title">Chief Engineer</label>
-                                    <p class="posting-job-detail"><i class="fas fa-ship"></i>Cargo Ship</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-calendar"></i>Contract Length</p>
-                                    <p class="posting-job-detail"><i class="fa-solid fa-file-word"></i>Job Requirement</p>
-                                    <label>Description</label>
-                                    <p class="job-posting-description">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo 
-                                    laboriosam numquam molestiae perspiciatis, eius ut exercitationem at?
-                                    </p>
-                                </div>
-                                <div class="card-right">
-                                    <button class="job-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-recent-job"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <img src="company-logo/marsa.jpg" alt="">
-                                    <button class="boost-btn">Boost Post</button>
-                                </div>
-                            </div>
-                        </section>
-                    </article>
-
-                </section>                                                  
+                    <?php if (count($jobs) > 0): ?>
+                        <?php foreach ($jobs as $job): ?>
+                            <article class="job-details-container">
+                                <section class="employer-related-job">
+                                    <div class="job-card">
+                                        <div class="card-left">
+                                            <label class="job-title"><?= htmlspecialchars($job['job_title']) ?></label>
+                                            <p class="posting-job-detail"><i class="fas fa-ship"></i> <?= htmlspecialchars($job['vessel']) ?></p>
+                                            <p class="posting-job-detail"><i class="fa-solid fa-calendar"></i> <?= htmlspecialchars($job['contract']) ?></p>
+                                            <p class="posting-job-detail"><i class="fa-solid fa-file-word"></i> <?= htmlspecialchars($job['requirements']) ?></p>
+                                            <label>Description</label>
+                                            <p class="job-posting-description"><?= nl2br(htmlspecialchars($job['job_description'])) ?></p>
+                                        </div>
+                                        <div class="card-right">
+                                            <button class="job-edit-icon" aria-label="Edit <?= htmlspecialchars($job['job_title']) ?>" data-bs-toggle="modal" data-bs-target="#edit-recent-job" data-job-code="<?= htmlspecialchars($job['code']) ?>">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                            <img src="<?= $logoPath ?>" alt="Company Logo">
+                                            <button class="boost-btn">Boost Post</button>
+                                        </div>
+                                    </div>
+                                </section>
+                            </article>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-muted">No active job postings found.</p>
+                    <?php endif; ?>
+                </section>                                          
             </div>
             
             <div class="currency-date-aside">
@@ -268,65 +288,94 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     <h1 class="modal-title fs-5" id="jobPostModalLabel">Create Job</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <form action="includes/post_job.php" method="POST">
+
                 <div class="modal-body">
                     <!-- HERE -->
-                    <form>
-                        <div class="mb-3 text-center">
-                            <label for="jobImage" class="form-label d-block">Job post image</label>
-                            <div class="upload-image">
-                                <input type="file" id="jobImage" class="form-control d-none">
-                                <div class="upload-box">
-                                    <p>Upload Vessel or Company Image</p>
-                                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                                </div>
-                            </div>
-                        </div>
+                    
                         <div class="row mb-3">
+                            <?php
+                            // Fetch job titles dynamically
+                            $jobTitles = [];
+                            $jobQuery = "SELECT category, job FROM seaman_jobs"; // Replace 'job_table' with your actual table name
+                            $jobStmt = $conn->prepare($jobQuery);
+                            $jobStmt->execute();
+                            $jobResult = $jobStmt->get_result();
+
+                            while ($jobRow = $jobResult->fetch_assoc()) {
+                                $jobTitles[] = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
+                            }
+                            ?>
                             <div class="col">
                                 <label for="jobPostName" class="form-label">Job Title</label>
-                                <select class="form-select searchable-select" id="jobPostName">
+                                <select class="form-select searchable-select" id="jobPostName" name="jobPostName" data-live-search="true">
                                     <option disabled selected>Select job post</option>
-                                    <option value="Chief Engineer">Chief Engineer</option>
-                                    <option value="Messman">Messman</option>
-                                    <option value="Deck Man">Deck Man</option>
-                                    <option value="IT">IT</option>
-                                    <option value="Offshore Vessel">Offshore Vessel</option>
-                                    <option value="Fishing Vessel">Fishing Vessel</option>
+                                    <?php foreach ($jobTitles as $jobTitle): ?>
+                                        <option data-tokens="<?php echo $jobTitle; ?>" value="<?php echo $jobTitle; ?>"><?php echo $jobTitle; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php
+                            // Fetch job titles dynamically
+                            $rankTitles = [];
+                            $rankQuery = "SELECT rank_name, rank_name_shortcut FROM seaman_ranks"; // Replace 'job_table' with your actual table name
+                            $rankStmt = $conn->prepare($rankQuery);
+                            $rankStmt->execute();
+                            $rankResult = $rankStmt->get_result();
+
+                            while ($rankRow = $rankResult->fetch_assoc()) {
+                                $rankTitles[] = htmlspecialchars($rankRow['rank_name'] . " - " . $rankRow['rank_name_shortcut']);
+                            }
+                            ?>
+                            <div class="col">
+                                <label for="rank" class="form-label">Rank*</label>
+                                <select class="form-select searchable-select" id="rank" name="rank" data-live-search="true">
+                                    <option disabled selected>Select job post</option>
+                                    <?php foreach ($rankTitles as $rankTitle): ?>
+                                        <option data-tokens="<?php echo $rankTitle; ?>" value="<?php echo $rankTitle; ?>"><?php echo $rankTitle; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="rank" class="form-label">Rank*</label>
-                                <input type="text" class="form-control" id="rank" value="Cadet">
-                            </div>
-                            <div class="col">
                                 <label for="contractLength" class="form-label">Contract Length*</label>
-                                <input type="text" class="form-control" id="contractLength" value="9 months">
+                                <input type="text" class="form-control" id="contractLength" name="contractLength">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="vesselType" class="form-label">Vessel type*</label>
-                                <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
+                                <label for="vesselType" class="form-label">Vessel Type*</label>
+                                <select class="form-select" id="vesselType" name="vesselType">
+                                    <option disabled selected>Select vessel type</option>
+                                    <?php
+                                    // Fetch vessel types dynamically
+                                    $vesselTypesQuery = "SELECT type FROM vessel_types";
+                                    $vesselTypesStmt = $conn->prepare($vesselTypesQuery);
+                                    $vesselTypesStmt->execute();
+                                    $vesselTypesResult = $vesselTypesStmt->get_result();
+
+                                    while ($vesselTypeRow = $vesselTypesResult->fetch_assoc()) {
+                                        $vesselType = htmlspecialchars($vesselTypeRow['type']);
+                                        echo "<option value=\"$vesselType\">$vesselType</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="col">
                                 <label for="jobRequirements" class="form-label">Job requirements*</label>
-                                <input type="text" class="form-control job-requirements-input" id="jobRequirements"
-                                    value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
+                                <input type="text" class="form-control job-requirements-input" id="jobRequirements" name="jobRequirements">
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="jobDescription" class="form-label">Job Description*</label>
-                            <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
+                            <textarea class="form-control" id="jobDescription" name="jobDescription" rows="4"></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter password" style="width: 50%;">
-                        </div>
-                    </form>
+                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Post Job</button>
+                    <button type="submit" class="btn btn-primary">Post Job</button>
                 </div>
+                </form>
             </div>
         </div>
     </section>

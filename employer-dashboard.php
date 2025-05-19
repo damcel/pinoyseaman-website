@@ -104,7 +104,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     $memberType = $row['member_type'] ?? '';
 
                     // Fetch the count of jobs posted by the employer
-                    $jobCountQuery = "SELECT COUNT(*) AS job_count FROM jobs WHERE email = ? AND company_code = ?";
+                    $jobCountQuery = "SELECT COUNT(id) AS job_count FROM jobs WHERE email = ? AND company_code = ?";
                     $jobCountStmt = $conn->prepare($jobCountQuery);
                     $jobCountStmt->bind_param("ss", $employerEmail, $companyCode);
                     $jobCountStmt->execute();
@@ -149,7 +149,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                 $company_name = $row['company'];
 
                                 // Query to count job applicants for the company
-                                $applicantCountQuery = "SELECT COUNT(*) AS applicant_count FROM job_applicants WHERE company_code = ? AND company = ?";
+                                $applicantCountQuery = "SELECT COUNT(code) AS applicant_count FROM job_applicants WHERE company_code = ? AND company = ?";
                                 $applicantCountStmt = $conn->prepare($applicantCountQuery);
                                 $applicantCountStmt->bind_param("ss", $companyCode, $company_name);
                                 $applicantCountStmt->execute();
@@ -176,7 +176,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                 $employerEmail = $row['email'];
 
                                 // Query to count total jobs for the company
-                                $jobCountQuery = "SELECT COUNT(*) AS job_count FROM jobs WHERE email = ? AND company_code = ?";
+                                $jobCountQuery = "SELECT COUNT(code) AS job_count FROM jobs WHERE email = ? AND company_code = ?";
                                 $jobCountStmt = $conn->prepare($jobCountQuery);
                                 $jobCountStmt->bind_param("ss", $employerEmail, $companyCode);
                                 $jobCountStmt->execute();
@@ -238,7 +238,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
 
                                     // Query to fetch job posts for the company
                                     $jobPostsQuery = "SELECT jobs.code, job_title, vessel, DATE_FORMAT(date_posted, '%m/%d/%Y') AS formatted_date, 
-                                                    (SELECT COUNT(*) FROM job_applicants WHERE job_applicants.job_code = jobs.code) AS applicant_count 
+                                                    (SELECT COUNT(code) FROM job_applicants WHERE job_applicants.job_code = jobs.code) AS applicant_count 
                                                     FROM jobs 
                                                     WHERE email = ? AND company_code = ? 
                                                     ORDER BY date_posted DESC";

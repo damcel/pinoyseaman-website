@@ -127,119 +127,123 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <li class="active-tab"><a href="applicant-list.php">Applicant</a></li>
                         </ul>
                         <div class="search-applicant">
-                            <select class="search-select">
+                            <select class="search-select" id="jobSelect">
                               <option value="">Select job</option>
-                              <!-- Add your job options -->
+                                <?php
+                                    // Fetch job titles and codes for this employer, ordered by latest date_posted
+                                    $jobTitleQuery = "SELECT code, job_title, date_posted FROM jobs WHERE email = ? AND (expiry IS NULL OR expiry > NOW()) ORDER BY date_posted DESC";
+                                    $jobTitleStmt = $conn->prepare($jobTitleQuery);
+                                    $jobTitleStmt->bind_param("s", $employerEmail);
+                                    $jobTitleStmt->execute();
+                                    $jobTitleResult = $jobTitleStmt->get_result();
+                                    $jobTitlesSeen = [];
+                                    $firstJobCode = '';
+                                    $first = true;
+                                    while ($jobRow = $jobTitleResult->fetch_assoc()) {
+                                        // Avoid duplicate job titles
+                                        if (!in_array($jobRow['job_title'], $jobTitlesSeen)) {
+                                            $jobTitlesSeen[] = $jobRow['job_title'];
+                                            $selected = '';
+                                            if ($first) {
+                                                $firstJobCode = $jobRow['code'];
+                                                $selected = 'selected';
+                                                $first = false;
+                                            }
+                                            echo '<option value="' . htmlspecialchars($jobRow['code']) . "\" $selected>" . htmlspecialchars($jobRow['job_title']) . '</option>';
+                                        }
+                                    }
+                                ?>
                             </select>
                           
-                            <select class="search-select">
-                              <option value="">Select vessel type</option>
-                              <!-- Add your vessel type options -->
+                            <select class="search-select" id="rankSelect">
+                              <option value="">Select Seaman's Rank</option>
+                                <?php
+                                    // Fetch seaman ranks dynamically
+                                    $rankQuery = "SELECT rank_name_shortcut, rank_name FROM seaman_ranks ORDER BY rank_name ASC";
+                                    $rankStmt = $conn->prepare($rankQuery);
+                                    $rankStmt->execute();
+                                    $rankResult = $rankStmt->get_result();
+                                    while ($rankRow = $rankResult->fetch_assoc()) {
+                                        $rankShortcut = htmlspecialchars($rankRow['rank_name_shortcut']);
+                                        $rankName = htmlspecialchars($rankRow['rank_name']);
+                                        echo "<option value=\"$rankShortcut\">$rankName ($rankShortcut)</option>";
+                                    }
+                                ?>
                             </select>
                           
-                            <button class="dashboard-src-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            <button class="dashboard-src-btn" id="searchApplicantsBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
                           </div>
                     </div>
                 </section>  
+
+                <?php
+                error_reporting(E_ALL);
+                ini_set('display_errors', 1);
+                // After your job select, get the default selected job code
+                $defaultJobCode = $firstJobCode ?? '';
+
+                // Fetch applicants for the default selected job
+                $applicants = [];
+                if ($defaultJobCode) {
+                    $applicantQuery = "SELECT ja.name, ja.email, js.rank, js.passport_valid, js.sbook_valid, js.user_photo
+                                    FROM job_applicants ja
+                                    INNER JOIN jobs j ON ja.job_code = j.code
+                                    LEFT JOIN job_seeker js ON ja.email = js.email
+                                    WHERE j.code = ?";
+                    $applicantStmt = $conn->prepare($applicantQuery);
+                    $applicantStmt->bind_param("s", $defaultJobCode);
+                    $applicantStmt->execute();
+                    $applicantResult = $applicantStmt->get_result();
+                    while ($applicantRow = $applicantResult->fetch_assoc()) {
+                        // Format passport_valid and sbook_valid to "F j, Y" (e.g., January 1, 2002)
+                        $row['passport_valid'] = (!empty($row['passport_valid']) && $row['passport_valid'] !== '0000-00-00')
+                            ? date("F j, Y", strtotime($row['passport_valid']))
+                            : '';
+                        $row['sbook_valid'] = (!empty($row['sbook_valid']) && $row['sbook_valid'] !== '0000-00-00')
+                            ? date("F j, Y", strtotime($row['sbook_valid']))
+                            : '';
+                        $applicants[] = $applicantRow;
+                    }
+                }
+                ?>
+                
                 <section class="applicant-profile-container">
-                    <section class="applicant-card-list">
-                        <article class="applicant-profile-card">
-                            <div class="applicant-profile">
-                                <div class="profile-information">
-                                    <img src="images/default-profile.png" alt="applicant-profile-photo">
-                                    <div class="important-details">
-                                        <p>Name</p>
-                                        <p>Rank</p>
-                                        <p>Seamans Validity:</p><p>august 26, 2025</p>
-                                        <p>Passport Validity:</p><p>august 26, 2025</p>
+                    <section class="applicant-card-list" id="applicantCardList">
+                        <?php if (count($applicants) > 0): ?>
+                            <?php foreach ($applicants as $applicant): ?>
+                                <?php
+                                    // Determine photo path
+                                    $photoFile = $applicant['user_photo'] ?? '';
+                                    $photoPath = (!empty($photoFile) && file_exists("Uploads/Seaman/User-Photo/" . $photoFile))
+                                        ? "Uploads/Seaman/User-Photo/" . htmlspecialchars($photoFile)
+                                        : "Uploads/Seaman/User-Photo/Portrait-placeholder.png";
+                                ?>
+                                <article class="applicant-profile-card">
+                                    <div class="applicant-profile">
+                                        <div class="profile-information">
+                                            <img 
+                                                src="<?= $photoPath ?>" 
+                                                alt="applicant-profile-photo"
+                                                style="width:60px;height:60px;object-fit:cover;"
+                                                loading="lazy"
+                                            >
+                                            <div class="important-details">
+                                                <p><?= htmlspecialchars($applicant['name']) ?></p>
+                                                <p>Rank: <?= htmlspecialchars($applicant['rank'] ?? 'N/A') ?></p>
+                                                <p>Seamans Validity: <?= htmlspecialchars($applicant['passport_valid'] ?? 'N/A') ?></p>
+                                                <p>Passport Validity: <?= htmlspecialchars($applicant['sbook_valid'] ?? 'N/A') ?></p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
+                                        </div>
                                     </div>
-                                </div>                         
-                                <div>
-                                    <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="applicant-profile-card">
-                            <div class="applicant-profile">
-                                <div class="profile-information">
-                                    <img src="images/default-profile.png" alt="applicant-profile-photo">
-                                    <div class="important-details">
-                                        <p>Name</p>
-                                        <p>Rank</p>
-                                        <p>Seamans Validity:</p><p>august 26, 2025</p>
-                                        <p>Passport Validity:</p><p>august 26, 2025</p>
-                                    </div>
-                                </div>                         
-                                <div>
-                                    <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="applicant-profile-card">
-                            <div class="applicant-profile">
-                                <div class="profile-information">
-                                    <img src="images/default-profile.png" alt="applicant-profile-photo">
-                                    <div class="important-details">
-                                        <p>Name</p>
-                                        <p>Rank</p>
-                                        <p>Seamans Validity:</p><p>august 26, 2025</p>
-                                        <p>Passport Validity:</p><p>august 26, 2025</p>
-                                    </div>
-                                </div>                         
-                                <div>
-                                    <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="applicant-profile-card">
-                            <div class="applicant-profile">
-                                <div class="profile-information">
-                                    <img src="images/default-profile.png" alt="applicant-profile-photo">
-                                    <div class="important-details">
-                                        <p>Name</p>
-                                        <p>Rank</p>
-                                        <p>Seamans Validity:</p><p>august 26, 2025</p>
-                                        <p>Passport Validity:</p><p>august 26, 2025</p>
-                                    </div>
-                                </div>                         
-                                <div>
-                                    <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="applicant-profile-card">
-                            <div class="applicant-profile">
-                                <div class="profile-information">
-                                    <img src="images/default-profile.png" alt="applicant-profile-photo">
-                                    <div class="important-details">
-                                        <p>Name</p>
-                                        <p>Rank</p>
-                                        <p>Seamans Validity:</p><p>august 26, 2025</p>
-                                        <p>Passport Validity:</p><p>august 26, 2025</p>
-                                    </div>
-                                </div>                         
-                                <div>
-                                    <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="applicant-profile-card">
-                            <div class="applicant-profile">
-                                <div class="profile-information">
-                                    <img src="images/default-profile.png" alt="applicant-profile-photo">
-                                    <div class="important-details">
-                                        <p>Name</p>
-                                        <p>Rank</p>
-                                        <p>Seamans Validity:</p><p>august 26, 2025</p>
-                                        <p>Passport Validity:</p><p>august 26, 2025</p>
-                                    </div>
-                                </div>                         
-                                <div>
-                                    <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
-                                </div>
-                            </div>
-                        </article>
-                    </section>  
+                                </article>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="text-muted">No applicants for this job yet.</p>
+                        <?php endif; ?>
+                    </section>
                 </section>             
             </div>
 
@@ -280,6 +284,8 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
         </section>
 
     </main>
+
+    <?php include 'components/show_applicant_profile.php'; ?>
 
     <!-- Edit recent job Modal -->
     <section class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  
@@ -402,6 +408,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="script/popover.js"></script>
     <script src="script/employer_job_posting.js"></script>
+    <script src="script/applicant-list.js"></script>
 
     <!-- Your own script to activate Select2 -->
     <script>

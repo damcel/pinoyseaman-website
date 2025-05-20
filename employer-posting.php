@@ -53,6 +53,8 @@ $query = "
         e.email, 
         e.logo, 
         e.verify, 
+        e.company_code,
+        e.member_type,
         j.vessel, 
         j.code, 
         j.job_title, 
@@ -108,6 +110,31 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
             </div>
         </section>
 
+        <?php
+        // Fetch the company code, email, and member type from the session or database
+        $companyCode = $row['company_code'] ?? ''; // Ensure $row contains the company_code
+        $employerEmail = $_SESSION['employer_email'] ?? '';
+        $memberType = $row['member_type'] ?? '';
+
+        // Fetch the count of jobs posted by the employer
+        $jobCountQuery = "SELECT COUNT(id) AS job_count FROM jobs WHERE email = ? AND company_code = ?";
+        $jobCountStmt = $conn->prepare($jobCountQuery);
+        $jobCountStmt->bind_param("ss", $employerEmail, $companyCode);
+        $jobCountStmt->execute();
+        $jobCountResult = $jobCountStmt->get_result();
+        $jobCountRow = $jobCountResult->fetch_assoc();
+        $jobCount = $jobCountRow['job_count'] ?? 0;
+
+        // Determine if the button should be disabled based on member type
+        if (stripos($memberType, 'free') !== false) {
+            // If member type contains "free", limit to 5 job postings
+            $isDisabled = $jobCount >= 5 ? 'disabled' : '';
+        } else {
+            // Otherwise, allow unlimited job postings
+            $isDisabled = '';
+        }
+        ?>
+
         <section class="job-list-container">
             <div class="job-search-container">
                 <section class="job-posting-container">
@@ -117,7 +144,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <p class="subtext">What seafaring rank or position are you hiring for? Post it here!</p>
                         <ul class="tab-list">
                         <li class="active-tab"><a href="employer-posting.php">Published</a></li>
-                        <li><a href="applicant-list.html">Applicant</a></li>
+                        <li><a href="applicant-list.php">Applicant</a></li>
                         </ul>
                     </div>
                 </section>
@@ -128,7 +155,12 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <div class="cta-text">
                         <h4>Post quickly, hire smarter.</h4>
                         <p>Aplikanteng Seaman, Isang Post Lang</p>
-                        <button class="cta-button" data-bs-toggle="modal" data-bs-target="#jobPostModal">Post Job</button>
+                        <button class="cta-button" data-bs-toggle="modal" data-bs-target="#jobPostModal" <?= $isDisabled; ?>>Post Job</button>
+                        <?php if ($isDisabled): ?>
+                            <div class="text-warning mt-2" style="font-size:0.95em;">
+                                You can only post up to 5 jobs on a Free plan. Upgrade to Premium for unlimited postings.
+                            </div>
+                        <?php endif; ?>
                         </div>
                         <div class="cta-image">
                         <img src="https://img.icons8.com/color/96/megaphone.png" alt="Megaphone" />
@@ -182,7 +214,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                             <p class="job-posting-description"><?= nl2br(htmlspecialchars($job['job_description'])) ?></p>
                                         </div>
                                         <div class="card-right">
-                                            <button class="job-edit-icon" aria-label="Edit <?= htmlspecialchars($job['job_title']) ?>" data-bs-toggle="modal" data-bs-target="#edit-recent-job" data-job-code="<?= htmlspecialchars($job['code']) ?>">
+                                            <button class="job-edit-icon edit-job-btn" aria-label="Edit <?= htmlspecialchars($job['job_title']) ?>" data-bs-toggle="modal" data-bs-target="#edit-recent-job" data-job-code="<?= htmlspecialchars($job['code']) ?>">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </button>
                                             <img src="<?= $logoPath ?>" alt="Company Logo">
@@ -197,85 +229,10 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     <?php endif; ?>
                 </section>                                          
             </div>
+
+            <?php include 'components/employer_jobPosting_aside.php'; ?>
             
-            <div class="currency-date-aside">
-                <aside class="currency-container">
-                    <div class="highlight-box">
-                        <h5>Post highlights</h5>
-                        <p class="subtext">In the last 30 days</p>
-                        <img class="highlight-img" src="https://img.icons8.com/office/80/laptop.png" alt="No highlights" />
-                        <p class="highlight-empty">No highlights</p>
-                        <p class="highlight-sub">No recent post to highlight.</p>
-                      </div>
-                </aside>
-                <aside class="job-post-container"> 
-                    <h2 class="job-post-h2">Recent Job Posted</h2>
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Tanker</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker" data-bs-toggle="modal" data-bs-target="#edit-recent-job"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div>
-                        </div>
-                    </div>
-                
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Chief Cook</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div>
-                        </div>
-                    </div>
-                
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Bosun</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div>
-                        </div>
-                    </div>
-                
-                    <div class="job-item">
-                        <div class="job-information">
-                            <p class="employer-post-job-title">Chief Engineer</p>
-                            <button class="job-edit-icon" aria-label="Edit Tanker"><i class="fa-solid fa-pen-to-square"></i></button>
-                        </div>
-                        <div class="job-meta">
-                            <time class="job-date">12 Sept 2022</time>
-                            <div class="job-status">Completed</div> 
-                        </div>
-                    </div>
-                </aside>
 
-                <aside class="calendar-container">
-                    <!-- Footer Section -->
-                    <footer class="page-footer">
-                        <ul class="footer-links">
-                        <li>About us</li>
-                        <li>Our Story</li>
-                        <li>Privacy & Terms</li>
-                        <li>Advertise</li>
-                        <li>Ad Choices</li>
-                        <li>Get in Touch</li>
-                        </ul>
-                        <div class="footer-branding">
-                            <img src="pinoyseaman-logo/alternativeHeaderLogo.png" alt="alternative-logo">
-                            <p>
-                                pinoyseaman.com © 2025
-                            </p>
-                        </div>
-                    </footer>
-                </aside>
-
-            </div>
         </section>
 
     </main>
@@ -384,7 +341,13 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <section class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  
         <!-- update / Delete recent job Modal -->
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content" style="position:relative;">
+                <!-- Loading Spinner for Edit Modal -->
+                <div id="editJobLoadingSpinner" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.7);z-index:10;justify-content:center;align-items:center;">
+                    <div class="spinner-border text-primary" role="status" style="width:3rem;height:3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
                 <div class="modal-header justify-content-between align-items-center">
                     <h1 class="modal-title fs-5" id="jobPostModalLabel">Edit Job</h1>
                     <div class="d-flex align-items-center gap-2">
@@ -394,61 +357,91 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
+
+                <form action="includes/update_job.php" method="POST">
+                    <input type="hidden" id="editJobCode" name="job_code">
+
                 <div class="modal-body">
                     <!-- HERE -->
-                    <form>
-                        <div class="mb-3 text-center">
-                            <label for="jobImage" class="form-label d-block">Job post image</label>
-                            <div class="upload-image">
-                                <input type="file" id="jobImage" class="form-control d-none">
-                                <div class="upload-box">
-                                    <p>Upload Vessel or Company Image</p>
-                                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                                </div>
-                            </div>
-                        </div>
+                    
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="jobPostName" class="form-label">Job Title</label>
-                                <select class="form-select searchable-select" id="jobPostName">
+                                <label for="editJobTitle" class="form-label">Job Title</label>
+                                <select class="form-select searchable-select" id="editJobTitle" name="editJobTitle">
                                     <option disabled selected>Select job post</option>
-                                    <option value="Chief Engineer">Chief Engineer</option>
-                                    <option value="Messman">Messman</option>
-                                    <option value="Deck Man">Deck Man</option>
-                                    <option value="IT">IT</option>
-                                    <option value="Offshore Vessel">Offshore Vessel</option>
-                                    <option value="Fishing Vessel">Fishing Vessel</option>
+                                    <?php
+                                    // Fetch job titles dynamically
+                                    $jobQuery = "SELECT category, job FROM seaman_jobs";
+                                    $jobStmt = $conn->prepare($jobQuery);
+                                    $jobStmt->execute();
+                                    $jobResult = $jobStmt->get_result();
+
+                                    while ($jobRow = $jobResult->fetch_assoc()) {
+                                        $jobTitle = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
+                                        echo "<option value=\"$jobTitle\">$jobTitle</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="rank" class="form-label">Rank*</label>
-                                <input type="text" class="form-control" id="rank" value="Cadet">
+                                <label for="editRank" class="form-label">Rank*</label>
+                                <select class="form-select searchable-select" id="editRank" name="editRank">
+                                    <option disabled selected>Select rank</option>
+                                    <?php
+                                    // Fetch rank titles dynamically
+                                    $rankQuery = "SELECT rank_name, rank_name_shortcut FROM seaman_ranks";
+                                    $rankStmt = $conn->prepare($rankQuery);
+                                    $rankStmt->execute();
+                                    $rankResult = $rankStmt->get_result();
+
+                                    while ($rankRow = $rankResult->fetch_assoc()) {
+                                        $rankTitle = htmlspecialchars($rankRow['rank_name'] . " - " . $rankRow['rank_name_shortcut']);
+                                        echo "<option value=\"$rankTitle\">$rankTitle</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="col">
-                                <label for="contractLength" class="form-label">Contract Length*</label>
-                                <input type="text" class="form-control" id="contractLength" value="9 months">
+                                <label for="editContractLength" class="form-label">Contract Length*</label>
+                                <input type="text" class="form-control" id="editContractLength" name="editContractLength">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="vesselType" class="form-label">Vessel type*</label>
-                                <input type="text" class="form-control" id="vesselType" placeholder="Vessel Type">
+                                <label for="editVesselType" class="form-label">Vessel type*</label>
+                                <select class="form-select" id="editVesselType" name="editVesselType">
+                                    <option disabled selected>Select vessel type</option>
+                                    <?php
+                                    // Fetch vessel types dynamically
+                                    $vesselTypesQuery = "SELECT type FROM vessel_types";
+                                    $vesselTypesStmt = $conn->prepare($vesselTypesQuery);
+                                    $vesselTypesStmt->execute();
+                                    $vesselTypesResult = $vesselTypesStmt->get_result();
+
+                                    while ($vesselTypeRow = $vesselTypesResult->fetch_assoc()) {
+                                        $vesselType = htmlspecialchars($vesselTypeRow['type']);
+                                        echo "<option value=\"$vesselType\">$vesselType</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="col">
-                                <label for="jobRequirements" class="form-label">Job requirements*</label>
-                                <input type="text" class="form-control job-requirements-input" id="jobRequirements"
-                                    value="SSS, PAG-IBIG, PHILHEALTH, PASSBOOK">
+                                <label for="editJobRequirements" class="form-label">Job requirements*</label>
+                                <input type="text" class="form-control job-requirements-input" id="editJobRequirements" name="editJobRequirements">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="jobDescription" class="form-label">Job Description*</label>
-                            <textarea class="form-control" id="jobDescription" rows="4">lorem ipsum........</textarea>
+                            <label for="editJobDescription" class="form-label">Job Description*</label>
+                            <textarea class="form-control" id="editJobDescription" name="editJobDescription" rows="4"></textarea>
                         </div>
-                    </form>
+                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
+
+                </form>
+
             </div>
         </div>
     </section>
@@ -458,6 +451,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <!-- Bootstrap JS with Popper (near the end of body) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+    <script src="script/employer_job_posting.js"></script>
     
 </body>
 </html>

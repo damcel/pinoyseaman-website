@@ -138,7 +138,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     </button>
                 
                     <!-- Job Seekdisplay-card -->
-                    <a href="applicant-list.html" class="display-card job-seeker">
+                    <a href="applicant-list.php" class="display-card job-seeker">
                         <div class="icon"><i class="fa-solid fa-users"></i></div>
                         <div class="text">
                             <div class="title-seeker">JOB SEEKER</div>

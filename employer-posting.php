@@ -128,7 +128,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
         // Determine if the button should be disabled based on member type
         if (stripos($memberType, 'free') !== false) {
             // If member type contains "free", limit to 5 job postings
-            $isDisabled = $jobCount >= 5 ? 'disabled' : '';
+            $isDisabled = $jobCount >= 3 ? 'disabled' : '';
         } else {
             // Otherwise, allow unlimited job postings
             $isDisabled = '';
@@ -158,7 +158,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <button class="cta-button" data-bs-toggle="modal" data-bs-target="#jobPostModal" <?= $isDisabled; ?>>Post Job</button>
                         <?php if ($isDisabled): ?>
                             <div class="text-warning mt-2" style="font-size:0.95em;">
-                                You can only post up to 5 jobs on a Free plan. Upgrade to Premium for unlimited postings.
+                                You can only post up to 3 jobs on a Free plan. Upgrade to Premium for unlimited postings.
                             </div>
                         <?php endif; ?>
                         </div>

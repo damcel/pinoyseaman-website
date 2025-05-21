@@ -115,7 +115,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     // Determine if the button should be disabled based on member type
                     if (stripos($memberType, 'free') !== false) {
                         // If member type contains "free", limit to 5 job postings
-                        $isDisabled = $jobCount >= 5 ? 'disabled' : '';
+                        $isDisabled = $jobCount >= 3 ? 'disabled' : '';
                     } else {
                         // Otherwise, allow unlimited job postings
                         $isDisabled = '';
@@ -129,7 +129,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                             <?php if ($isDisabled): ?>
                                 <!-- <div class="title white">POST NEW</div>
                                 <div class="subtitle white">job</div> -->
-                                <p class="text-warning mt-2">You can only post up to 5 jobs. Upgrade to Premium plan for unlimited job postings!</p>
+                                <p class="text-warning mt-2">You can only post up to 3 jobs. Upgrade to Premium plan for unlimited job postings!</p>
                             <?php else: ?>
                                 <div class="title white">POST NEW</div>
                                 <div class="subtitle white">job</div>

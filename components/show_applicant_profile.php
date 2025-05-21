@@ -61,10 +61,10 @@
                                     </div>
                             
                                     <!-- Styled uploaded file box -->
-                                    <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
+                                    <div id="seagoing-file-box" class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                         <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                        <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                        Resume_JohnDoe.pdf
+                                        <a href="Uploads/Seaman/Seagoing/filename.file" download class="text-decoration-none fw-medium text-dark">
+                                        File Name
                                         </a>
                                     </div>
                                 </div>
@@ -86,10 +86,10 @@
                                     </div>
                             
                                     <!-- Styled uploaded file box -->
-                                    <div class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
+                                    <div id="nonseagoing-file-box" class="uploaded-file-box border rounded p-3 mt-3 d-flex flex-column align-items-center justify-content-center text-center">
                                         <i class="fa-solid fa-file-lines text-primary mb-2" style="font-size: 24px;"></i>
-                                        <a href="uploads/Resume_JohnDoe.pdf" download class="text-decoration-none fw-medium text-dark">
-                                        Resume_JohnDoe.pdf
+                                        <a href="Uploads/Seaman/Land-Based-Exp/filename.file" download class="text-decoration-none fw-medium text-dark">
+                                        File Name
                                         </a>
                                     </div>
                                 </div>
@@ -112,34 +112,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     <tr>
                                         <td data-label="Document Name"><strong>Visa</strong></td>
-                                        <td data-label="Number">1234-4567</td>
-                                        <td data-label="Country">Philippines</td>
-                                        <td data-label="Start Date">2020</td>
-                                        <td data-label="End Date">2024</td>
-                                        <td class="attachment-cell" data-label="Attachment">
-                                            <div class="attachment-content">
-                                                <span>taengbinasateasdasda</span>
+                                        <td class="visa-num-label" data-label="Number"></td>
+                                        <td class="visa-country-label" data-label="Country"></td>
+                                        <td class="visa-issue-label" data-label="Start Date"></td>
+                                        <td class="visa-valid-label" data-label="End Date"></td>
+                                        <td class="visa-attachment-cell" data-label="Attachment">
+                                            <div class="visa-attachment-content">
+                                                <!-- <span>filename</span> -->
                                                 <div class="download-wrapper">
-                                                    <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></a>
+                                                    <a href="Uploads/Seaman/Visa/" download>
+                                                        <i class="fa-solid fa-download"></i> download
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <!-- Add another record -->
+                                    
                                     <tr>
                                         <td data-label="Document Name"><strong>Passport</strong></td>
-                                        <td data-label="Number">1234-5678</td>
-                                        <td data-label="Country">Philippines</td>
-                                        <td data-label="Start Date">2018</td>
-                                        <td data-label="End Date">2020</td>
-                                        <td class="attachment-cell" data-label="Attachment">
-                                            <div class="attachment-content">
-                                                <span>marine_diploma.pdf</span>
+                                        <td class="passport-num-label" data-label="Number"></td>
+                                        <td class="passport-country-label" data-label="Country"></td>
+                                        <td class="passport-issue-label" data-label="Start Date"></td>
+                                        <td class="passport-valid-label" data-label="End Date"></td>
+                                        <td class="passport-attachment-cell" data-label="Attachment">
+                                            <div class="passport-attachment-content">
+                                                <!-- <span>filename</span> -->
                                                 <div class="download-wrapper">
-                                                    <a href="files/marine_diploma.pdf" download>
-                                                        <i class="fa-solid fa-download"></i>
+                                                    <a href="Uploads/Seaman/Passport/" download>
+                                                        <i class="fa-solid fa-download"></i> download
                                                     </a>
                                                 </div>
                                             </div>
@@ -149,16 +152,16 @@
                                     <!-- Add another record -->
                                     <tr>
                                         <td data-label="Document Name"><strong>Seamans Book</strong></td>
-                                        <td data-label="Number">1234-5678</td>
-                                        <td data-label="Country">Philippines</td>
-                                        <td data-label="Start Date">2018</td>
-                                        <td data-label="End Date">2020</td>
-                                        <td class="attachment-cell" data-label="Attachment">
-                                            <div class="attachment-content">
-                                                <span>marine_diploma.pdf</span>
+                                        <td class="sbook-num-label" data-label="Number"></td>
+                                        <td class="sbook-country-label" data-label="Country"></td>
+                                        <td class="sbook-issue-label" data-label="Start Date"></td>
+                                        <td class="sbook-valid-label" data-label="End Date"></td>
+                                        <td class="sbook-attachment-cell" data-label="Attachment">
+                                            <div class="sbook-attachment-content">
+                                                <!-- <span>marine_diploma.pdf</span> -->
                                                 <div class="download-wrapper">
-                                                    <a href="files/marine_diploma.pdf" download>
-                                                        <i class="fa-solid fa-download"></i>
+                                                    <a href="Uploads/Seaman/SBook/" download>
+                                                        <i class="fa-solid fa-download"></i> download
                                                     </a>
                                                 </div>
                                             </div>
@@ -167,7 +170,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </section>  
+                    </section>   
                     
                     <section class="education-section-modal">
                         <h2 class="header-info-modal">TRAINING & CERTIFICATIONS</h2>
@@ -185,16 +188,16 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td data-label="Document Name"><strong>First Aid Certification</strong></td>
-                                        <td data-label="Number">1234-4567</td>
-                                        <td data-label="Country">Philippines</td>
-                                        <td data-label="Start Date">2020</td>
-                                        <td data-label="End Date">2039</td>
-                                        <td class="attachment-cell" data-label="Attachment">
-                                            <div class="attachment-content">
-                                                <span>taengbinasateasdasda</span>
+                                        <td data-label="Document Name"><strong class="certificate-name-label"></strong></td>
+                                        <td class="certificate-num-label" data-label="Number"></td>
+                                        <td class="certificate-country-label" data-label="Country"></td>
+                                        <td class="certificate-start-label" data-label="Start Date"></td>
+                                        <td class="certificate-end-label" data-label="End Date"></td>
+                                        <td class="certificate-attachment-cell" data-label="Attachment">
+                                            <div class="certificate-attachment-content">
+                                                
                                                 <div class="download-wrapper">
-                                                    <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></a>
+                                                    <a href="files/attachment-content" download><i class="fa-solid fa-download"></i> download</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -220,14 +223,14 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td data-label="School"><strong>University of Batangas</strong></td>
-                                        <td data-label="Field of Study">Information Technology</td>
-                                        <td data-label="Educational Level">Bachelor's Degree</td>
-                                        <td data-label="Start Date">2020</td>
-                                        <td data-label="End Date">2024</td>
-                                        <td class="attachment-cell" data-label="Attachment">
-                                            <div class="attachment-content">
-                                                <span>taengbinasateasdasda</span>
+                                        <td data-label="School"><strong class="school-name-label"></strong></td>
+                                        <td class="school-field-label" data-label="Field of Study"></td>
+                                        <td class="school-educlevel-label" data-label="Educational Level"></td>
+                                        <td class="school-start-label" data-label="Start Date">2020</td>
+                                        <td class="school-end-label" data-label="End Date">2024</td>
+                                        <td class="school-attachment-cell" data-label="Attachment">
+                                            <div class="school-attachment-content">
+                                                
                                                 <div class="download-wrapper">
                                                     <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></i></a>
                                                 </div>

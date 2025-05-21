@@ -232,40 +232,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 
                 <section class="applicant-profile-container" >
                     <section class="applicant-card-list" id="applicantCardList">
-                        <?php if (count($applicants) > 0): ?>
-                            <?php foreach ($applicants as $applicant): ?>
-                                <?php
-                                    // Determine photo path
-                                    $photoFile = $applicant['user_photo'] ?? '';
-                                    $photoPath = (!empty($photoFile) && file_exists("Uploads/Seaman/User-Photo/" . $photoFile))
-                                        ? "Uploads/Seaman/User-Photo/" . htmlspecialchars($photoFile)
-                                        : "Uploads/Seaman/User-Photo/Portrait-placeholder.png";
-                                ?>
-                                <article class="applicant-profile-card" data-applicant-id="<?= htmlspecialchars($applicant['id']) ?>">
-                                    <div class="applicant-profile">
-                                        <div class="profile-information">
-                                            <img 
-                                                src="<?= $photoPath ?>" 
-                                                alt="applicant-profile-photo"
-                                                style="width:60px;height:60px;object-fit:cover;"
-                                                loading="lazy"
-                                            >
-                                            <div class="important-details">
-                                                <p><?= htmlspecialchars($applicant['name']) ?></p>
-                                                <p>Rank: <?= htmlspecialchars($applicant['rank'] ?? 'N/A') ?></p>
-                                                <p>Seamans Validity: <?= htmlspecialchars($applicant['passport_valid'] ?? 'N/A') ?></p>
-                                                <p>Passport Validity: <?= htmlspecialchars($applicant['sbook_valid'] ?? 'N/A') ?></p>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <button class="view-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal">View<i class="fa-solid fa-eye"></i></button>
-                                        </div>
-                                    </div>
-                                </article>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p class="text-muted">No applicants for this job yet.</p>
-                        <?php endif; ?>
+                        
                     </section>
                 </section>             
             </div>

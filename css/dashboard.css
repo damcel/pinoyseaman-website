@@ -3107,3 +3107,10 @@ text-decoration: underline;
 }
 
 }
+
+/* Add this to your CSS file */
+.applicant-profile-card.blurred {
+    filter: blur(4px);
+    pointer-events: none;
+    opacity: 0.7;
+}

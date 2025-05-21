@@ -185,7 +185,27 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 // Fetch applicants for the default selected job
                 $applicants = [];
                 if ($defaultJobCode) {
-                    $applicantQuery = "SELECT ja.name, ja.email, js.rank, js.passport_valid, js.sbook_valid, js.user_photo
+                    $applicantQuery = "SELECT js.id, 
+                                    js.first_name, 
+                                    js.middle_name, 
+                                    js.last_name, 
+                                    js.address, 
+                                    js.gender, 
+                                    js.birthday, 
+                                    ja.name, 
+                                    ja.email, 
+                                    js.rank, 
+                                    js.passport_valid, 
+                                    js.sbook_valid, 
+                                    js.user_photo,
+                                    js.marital_status,
+                                    js.nationality,
+                                    js.religion,
+                                    js.english_level,
+                                    js.email,
+                                    js.cellphone,
+                                    js.seagoing_work,
+                                    js.non_seagoing_work
                                     FROM job_applicants ja
                                     INNER JOIN jobs j ON ja.job_code = j.code
                                     LEFT JOIN job_seeker js ON ja.email = js.email
@@ -202,12 +222,15 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         $row['sbook_valid'] = (!empty($row['sbook_valid']) && $row['sbook_valid'] !== '0000-00-00')
                             ? date("F j, Y", strtotime($row['sbook_valid']))
                             : '';
+                        // Build full name: First M. Last
+                        $middleInitial = $applicantRow['middle_name'] ? strtoupper(substr($applicantRow['middle_name'], 0, 1)) . '.' : '';
+                        $applicantRow['full_name'] = trim($applicantRow['first_name'] . ' ' . $middleInitial . ' ' . $applicantRow['last_name']);
                         $applicants[] = $applicantRow;
                     }
                 }
                 ?>
                 
-                <section class="applicant-profile-container">
+                <section class="applicant-profile-container" >
                     <section class="applicant-card-list" id="applicantCardList">
                         <?php if (count($applicants) > 0): ?>
                             <?php foreach ($applicants as $applicant): ?>
@@ -218,7 +241,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                         ? "Uploads/Seaman/User-Photo/" . htmlspecialchars($photoFile)
                                         : "Uploads/Seaman/User-Photo/Portrait-placeholder.png";
                                 ?>
-                                <article class="applicant-profile-card">
+                                <article class="applicant-profile-card" data-applicant-id="<?= htmlspecialchars($applicant['id']) ?>">
                                     <div class="applicant-profile">
                                         <div class="profile-information">
                                             <img 

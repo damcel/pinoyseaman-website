@@ -427,6 +427,7 @@ $document = $documentsResult->fetch_assoc();
                             <div class="col-md-4 col-sm-12">
                                 <label for="englishLevel" class="form-label">Level of English</label>
                                 <select class="form-select" id="englishLevel" name="englishLevel">
+                                    <option value="" disabled>Select from options</option>
                                     <option value="Beginner" <?php echo ($user['english_level'] === 'Beginner') ? 'selected' : ''; ?>>Beginner</option>
                                     <option value="Intermediate" <?php echo ($user['english_level'] === 'Intermediate') ? 'selected' : ''; ?>>Intermediate</option>
                                     <option value="Advanced" <?php echo ($user['english_level'] === 'Advanced') ? 'selected' : ''; ?>>Advanced</option>

@@ -2,6 +2,12 @@
 <section class="modal fade" id="applicant-profile-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <!-- Loading Spinner for Modal -->
+            <div id="editJobLoadingSpinner" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.7);z-index:10;justify-content:center;align-items:center;">
+                <div class="spinner-border text-primary" role="status" style="width:3rem;height:3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Applicant Information</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -15,34 +21,29 @@
                         </div>
                         <div class="user-profile-details">
                             <div class="name-rank">
-                                <h3>Juan Dela Cruz</h3>
+                                <h3></h3>
                                 <div class="rank-bg">
-                                    <span><i class="fa-solid fa-id-badge"></i> Chief Engineer</span>
+                                    <span><i class="fa-solid fa-id-badge"></i> <span class="rank-label"></span></span>
                                 </div>
                             </div> 
                             <div class="employer-view-profile-details">
                                 <div class="info-pair">
                                     <h5>Personal Details</h5>
-                                    <p class="text-muted">Address:  <label>Lipa City</label></p>
-                                    <p class="text-muted">Gender: <label>Male</label></p>
-                                    <p class="text-muted">Date of Birth <label>Aug 26, 2000 (24 years old)</label></p>
-                                    <p class="text-muted">Marital Status: <label>Single</label></p>
-                                    <p class="text-muted">Nationality: <label>Filipino</label></p>
-                                    <p class="text-muted">Religion: <label>Catholic</label></p>
-                                    <p class="text-muted">Level of English: <label>Intermidiate</label></p>
+                                    <p class="text-muted">Address:  <label class="address-label"></label></p>
+                                    <p class="text-muted">Gender: <label class="gender-label"></label></p>
+                                    <p class="text-muted">Date of Birth: <label class="bday-age-label"></label></p>
+                                    <p class="text-muted">Marital Status: <label class="marital-status-label"></label></p>
+                                    <p class="text-muted">Nationality: <label class="nationality-label"></label></p>
+                                    <p class="text-muted">Religion: <label class="religion-label"></label></p>
+                                    <p class="text-muted">Level of English: <label class="english-level-label"></label></p>
                                 </div>
                                 <div class="info-pair">
-                                    <h5>Last Employment</h5>
-                                    <p class="text-muted">Rank:  <label>N/A</label></p>
-                                    <p class="text-muted">Vessel: <label>Vessel type</label></p>
-                                    <p class="text-muted">Duration: <label>N/A</label></p>
+                                    <h5>Contact Details</h5>
+                                    <p class="text-muted">Email:  <label class="email-label"></label></p>
+                                    <p class="text-muted">Contact No.: <label class="contact-label"></label></p>
                                 </div>
                             </div>
                         </div>
-                        
-                        <button type="button" class="btn btn-secondary contact-btn" id="contactPopoverBtn">
-                            Contact
-                        </button>
                     </div>               
                 
                     <section class="experience-section">
@@ -52,7 +53,7 @@
                                 <div>
                                     <div class="content-editIcon">
                                         <p class="experience-content">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                            
                                         </p>
                                         <span class="download-wrapper">
                                             <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></i></a>
@@ -76,8 +77,8 @@
                             <div class="experience-box">
                                 <div>
                                     <div class="content-editIcon">
-                                        <p class="experience-content">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        <p class="non-experience-content">
+                                            
                                         </p>
                                         <span class="download-wrapper">
                                             <a href="files/attachment-content" download><i class="fa-solid fa-download"></i></i></a>

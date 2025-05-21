@@ -7,13 +7,13 @@ $rank = $_GET['rank'] ?? '';
 $response = [];
 
 if ($jobCode) {
-    $sql = "SELECT ja.name, ja.email, js.rank, js.passport_valid, js.sbook_valid, js.user_photo
+    $sql = "SELECT js. id, ja.name, ja.email, js.rank, js.passport_valid, js.sbook_valid, js.user_photo
             FROM job_applicants ja
             INNER JOIN jobs j ON ja.job_code = j.code
             LEFT JOIN job_seeker js ON ja.email = js.email
             WHERE j.code = ?";
     if ($rank) {
-        $sql .= " AND ja.rank = ?";
+        $sql .= " AND js.rank LIKE ?";
     }
     $stmt = $conn->prepare($sql);
     if ($rank) {

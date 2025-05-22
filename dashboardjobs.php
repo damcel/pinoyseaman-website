@@ -13,6 +13,11 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) >
     exit;
 }
 
+
+
+
+
+
 // Update the last activity time
 $_SESSION['LAST_ACTIVITY'] = time();
 

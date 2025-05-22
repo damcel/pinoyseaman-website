@@ -184,7 +184,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         jobs j
                     WHERE 
                         j.email = ? 
-                        AND (j.expiry IS NULL OR j.expiry > NOW())
+                        
                     ORDER BY j.date_posted DESC
                 ";
                 $stmt = $conn->prepare($query);
@@ -202,11 +202,23 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 <section class="dashboard-job-container">
                     <?php if (count($jobs) > 0): ?>
                         <?php foreach ($jobs as $job): ?>
+                            <?php
+                                $expiryDate = $job['expiry'] ?? null;
+                                $jobCode = $job['code'] ?? '';
+
+                                // Determine if expired
+                                $isExpired = false;
+                                $expiryLabel = '';
+                                if ($expiryDate && strtotime($expiryDate) <= time()) {
+                                    $isExpired = true;
+                                    $expiryLabel = '<span class="badge bg-danger ms-2">Expired</span>';
+                                }
+                            ?>
                             <article class="job-details-container">
                                 <section class="employer-related-job">
                                     <div class="job-card">
                                         <div class="card-left">
-                                            <label class="job-title"><?= htmlspecialchars($job['job_title']) ?></label>
+                                            <label class="job-title"><?= htmlspecialchars($job['job_title']) ?> <?= $expiryLabel ?></label>
                                             <p class="posting-job-detail"><i class="fas fa-ship"></i> <?= htmlspecialchars($job['vessel']) ?></p>
                                             <p class="posting-job-detail"><i class="fa-solid fa-calendar"></i> <?= htmlspecialchars($job['contract']) ?></p>
                                             <p class="posting-job-detail"><i class="fa-solid fa-file-word"></i> <?= htmlspecialchars($job['requirements']) ?></p>
@@ -214,11 +226,20 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                             <p class="job-posting-description"><?= nl2br(htmlspecialchars($job['job_description'])) ?></p>
                                         </div>
                                         <div class="card-right">
-                                            <button class="job-edit-icon edit-job-btn" aria-label="Edit <?= htmlspecialchars($job['job_title']) ?>" data-bs-toggle="modal" data-bs-target="#edit-recent-job" data-job-code="<?= htmlspecialchars($job['code']) ?>">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
+                                            <?php if ($isExpired): ?>
+                                                <form method="POST" action="includes/delete_job2.php" onsubmit="return confirm('Are you sure you want to delete this job posting?');" style="display:inline;">
+                                                    <input type="hidden" name="job_code" value="<?= $jobCode ?>">
+                                                    <input type="hidden" name="delete_job2" value="1">
+                                                    <button type="submit" class="btn btn-danger job-delete-icon" id="deleteJobBtn2" title="Delete Job">
+                                                        <i class="fa-solid fa-trash-can"></i>
+                                                    </button>
+                                                </form>
+                                            <?php else: ?>
+                                                <button class="job-edit-icon edit-job-btn" aria-label="Edit <?= $jobTitle ?>" data-bs-toggle="modal" data-bs-target="#edit-recent-job" data-job-code="<?= $jobCode ?>">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                            <?php endif; ?>
                                             <img src="<?= $logoPath ?>" alt="Company Logo">
-                                            <button class="boost-btn">Boost Post</button>
                                         </div>
                                     </div>
                                 </section>
@@ -246,7 +267,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="includes/post_job.php" method="POST">
+                <form action="includes/post_job2.php" method="POST">
 
                 <div class="modal-body">
                     <!-- HERE -->

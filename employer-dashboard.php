@@ -211,13 +211,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <div class="project-summary">
                           <div class="summary-header">
                             <h3>Job Post Monitoring</h3>
-                            <!-- <div class="jobpost-dropdown">
-                              <button class="filter-btn" id="dropdownSelect">Recent Post <i class="fa-solid fa-angle-down"></i></button>
-                              <ul class="dropdown-menu" id="dropdownList">
-                                <li data-type="recent">Recent Job Post</li>
-                                <li data-type="all">Job Post List</li>
-                              </ul>
-                            </div> -->
+                            
                           </div>
                     
                           <div class="table-responsive">
@@ -228,6 +222,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                   <th>Vessel Type</th>
                                   <th>Date Posted</th>
                                   <th>Applicants</th>
+                                  <th>Status</th>
                                 </tr>
                               </thead>
                                 <tbody id="tableBody">
@@ -255,17 +250,55 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                         $applicantCount = htmlspecialchars($jobPost['applicant_count']);
                                         $jobCode = htmlspecialchars($jobPost['code']);
 
+                                        // Fetch expiry date for this job
+                                        $expiryQuery = "SELECT expiry FROM jobs WHERE code = ?";
+                                        $expiryStmt = $conn->prepare($expiryQuery);
+                                        $expiryStmt->bind_param("s", $jobCode);
+                                        $expiryStmt->execute();
+                                        $expiryResult = $expiryStmt->get_result();
+                                        $expiryRow = $expiryResult->fetch_assoc();
+                                        $expiryDate = $expiryRow['expiry'] ?? null;
+
+                                        // Determine status
+                                        $status = "Expired";
+                                        $isExpired = true;
+                                        if ($expiryDate && strtotime($expiryDate) > time()) {
+                                            $status = "Active";
+                                            $isExpired = false;
+                                        }
+
                                         echo "<tr class='job-posted'>
                                                 <td data-label='Job Title'>$jobTitle</td>
                                                 <td data-label='Vessel Type'>$vesselType</td>
                                                 <td data-label='Date Posted'>$datePosted</td>
                                                 <td data-label='Applicants'>$applicantCount</td>
-                                                <td>
-                                                    <button class='profile-side-btn edit-job-btn' data-bs-toggle='modal' data-bs-target='#edit-recent-job' data-job-code='$jobCode'>
-                                                        <i class='fa-solid fa-pen-to-square'></i>
-                                                    </button>
+                                                <td data-label='Status'>
+                                                    <span class='status-label " . strtolower($status) . "'>$status</span>
                                                 </td>
+                                                <td>";
+                                        if ($isExpired) {
+                                            // Show delete button for expired jobs
+                                            echo "
+                                                <form method='POST' action='includes/delete_job.php' onsubmit='return confirm(\"Are you sure you want to delete this job posting?\");' style='display:inline;'>
+                                                    <input type='hidden' name='job_code' value='$jobCode'>
+                                                    <input type='hidden' name='delete_job' value='1'>
+                                                    <button type='submit' class='btn btn-danger btn-sm' id='deleteJobBtn2' title='Delete Job'>
+                                                        <i class='fa-solid fa-trash-can'></i>
+                                                    </button>
+                                                </form>
+                                            ";
+                                        } else {
+                                            // Show edit button for active jobs
+                                            echo "
+                                                <button class='profile-side-btn edit-job-btn' data-bs-toggle='modal' data-bs-target='#edit-recent-job' data-job-code='$jobCode'>
+                                                    <i class='fa-solid fa-pen-to-square'></i>
+                                                </button>
+                                            ";
+                                        }
+                                        echo "</td>
                                             </tr>";
+
+                                        $expiryStmt->close();
                                     }
                                     ?>
                                 </tbody>
@@ -275,8 +308,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                       </div>                  
                 </section>
 
-                <section class="performance-tracker">
-                    <!-- Performance Tracker -->
+                <!-- <section class="performance-tracker">
                     <div class="dashboard-card">
                         <h3>Performance Tracker</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
@@ -299,7 +331,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         </div>
                         </div>
                     </div>
-                </section>
+                </section> -->
             </div>
             <div class="currency-date-aside">
                 <aside class="applicant-container">

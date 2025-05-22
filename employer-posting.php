@@ -358,8 +358,9 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     </div>
                 </div>
 
-                <form action="includes/update_job.php" method="POST">
+                <form action="includes/update_job2.php" method="POST">
                     <input type="hidden" id="editJobCode" name="job_code">
+                    <input type="hidden" name="delete_job" id="deleteJobInput" value="0">
 
                 <div class="modal-body">
                     <!-- HERE -->
@@ -445,6 +446,24 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
             </div>
         </div>
     </section>
+
+    <!-- Modal Alert -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alertModalLabel">Notification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="alertModalMessage">
+                    <!-- Message will be dynamically inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script src="script/sidenav.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
@@ -452,6 +471,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
     <script src="script/employer_job_posting.js"></script>
+    <!-- <script src="script/employer_dashboard.js"></script> -->
     
 </body>
 </html>

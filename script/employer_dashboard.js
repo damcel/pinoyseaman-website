@@ -89,15 +89,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
     const applicantCards = document.querySelectorAll(".applicant-card");
+    // Delete Job Button Handler
+    const deleteBtn = document.getElementById('deleteJobBtn');
+    const deleteInput = document.getElementById('deleteJobInput');
+    const editForm = document.querySelector('#edit-recent-job form');
+
+    if (deleteBtn && deleteInput && editForm) {
+        deleteBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm("Are you sure you want to delete this job? This action cannot be undone.")) {
+                deleteInput.value = "1";
+                editForm.submit();
+            }
+        });
+    }
 
     applicantCards.forEach(card => {
         card.addEventListener("click", function () {
             const jobSeekerId = this.getAttribute("data-job-seeker-id");
 
+            // Show loading spinner
+            let spinner = document.getElementById("applicantLoadingSpinner");
+            if (!spinner) {
+                spinner = document.createElement("div");
+                spinner.id = "applicantLoadingSpinner";
+                spinner.style.position = "fixed";
+                spinner.style.top = "0";
+                spinner.style.left = "0";
+                spinner.style.width = "100vw";
+                spinner.style.height = "100vh";
+                spinner.style.background = "rgba(255,255,255,0.7)";
+                spinner.style.zIndex = "2000";
+                spinner.style.display = "flex";
+                spinner.style.justifyContent = "center";
+                spinner.style.alignItems = "center";
+                spinner.innerHTML = `
+                    <div class="spinner-border text-primary" role="status" style="width:3rem;height:3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                `;
+                document.body.appendChild(spinner);
+            } else {
+                spinner.style.display = "flex";
+            }
+
             // Fetch applicant details via AJAX
             fetch(`includes/get_applicant_details.php?job_seeker_id=${jobSeekerId}`)
                 .then(response => response.json())
                 .then(data => {
+
+                    spinner.style.display = "none";
+
                     if (data.error) {
                         console.error(data.error);
                         alert(data.error);
@@ -184,7 +226,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                 })
-                .catch(error => console.error("Error fetching applicant details:", error));
+                .catch(error => {
+                    spinner.style.display = "none";
+                    console.error("Error fetching applicant details:", error);
+                });
         });
     });
 });

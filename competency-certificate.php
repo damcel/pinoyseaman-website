@@ -122,17 +122,12 @@ include 'db.php';
 
     <main class="dashboard-container">
         <section class="header-container">
-            <div class="saved-ctn">
-                <a href="saved-jobs.html" class="saved-btn">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </a>
-            </div>
             <div class="dropdown-container">
                 <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
                 <!-- Dropdown Menu -->
                 <div class="dropdown" id="dropdownMenu">
                     <a href="userprofile.php" class="prfl">Profile Settings</a>
-                    <a href="#">Logout</a>
+                    <a href="includes/logout.php">Logout</a>
                 </div>
             </div>
         </section>
@@ -167,6 +162,7 @@ include 'db.php';
             $stmt->bind_param("s", $seekerEmail);
             $stmt->execute();
             $certResult = $stmt->get_result()->fetch_assoc();
+            $certCount = $certResult->num_rows;
             $stmt->close();
 
             ?>
@@ -206,7 +202,7 @@ include 'db.php';
                                         <?php endif; ?>
                                         <div class="attachment-icons">
                                             <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-certification">
-                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <i class="fa-solid fa-pen-to-square"></i> Edit
                                             </button>
                                         </div>
                                     </td>
@@ -221,7 +217,10 @@ include 'db.php';
                             
                         </tbody>                
                     </table>            
-                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-certification">+ Add Document</button>
+                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-certification"
+                        >
+                        + Add Document
+                    </button>
                 </div>
             </section>
 
@@ -239,7 +238,9 @@ include 'db.php';
             $stmt = $conn->prepare($competenceQuery);
             $stmt->bind_param("s", $seekerEmail);
             $stmt->execute();
-            $competenceResult = $stmt->get_result()->fetch_assoc();
+            $competenceResult = $stmt->get_result();
+            $competenceCount = $competenceResult->num_rows;
+            $competenceResult = $competenceResult->fetch_assoc();
 
             ?>
 
@@ -254,7 +255,7 @@ include 'db.php';
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-competence">
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </button>
                                 </span>
                             </div>
@@ -268,7 +269,10 @@ include 'db.php';
                             </div>
                         </div>
                         <hr>
-                        <button class="add-cv-btn" data-bs-toggle="modal" data-bs-target="#add-competence">+ Add Document</button>
+                        <button class="add-cv-btn" data-bs-toggle="modal" data-bs-target="#add-competence"
+                            <?php if ($competenceCount >= 1) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                            + Add Document
+                        </button>
                     </div>
                 </div>
             </section>
@@ -288,7 +292,9 @@ include 'db.php';
             $stmt = $conn->prepare($meritsQuery);
             $stmt->bind_param("s", $seekerEmail);
             $stmt->execute();
-            $meritsResult = $stmt->get_result()->fetch_assoc();
+            $meritsResult = $stmt->get_result();
+            $meritsCount = $meritsResult->num_rows;
+            $meritsResult = $meritsResult->fetch_assoc();
 
             ?>
 
@@ -303,7 +309,7 @@ include 'db.php';
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-merits">
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </button>
                                 </span>
                             </div>
@@ -317,7 +323,10 @@ include 'db.php';
                             </div>
                         </div>
                         <hr>
-                        <button class="add-cv-btn" data-bs-toggle="modal" data-bs-target="#add-merits">+ Add Document</button>
+                        <button class="add-cv-btn" data-bs-toggle="modal" data-bs-target="#add-merits"
+                            <?php if ($meritsCount >= 1) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                            + Add Document
+                        </button>
                     </div>
                 </div>
             </section>

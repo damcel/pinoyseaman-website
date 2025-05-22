@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deleteStmt->bind_param("s", $jobCode);
 
         if ($deleteStmt->execute()) {
-            header("Location: ../employer-dashboard.php?type=success&message=Job deleted successfully.");
+            header("Location: ../employer-posting.php?type=success&message=Job deleted successfully.");
         } else {
-            header("Location: ../employer-dashboard.php?type=error&message=Failed to delete job.");
+            header("Location: ../employer-posting.php?type=error&message=Failed to delete job.");
         }
         $deleteStmt->close();
         $conn->close();
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate required fields
     if (empty($jobCode) || empty($jobTitle) || empty($rank) || empty($contractLength) || empty($vesselType) || empty($jobRequirements) || empty($jobDescription)) {
-        header("Location: ../employer-dashboard.php?type=error&message=All fields are required.");
+        header("Location: ../employer-posting.php?type=error&message=All fields are required.");
         exit;
     }
 
@@ -45,17 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         // Redirect back to the dashboard with a success message
-        header("Location: ../employer-dashboard.php?type=success&message=Job updated successfully.");
+        header("Location: ../employer-posting.php?type=success&message=Job updated successfully.");
     } else {
         // Redirect back to the dashboard with an error message
-        header("Location: ../employer-dashboard.php?type=error&message=Failed to update job.");
+        header("Location: ../employer-posting.php?type=error&message=Failed to update job.");
     }
 
     $stmt->close();
     $conn->close();
 } else {
     // Redirect if the request method is not POST
-    header("Location: ../employer-dashboard.php?type=error&message=Invalid request.");
+    header("Location: ../employer-posting.php?type=error&message=Invalid request.");
     exit;
 }
 ?>

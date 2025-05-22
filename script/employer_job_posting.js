@@ -2,6 +2,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const editButtons = document.querySelectorAll(".edit-job-btn");
     const spinner = document.getElementById("editJobLoadingSpinner");
 
+    const applicantCards = document.querySelectorAll(".applicant-card");
+    // Delete Job Button Handler
+    const deleteBtn = document.getElementById('deleteJobBtn');
+    const deleteInput = document.getElementById('deleteJobInput');
+    const editForm = document.querySelector('#edit-recent-job form');
+
+    if (deleteBtn && deleteInput && editForm) {
+        deleteBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm("Are you sure you want to delete this job? This action cannot be undone.")) {
+                deleteInput.value = "1";
+                editForm.submit();
+            }
+        });
+    }
+
     editButtons.forEach(button => {
         button.addEventListener("click", function () {
             // Show spinner

@@ -46,6 +46,7 @@ $documentsStmt = $conn->prepare($documentsQuery);
 $documentsStmt->bind_param("s", $seekerId);
 $documentsStmt->execute();
 $documentsResult = $documentsStmt->get_result();
+$documentsCount = $documentsResult->num_rows;
 $document = $documentsResult->fetch_assoc();
 ?>
 <!DOCTYPE html>
@@ -239,6 +240,7 @@ $document = $documentsResult->fetch_assoc();
             $educationStmt->bind_param("s", $seekerId);
             $educationStmt->execute();
             $educationResult = $educationStmt->get_result();
+            $educationCount = $educationResult->num_rows;
             ?>
 
             <section class="education-section">
@@ -301,7 +303,10 @@ $document = $documentsResult->fetch_assoc();
                         <?php endif; ?>
                     </tbody>                
                     </table>          
-                    <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#add-education">+ Add Education</button>
+                    <button type="button" class="add-document" data-bs-toggle="modal" data-bs-target="#add-education"
+                        <?php if ($educationCount >= 4) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                        + Add Education
+                    </button>
                 </div>
             </section>
 
@@ -321,7 +326,7 @@ $document = $documentsResult->fetch_assoc();
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-experience">
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </button>
                                 </span>
                             </div>
@@ -334,7 +339,10 @@ $document = $documentsResult->fetch_assoc();
                                 </a>
                             </div>
                         </div>
-                        <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-experience">+ Add work experience</button>
+                        <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-experience"
+                            <?php if ($documentsCount >= 1) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                            + Add work experience
+                        </button>
                     </div>
                 </section>
 
@@ -345,6 +353,7 @@ $document = $documentsResult->fetch_assoc();
                 $landDocumentsStmt->bind_param("s", $seekerId);
                 $landDocumentsStmt->execute();
                 $landDocumentsResult = $landDocumentsStmt->get_result();
+                $landDocumentsCount = $landDocumentsResult->num_rows;
                 $landDocument = $landDocumentsResult->fetch_assoc();
                 ?>
                 
@@ -359,7 +368,7 @@ $document = $documentsResult->fetch_assoc();
                                 </p>
                                 <span class="edit-wrapper">
                                     <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#edit-land-experience">
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </button>
                                 </span>
                             </div>
@@ -372,7 +381,10 @@ $document = $documentsResult->fetch_assoc();
                                 </a>
                             </div>
                         </div>
-                        <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-land-experience">+ Add work experience</button>
+                        <button class="add-work-exp-btn" data-bs-toggle="modal" data-bs-target="#add-land-experience"
+                            <?php if ($landDocumentsCount >= 1) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                            + Add work experience
+                        </button>
                     </div>
                 </section>
             </section>

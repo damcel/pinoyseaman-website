@@ -44,13 +44,6 @@ $companyData = $companyResult->fetch_all(MYSQLI_ASSOC);
 $companyLogoPath = "company-logo/";
 $companyLogoDefault = "Logo-placeholder.png"; 
 
-// $jobCountQuery = "SELECT COUNT(*) as job_count FROM jobs
-//                   INNER JOIN employer ON jobs.company_code = employer.company_code
-//                   WHERE employer.verify = 'y' AND jobs.expiry > CURDATE()";
-// $jobCountResult = $conn->query($jobCountQuery);
-// $jobCountRow = $jobCountResult->fetch_assoc();
-// $jobCount = $jobCountRow['job_count'];  
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -104,11 +104,7 @@ include 'db.php';
 
     <main class="dashboard-container">
         <section class="header-container">
-            <div class="saved-ctn">
-                <a href="saved-jobs.html" class="saved-btn">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </a>
-            </div>
+    
             <div class="dropdown-container">
                 <button class="profile-btn" id="dpBtn"><i class="fa-solid fa-user"></i></button>
                 <!-- Dropdown Menu -->
@@ -140,6 +136,7 @@ include 'db.php';
         $sBookStmt->bind_param("s", $seekerId);
         $sBookStmt->execute();
         $sBookResult = $sBookStmt->get_result();
+        $sBookAttachmentCount = $sBookResult->num_rows;
         $sBookAttachment = $sBookResult->fetch_assoc();
         ?>
 
@@ -187,7 +184,7 @@ include 'db.php';
                                         <?php endif; ?>
                                         <div class="attachment-icons">
                                             <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-seamans-book">
-                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <i class="fa-solid fa-pen-to-square"></i> Edit
                                             </button>
                                         </div>
                                     </td>
@@ -199,7 +196,10 @@ include 'db.php';
                             <?php endif; ?>
                         </tbody>                
                     </table>      
-                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-seamans-book">+ Add Document</button>      
+                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-seamans-book"
+                        <?php if ($sBookAttachmentCount >= 1) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                        + Add Document
+                    </button>      
                 </div>
             </section>
 
@@ -224,6 +224,7 @@ include 'db.php';
             $passportStmt->bind_param("s", $seekerId);
             $passportStmt->execute();
             $passportResult = $passportStmt->get_result();
+            $passportAttachmentCount = $passportResult->num_rows;
             $passportAttachment = $passportResult->fetch_assoc();
             ?>
 
@@ -259,7 +260,7 @@ include 'db.php';
                                         <?php endif; ?>
                                         <div class="attachment-icons">
                                             <button class="edit-education" type="button" data-bs-toggle="modal" data-bs-target="#edit-passport">
-                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <i class="fa-solid fa-pen-to-square"></i> Edit
                                             </button>
                                         </div>
                                     </td>
@@ -271,7 +272,10 @@ include 'db.php';
                             <?php endif; ?>
                         </tbody>              
                     </table>            
-                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-passport">+ Add Document</button>
+                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-passport"
+                        <?php if ($passportAttachmentCount >= 1) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                        + Add Document
+                    </button>
                 </div>
             </section>
 
@@ -291,6 +295,8 @@ include 'db.php';
                     $visaRecords[] = $row;
                 }
             }
+
+            $visaCount = count($visaRecords);
             ?>
 
             <section class="education-section">
@@ -333,7 +339,7 @@ include 'db.php';
                                                         data-issued="<?php echo htmlspecialchars($visa['visa_issued']); ?>"
                                                         data-valid="<?php echo htmlspecialchars($visa['visa_valid']); ?>"
                                                         data-url="<?php echo htmlspecialchars($visa['visa_url']); ?>">
-                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                        <i class="fa-solid fa-pen-to-square"></i> Edit
                                                     </button>
                                                 </div>
                                             </div>
@@ -347,7 +353,10 @@ include 'db.php';
                             <?php endif; ?>
                         </tbody>                
                     </table>            
-                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-visa">+ Add Document</button>
+                    <button class="add-document" data-bs-toggle="modal" data-bs-target="#add-visa"
+                        <?php if ($visaCount >= 1) echo 'disabled style="opacity:0.5;pointer-events:none;"'; ?>>
+                        + Add Document
+                    </button>                
                 </div>
             </section>
     </main>

@@ -261,7 +261,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                                 <td data-label='Date Posted'>$datePosted</td>
                                                 <td data-label='Applicants'>$applicantCount</td>
                                                 <td>
-                                                    <button class='profile-side-btn edit-job-btn' type='button' data-bs-toggle='modal' data-bs-target='#edit-recent-job' data-job-code='$jobCode'>
+                                                    <button class='profile-side-btn edit-job-btn' data-bs-toggle='modal' data-bs-target='#edit-recent-job' data-job-code='$jobCode'>
                                                         <i class='fa-solid fa-pen-to-square'></i>
                                                     </button>
                                                 </td>
@@ -331,7 +331,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                 ja.company_code = ?
                             ORDER BY 
                                 ja.date DESC
-                            LIMIT 6"; // Limit to 6 applicants for display
+                            LIMIT 3"; // Limit to 3 applicants for display
 
                         $applicantStmt = $conn->prepare($applicantQuery);
                         $applicantStmt->bind_param("s", $companyCode); // Use the company code from the session
@@ -406,7 +406,13 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <section class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  
         <!-- update / Delete recent job Modal -->
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content" style="position:relative;">
+                <!-- Loading Spinner for Edit Modal -->
+                <div id="editJobLoadingSpinner" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.7);z-index:10;justify-content:center;align-items:center;">
+                    <div class="spinner-border text-primary" role="status" style="width:3rem;height:3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
                 <div class="modal-header justify-content-between align-items-center">
                     <h1 class="modal-title fs-5" id="jobPostModalLabel">Edit Job</h1>
                     <div class="d-flex align-items-center gap-2">
@@ -419,6 +425,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
 
                 <form action="includes/update_job.php" method="POST">
                     <input type="hidden" id="editJobCode" name="job_code">
+                    <input type="hidden" name="delete_job" id="deleteJobInput" value="0">
 
                 <div class="modal-body">
                     <!-- HERE -->
@@ -635,6 +642,71 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src="script/popover.js"></script>
     <script src="script/employer_dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show spinner and fetch job details when edit-job-btn is clicked
+            document.querySelectorAll('.edit-job-btn').forEach(function(btn) {
+                btn.addEventListener('click', function () {
+                    const jobCode = btn.getAttribute('data-job-code');
+                    const spinner = document.getElementById('editJobLoadingSpinner');
+                    if (spinner) spinner.style.display = 'flex';
+
+                    // Fetch job details via AJAX
+                    fetch(`includes/get_job_details.php?job_code=${encodeURIComponent(jobCode)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (spinner) spinner.style.display = "none";
+
+                            if (data.error) {
+                                alert(data.error);
+                                return;
+                            }
+
+                            // Populate the modal with job details
+                            const jobTitleSelect = document.getElementById("editJobTitle");
+                            const rankSelect = document.getElementById("editRank");
+                            const vesselTypeSelect = document.getElementById("editVesselType");
+
+                            // Set values for text/textarea/hidden fields
+                            document.getElementById("editContractLength").value = data.contract || "";
+                            document.getElementById("editJobRequirements").value = data.requirements || "";
+                            document.getElementById("editJobDescription").value = data.job_description || "";
+                            document.getElementById("editJobCode").value = data.code || "";
+
+                            // Pre-select dropdown values (reset first)
+                            if (jobTitleSelect) {
+                                Array.from(jobTitleSelect.options).forEach(option => {
+                                    option.selected = (option.value === data.job_title);
+                                });
+                            }
+                            if (rankSelect) {
+                                Array.from(rankSelect.options).forEach(option => {
+                                    option.selected = (option.value === data.rank);
+                                });
+                            }
+                            if (vesselTypeSelect) {
+                                Array.from(vesselTypeSelect.options).forEach(option => {
+                                    option.selected = (option.value === data.vessel);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            if (spinner) spinner.style.display = "none";
+                            alert("Error fetching job details.");
+                            console.error("Error fetching job details:", error);
+                        });
+                });
+            });
+
+            // Hide spinner when modal is closed
+            var editModal = document.getElementById('edit-recent-job');
+            if (editModal) {
+                editModal.addEventListener('hidden.bs.modal', function () {
+                    document.getElementById('editJobLoadingSpinner').style.display = 'none';
+                });
+            }
+        });
+    </script>
     
 </body>
 </html>

@@ -198,7 +198,6 @@ $document = $documentsResult->fetch_assoc();
                         <div class="details-section">
                             <h4>Details</h4>
                             <p><strong>Address:</strong> <?php echo !empty($user['address']) ? htmlspecialchars($user['address']) : 'N/A'; ?></p>
-                            <p><strong>Planned status:</strong> Availability</p>
                             <p><strong>Gender:</strong> <?php echo !empty($user['gender']) ? htmlspecialchars($user['gender']) : 'N/A'; ?></p>
                             <?php
                             $dob = !empty($user['birthday']) ? $user['birthday'] : null;
@@ -440,9 +439,9 @@ $document = $documentsResult->fetch_assoc();
                                 <label for="gender" class="form-label">Gender</label>
                                 <select class="form-select" id="gender" name="gender">
                                     <option selected disabled>Select from option</option>
-                                    <option value="Male" <?php echo ($user['gender'] === 'Male') ? 'selected' : ''; ?>>Male</option>
-                                    <option value="Female" <?php echo ($user['gender'] === 'Female') ? 'selected' : ''; ?>>Female</option>
-                                    <option value="Diverse" <?php echo ($user['gender'] === 'Diverse') ? 'selected' : ''; ?>>Diverse</option>
+                                    <option value="M" <?php echo ($user['gender'] === 'M') ? 'selected' : ''; ?>>Male</option>
+                                    <option value="F" <?php echo ($user['gender'] === 'F') ? 'selected' : ''; ?>>Female</option>
+                                    <option value="D" <?php echo ($user['gender'] === 'D') ? 'selected' : ''; ?>>Diverse</option>
                                 </select>
                             </div>
                             <div class="col-md-4 col-sm-12">
@@ -483,13 +482,13 @@ $document = $documentsResult->fetch_assoc();
                             </div>
                     
                             <!-- Job Status Row with Smaller Toggleable Buttons -->
-                            <div class="col-md-6 col-sm-12">
+                            <!-- <div class="col-md-6 col-sm-12">
                                 <label for="jobStatus" class="form-label">Job status</label>
                                 <div class="btn-group" role="group" aria-label="Job Status">
                                     <button type="button" class="btn btn-outline-primary btn-sm <?php echo ($user['job_status'] === 'Interested') ? 'active' : ''; ?>" id="interestedBtn" onclick="toggleJobStatus(this)">Interested</button>
                                     <button type="button" class="btn btn-outline-primary btn-sm <?php echo ($user['job_status'] === 'Not Interested') ? 'active' : ''; ?>" id="notInterestedBtn" onclick="toggleJobStatus(this)">Not Interested</button>
                                 </div>
-                            </div>
+                            </div> -->
                     
                             <!-- Email Row -->
                             <div class="col-12">

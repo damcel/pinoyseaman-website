@@ -478,6 +478,15 @@
     </main>
     <!-- <script src="https://www.google.com/recaptcha/api.js?render=6LcsKjIrAAAAADu-B6dIIu2PdPHt6VHjqvxVFMmt"></script> -->
 
+    <!-- Alert Modal -->
+    <div id="alertModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="alertTitle">Notification</h3>
+            <p id="alertMessage"></p>
+            <button id="closeModal" class="btn">Close</button>
+        </div>
+    </div>
+
     <script>
         let container = document.getElementById('container')
 
@@ -489,6 +498,64 @@
         setTimeout(() => {
             container.classList.add('sign-in')
         }, 200)
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to show the modal
+            function showModal(type, message) {
+                const modal = document.getElementById('alertModal');
+                const modalTitle = document.getElementById('alertTitle');
+                const modalMessage = document.getElementById('alertMessage');
+
+                // Set the modal type and message
+                modal.classList.remove('success', 'error');
+                modal.classList.add(type);
+                modalTitle.textContent = type === 'success' ? 'Success' : 'Error';
+                modalMessage.textContent = message;
+
+                // Show the modal
+                modal.classList.remove('hidden');
+                modal.classList.add('visible');
+            }
+
+            // Function to hide the modal
+            function hideModal() {
+                const modal = document.getElementById('alertModal');
+                modal.classList.remove('visible');
+                modal.classList.add('hidden');
+            }
+
+            // Close modal on button click
+            document.getElementById('closeModal').addEventListener('click', hideModal);
+
+            // Check for query parameters in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type');
+            const message = urlParams.get('message');
+
+            if (type && message) {
+                showModal(type, message);
+            }
+
+            const form = document.querySelector('form[action="includes/seaman_init_reg.php"]');
+            const passwordInput = document.querySelector('input[name="password"]');
+            const errorMessage = document.createElement('p');
+            errorMessage.style.color = 'red';
+            errorMessage.style.fontSize = '0.9rem';
+            passwordInput.parentNode.appendChild(errorMessage);
+
+            form.addEventListener('submit', function (e) {
+                const password = passwordInput.value;
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+                if (!passwordRegex.test(password)) {
+                    e.preventDefault();
+                    errorMessage.textContent = 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.';
+                } else {
+                    errorMessage.textContent = '';
+                }
+            });
+
+        });
 
         // grecaptcha.ready(function() {
         //     grecaptcha.execute('6LcsKjIrAAAAADu-B6dIIu2PdPHt6VHjqvxVFMmt', {action: 'submit'}).then(function(token) {

@@ -77,7 +77,7 @@
                         <h1>Registration Form</h1>
                     </div>
                     <div>
-                        <form action="includes/seaman_init_reg.php" method="POST" class="form-container">
+                        <form action="includes/seaman_init_reg2.php" method="POST" class="form-container">
                             <div class="user-card">
                                 <div class="input-fname">
                                     <label for="firstname">Firstname</label>

@@ -131,7 +131,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                               <option value="">Select job</option>
                                 <?php
                                     // Fetch job titles and codes for this employer, ordered by latest date_posted
-                                    $jobTitleQuery = "SELECT code, job_title, date_posted FROM jobs WHERE email = ? AND (expiry IS NULL OR expiry > NOW()) ORDER BY date_posted DESC";
+                                    $jobTitleQuery = "SELECT code, job_title, date_posted FROM jobs WHERE email = ? ORDER BY date_posted DESC";
                                     $jobTitleStmt = $conn->prepare($jobTitleQuery);
                                     $jobTitleStmt->bind_param("s", $employerEmail);
                                     $jobTitleStmt->execute();

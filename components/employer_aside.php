@@ -75,15 +75,15 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                 <i class="fa-regular fa-user"></i><span>Job Post</span>
             </a>
             </li>
-            <li>
+            <!-- <li>
             <a href="employer-analytics.html">
-                <!-- SVG Icon -->
+                
                 <i class="fa-solid fa-business-time"></i><span>Analytics</span>
             </a>
             </li>
             <li class="separator">
             <a href="account-plan.html">
-                <!-- SVG Icon -->
+                
                 <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
             </a>
             </li>
@@ -99,7 +99,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <ul id="missing-fields"></ul>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </ul>
     </nav>
 </aside>

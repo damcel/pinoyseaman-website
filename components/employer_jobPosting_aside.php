@@ -8,37 +8,52 @@
             <p class="highlight-sub">No recent post to highlight.</p>
             </div>
     </aside>
-    <aside class="job-post-container"> 
-        <h2 class="job-post-h2">Recent Job Posted</h2>
-        <?php if (count($jobs) > 0): ?>
-            <?php foreach ($jobs as $job): ?>
-                <div class="job-item">
-                    <div class="job-information">
-                        <p class="employer-post-job-title"><?= htmlspecialchars($job['job_title']) ?></p>
-                        <button 
-                            class="job-edit-icon edit-job-btn" 
-                            aria-label="Edit <?= htmlspecialchars($job['job_title']) ?>" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#edit-recent-job"
-                            data-job-code="<?= htmlspecialchars($job['code']) ?>"
-                        >
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                    </div>
-                    <div class="job-meta">
-                        <time class="job-date">
-                            <?= !empty($job['date_posted']) ? date('d M Y', strtotime($job['date_posted'])) : '' ?>
-                        </time>
-                        <div class="job-status">
-                            <?= (!empty($job['expiry']) && strtotime($job['expiry']) < time()) ? 'Completed' : 'Active' ?>
-                        </div>
-                    </div>
+<aside class="job-post-container"> 
+    <h2 class="job-post-h2">Recent Job Posted</h2>
+    <?php
+    $hasActiveJobs = false;
+    if (count($jobs) > 0):
+        foreach ($jobs as $job):
+            // Only show jobs that are NOT expired
+            if (!empty($job['expiry']) && strtotime($job['expiry']) < time()) {
+                continue;
+            }
+            $hasActiveJobs = true;
+    ?>
+        <div class="job-item">
+            <div class="job-information">
+                <p class="employer-post-job-title"><?= htmlspecialchars($job['job_title']) ?></p>
+                <button 
+                    class="job-edit-icon edit-job-btn" 
+                    aria-label="Edit <?= htmlspecialchars($job['job_title']) ?>" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#edit-recent-job"
+                    data-job-code="<?= htmlspecialchars($job['code']) ?>"
+                >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+            </div>
+            <div class="job-meta">
+                <time class="job-date">
+                    <?= !empty($job['date_posted']) ? date('d M Y', strtotime($job['date_posted'])) : '' ?>
+                </time>
+                <div class="job-status">
+                    Active
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p class="text-muted">No recent job postings found.</p>
-        <?php endif; ?>
-    </aside>
+            </div>
+        </div>
+    <?php
+        endforeach;
+        if (!$hasActiveJobs):
+    ?>
+        <p class="text-muted">No recent job postings found.</p>
+    <?php
+        endif;
+    else:
+    ?>
+        <p class="text-muted">No recent job postings found.</p>
+    <?php endif; ?>
+</aside>
 
     <aside class="calendar-container">
         <!-- Footer Section -->

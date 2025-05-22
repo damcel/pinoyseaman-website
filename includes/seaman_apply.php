@@ -52,6 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    $checkQuery = "SELECT id FROM job_applicants WHERE job_code = ? AND email = ?";
+    $checkStmt = $conn->prepare($checkQuery);
+    $checkStmt->bind_param("ss", $jobCode, $seekerEmail);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
+
+    if ($checkResult->num_rows > 0) {
+        echo json_encode(['status' => 'error', 'message' => 'You have already applied for this job.']);
+        exit;
+    }
+
     // Handle the CV upload
     $uploadedFileName = null;
     $filePath = null;

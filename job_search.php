@@ -20,7 +20,7 @@
                     <li><a href="index.php">Home</a></li>
                     <li><a href="job_search.php">Jobs</a></li>
                     <li><a href="explore-companies.php">Explore Companies</a></li>
-                    <li><a href="#">Contact us</a></li>
+                    <li><a href="contact-us.php">Contact us</a></li>
                     <li><a href="start.php" class="login-btn">Login</a></li>
                     <li><a href="start.php" class="signup-btn">Sign up</a></li>
                 </ul>

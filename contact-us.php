@@ -14,6 +14,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <script>
+      function enableSubmitButton() {
+        document.getElementById("btnSubmitMsg").disabled = false;
+      }
+    </script>
+
     <title>Home</title>
 
     <style>
@@ -134,6 +143,17 @@ form button:hover {
   transition: height 0.2s ease;
 }
 
+form button:disabled,
+form button[disabled] {
+  background: #cccccc !important;
+  color: #888888 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  pointer-events: none;
+  box-shadow: none;
+  border: none;
+}
+
     </style>
 
     <style>
@@ -243,7 +263,11 @@ form button:hover {
                   <label>Message</label>
                   <textarea id="message" name="sender_message" placeholder="Type your message here" oninput="autoGrow(this)"></textarea>
                 </div>
-                <button type="submit">Send Message</button>
+                <br>
+                <div class="mb-3">
+                  <div class="g-recaptcha" data-sitekey="6LfxHEYrAAAAAPLHR4Pke5MUyzAufn34RSAU_I3f" data-callback="enableSubmitButton"></div>
+                </div>
+                <button id="btnSubmitMsg" disabled="disabled" type="submit">Send Message</button>
               </form>
             </div>
           </div>

@@ -1,29 +1,11 @@
 <?php
+// filepath: c:\xampp\htdocs\pinoyseaman-website\includes\seaman_init_reg.php
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'vendor/autoload.php'; // Ensure PHPMailer is installed via Composer
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // $recaptchaSecret = '6LcsKjIrAAAAAKLKhlob34wEVJxNK2nf9fZ8Fqam';
-    // $recaptchaToken = $_POST['recaptcha_token'];
-
-    // $recaptchaResponse = file_get_contents(
-    //     "https://www.google.com/recaptcha/api/siteverify?secret=$recaptchaSecret&response=$recaptchaToken"
-    // );
-    // $responseData = json_decode($recaptchaResponse);
-
-    // if (!$responseData->success || $responseData->score < 0.5) {
-    //     // Score too low or failed
-    //     header("Location: ../user-login-signup.php?type=error&message=reCAPTCHA verification failed. Please try again.");
-    //     exit;
-    // }
 
     // Retrieving form data
     $first_name = trim($_POST["firstname"]);
@@ -91,35 +73,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $actionStmt->execute();
         $actionStmt->close();
 
-        $pdo = null;
-        $stmt = null;
+        // Send email using Brevo API
+        $apiKey = 'YOUR_BREVO_API_KEY'; // Replace with your Brevo API key
 
-        
-        // Send email using PHPMailer
-        $mail = new PHPMailer(true);
-
-        try {
-            
-            // $mail->isMail();
-
-            $mail->isSMTP();
-            $mail->Host = 'smtp-relay.brevo.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = '88d0c6002@smtp-brevo.com';
-            $mail->Password = 'ARnazdkms0EcBHVC';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-
-            // Sender and recipient settings
-            $mail->setFrom('noreply@pinoyseaman.com', 'PinoySeaman');
-            
-            $mail->addAddress($email, $first_name);
-
-            // Email content
-            $mail->isHTML(true);
-            $mail->Subject = 'Welcome to PinoySeaman!';
-            $mail->Body = "
+        // Email to user
+        $userData = [
+            "sender" => [
+                "name" => "PinoySeaman",
+                "email" => "noreply@pinoyseaman.com"
+            ],
+            "to" => [
+                [
+                    "email" => $email,
+                    "name" => $first_name
+                ]
+            ],
+            "subject" => "Welcome to PinoySeaman!",
+            "htmlContent" => "
                 <p>Hello Seafarer!</p>
                 <p>Welcome to PinoySeaman! Your account has been created successfully.</p>
                 <p>Your Name: <strong>$first_name $last_name</strong></p>
@@ -127,33 +97,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>Please login to your account and complete your information right away, Thank you!.</p>
                 <br>
                 <p>Note: PinoySeaman does not collect any fees for registration or job applications.</p>
-                <p>If you have any questions, feel free to reach out to us at filoseaman@gmail.com.</p>";
+                <p>If you have any questions, feel free to reach out to us at filoseaman@gmail.com.</p>"
+        ];
 
-            $mail->send();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://api.brevo.com/v3/smtp/email");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "accept: application/json",
+            "api-key: $apiKey",
+            "content-type: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
+        $userResponse = curl_exec($ch);
+        $userHttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            // Notify admin
-            $mail->clearAddresses();
-            $mail->addAddress('admin@pinoyseaman.com');
-            $mail->Subject = 'New Seaman Registration';
-            $mail->Body = "
+        // Email to admin
+        $adminData = [
+            "sender" => [
+                "name" => "PinoySeaman",
+                "email" => "noreply@pinoyseaman.com"
+            ],
+            "to" => [
+                [
+                    "email" => "admin@pinoyseaman.com",
+                    "name" => "PinoySeaman Admin"
+                ]
+            ],
+            "subject" => "New Seaman Registration",
+            "htmlContent" => "
                 <p>A new seaman has registered on PinoySeaman:</p>
                 <p>Name : $first_name $last_name</p>
                 <p>Birthdate : $birthday</p>
                 <p>Email : $email</p>
-                <p>PinoySeaman ID : $newid</p>";
+                <p>PinoySeaman ID : $newid</p>"
+        ];
 
-            $mail->send();
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($adminData));
+        $adminResponse = curl_exec($ch);
+        $adminHttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
+        if ($userHttpCode >= 200 && $userHttpCode < 300 && $adminHttpCode >= 200 && $adminHttpCode < 300) {
             header("Location: ../index.php?type=success&message=Registration successful! A confirmation email has been sent.");
             exit;
-        } catch (Exception $e) {
-            header("Location: ../index.php?type=error&message=Registration successful, but email sending failed: {$mail->ErrorInfo}");
+        } else {
+            header("Location: ../index.php?type=error&message=Registration successful, but email sending failed.");
             exit;
         }
 
-        header("Location: ../user-login-signup.php?type=success&message=Registration successful!");
-        exit;
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         header("Location: ../user-login-signup.php?type=error&message=Error: " . $e->getMessage());
         exit;
     }

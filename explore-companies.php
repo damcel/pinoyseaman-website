@@ -46,10 +46,10 @@
             <div class="text-content">
               <h1>Find the right company for you</h1>
               <p>Everything you need to know about a company,<br> all in one place</p>
-              <div class="search-box">
+              <!-- <div class="search-box">
                 <input type="text" placeholder="Search by company name" />
                 <button><i class="fa-solid fa-magnifying-glass"></i></button>
-              </div>
+              </div> -->
             </div>
             <div class="image-content">
               <img src="images/group.png" alt="Team illustration" />
@@ -66,96 +66,50 @@
                 all in one place!
             </p>
         </div>
-    
+
         <div class="slider-wrapper">
             <button id="prevBtn" class="slider-btn">&#10094;</button>
-    
+
             <div class="company-container">
                 <div class="company-track">
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-rating">
-                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
-                            <div class="rating-section">
-                              <span class="star">★</span>
-                              <span class="rating-value">4.6</span>
-                            </div>
-                            <p class="review-count">100 Reviews</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-rating">
-                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
-                            <div class="rating-section">
-                              <span class="star">★</span>
-                              <span class="rating-value">4.6</span>
-                            </div>
-                            <p class="review-count">100 Reviews</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-rating">
-                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
-                            <div class="rating-section">
-                              <span class="star">★</span>
-                              <span class="rating-value">4.6</span>
-                            </div>
-                            <p class="review-count">100 Reviews</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-rating">
-                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
-                            <div class="rating-section">
-                              <span class="star">★</span>
-                              <span class="rating-value">4.6</span>
-                            </div>
-                            <p class="review-count">100 Reviews</p>
-                        </div>
-                    </div>
-    
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/scanmar_big.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-rating">
-                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
-                            <div class="rating-section">
-                              <span class="star">★</span>
-                              <span class="rating-value">4.6</span>
-                            </div>
-                            <p class="review-count">100 Reviews</p>
-                        </div>
-                    </div>
+                    <?php
+                    // Include the database connection file
+                    include 'db.php';
 
-                    <div class="company-card">
-                        <div class="employer-profile-container">
-                            <img src="company-logo/marsa.jpg" alt="Company image">
-                        </div>
-                        <div class="company-card-rating">
-                            <h3><strong>SCANMAR CREWING SPECIALISTS</strong></h3>
-                            <div class="rating-section">
-                              <span class="star">★</span>
-                              <span class="rating-value">4.6</span>
-                            </div>
-                            <p class="review-count">100 Reviews</p>
-                        </div>
-                    </div>
+                    // Query to get all featured companies
+                    $sql = "SELECT company_code, company, company_profile, logo
+                            FROM employer
+                            WHERE verify = 'y' AND (member_type = 'Plan1' OR member_type = 'Plan2' OR member_type = 'Plan3' OR member_type = 'Plan4')";
+                    $result = $conn->query($sql);
 
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $company_name = $row['company'];
+                            $company_profile = $row['company_profile'];
+                            $company_code = $row['company_code'];
+                            $logo = $row['logo'];
+                            $logo_path = "company-logo/" . $logo;
+
+                            // Check if the logo file exists, otherwise use the placeholder
+                            if (!file_exists($logo_path) || empty($logo)) {
+                                $logo_path = "company-logo/Logo-placeholder.png";
+                            }
+                            ?>
+                            <div class="company-card">
+                                <div class="employer-profile-container">
+                                    <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Company image">
+                                </div>
+                                <div class="company-card-content">
+                                    <h3><strong><?php echo htmlspecialchars($company_name); ?></strong></h3>
+                                    <p><?php echo htmlspecialchars($company_profile) ?></p>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        echo "<p>No featured companies available at the moment.</p>";
+                    }
+                    ?>
                 </div>
             </div>
             <button id="nextBtn" class="slider-btn">&#10095;</button>
@@ -171,9 +125,9 @@
             <h3>Culture and values</h3>
           </div>
           <div class="perk-item">
-            <p class="perk-subtext">Read reviews from employees</p>
+            <p class="perk-subtext">Join thousands of Filipino seafarers</p>
             <img src="images/heart-img.png" alt="Ratings and reviews icon" />
-            <h3>Ratings and reviews</h3>
+            <h3>Trusted by many</h3>
           </div>
           <div class="perk-item">
             <p class="perk-subtext">Find perks that matter to you</p>

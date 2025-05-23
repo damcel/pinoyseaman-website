@@ -38,7 +38,7 @@ $job = $jobResult->fetch_assoc();
                     <li><a href="index.php">Home</a></li>
                     <li><a href="job_search.php">Jobs</a></li>
                     <li><a href="explore-companies.php">Explore Companies</a></li>
-                    <li><a href="#">Contact us</a></li>
+                    <li><a href="contact-us.php">Contact us</a></li>
                     <li><a href="user-login-signup.php" class="login-btn">Join Us</a></li>
                     <li><a href="employer-login-signup.php" class="signup-btn">Employer login</a></li>
                 </ul>

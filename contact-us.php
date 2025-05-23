@@ -135,8 +135,35 @@ form button:hover {
 }
 
     </style>
+
+    <style>
+        /* Alert Styles */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: #4caf50; /* Green for success */
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+            z-index: 1000;
+        }
+        .alert.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .alert.error {
+            background-color: #f44336; /* Red for error */
+        }
+    </style>
 </head>
 <body>
+  <!-- Alert Container -->
+    <div id="alert" class="alert"></div>
     <header>
         <nav class="main-nav">
             <div class="nav-left">
@@ -149,7 +176,7 @@ form button:hover {
                     <li><a href="index.php">Home</a></li>
                     <li><a href="job_search.php">Jobs</a></li>
                     <li><a href="explore-companies.php">Explore Companies</a></li>
-                    <li><a href="contuct-us.html">Contact us</a></li>
+                    <li><a href="contuct-us.php">Contact us</a></li>
                     <li><a href="user-login-signup.php" class="login-btn">Join Us</a></li>
                     <li><a href="employer-login-signup.php" class="signup-btn">Employer login</a></li>
                 </ul>
@@ -197,24 +224,24 @@ form button:hover {
         
             <div class="contact-form">
               <h2>Get in touch</h2>
-              <form>
+              <form action="includes/message_us.php" method="POST">
                 <div class="form-row">
                   <div class="form-group">
                     <label>First Name</label>
-                    <input type="text" placeholder="Name">
+                    <input type="text" name="first_name" placeholder="First Name">
                   </div>
                   <div class="form-group">
                     <label>Last Name</label>
-                    <input type="text" placeholder="Name">
+                    <input type="text" name="last_name" placeholder="Last Name">
                   </div>
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" placeholder="Email">
+                    <input type="email" name="sender_email" placeholder="Email">
                 </div>
                 <div class="form-group">
                   <label>Message</label>
-                  <textarea id="message" placeholder="Thankyou pinoyseaman......" oninput="autoGrow(this)"></textarea>
+                  <textarea id="message" name="sender_message" placeholder="Type your message here" oninput="autoGrow(this)"></textarea>
                 </div>
                 <button type="submit">Send Message</button>
               </form>
@@ -246,7 +273,7 @@ form button:hover {
             </div>
             <div class="footer-section links">
                 <ul>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="contact-us.php">Contact us</a></li>
                     <li><a href="#">Advertise</a></li>
                 </ul>
             </div>
@@ -259,5 +286,29 @@ form button:hover {
           textarea.style.height = (textarea.scrollHeight) + 'px';
         }
     </script>  
+    <script>
+        // Function to show alert
+        function showAlert(message, type = 'success') {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = message;
+            alertBox.className = `alert ${type} show`;
+
+            // Hide the alert after 3 seconds
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 3000);
+        }
+
+        // Check for query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        const type = urlParams.get('type'); // 'success' or 'error'
+
+        if (message) {
+            showAlert(message, type);
+            // Remove query parameters from the URL
+            history.replaceState(null, '', window.location.pathname);
+        }
+    </script>
 </body>
 </html>

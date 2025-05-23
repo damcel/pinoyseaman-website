@@ -274,7 +274,7 @@ $job = $jobResult->fetch_assoc();
             </div>
             <div class="footer-section links">
                 <ul>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="contact-us.php">Contact us</a></li>
                     <li><a href="#">Advertise</a></li>
                 </ul>
             </div>

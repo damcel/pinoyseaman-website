@@ -159,6 +159,17 @@
         .dropdown-list li:hover {
             background-color: #e6f0ff;
         }
+
+        .approve-btn{
+            background-color: #2c5de3; /* Red color */
+            color: white;
+            border: none;
+            padding: 7px 13px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
     </style>
 </head>
 <body>
@@ -178,28 +189,28 @@
             </div>
             <ul class="ul-links">
               <li class="menu-title">MENU</li>
-              <li>
-                <a href="#">
+              <li class="span-style">
+                <a href="admin-panel-verification.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-user-check"></i><span>EMPLOYER VERIFICATION</span>
+                </a>
+              </li>
+              <li  class="separator">
+                <a href="admin-panel-seafarer.html">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-users"></i><span>SEAFARER</span>
+                </a>
+              </li>
+              <li>
+                <a href="admin-panel-employer.html">
+                  <!-- SVG Icon -->
+                  <i class="fa-solid fa-users-line"></i><span>EMPLOYER</span>
                 </a>
               </li>
               <li class="separator">
                 <a href="#">
                   <!-- SVG Icon -->
-                  <i class="fa-solid fa-users-line"></i><span>EMPLOYER</span>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <!-- SVG Icon -->
                   <i class="fa-solid fa-chart-simple"></i><span>STATISTICS</span>
-                </a>
-              </li>
-              <li class="separator span-style">
-                <a href="#">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-user-check"></i><span>EMPLOYER VERIFICATION</span>
                 </a>
               </li>
             </ul>
@@ -212,7 +223,7 @@
                 <div class="search-ctn">
                     <div class="search-wrapper">
                       <i class="fa fa-search search-icon"></i>
-                      <input type="text" id="searchInput" placeholder="Search by firstname, lastname, or rank..." />
+                      <input type="text" id="searchInput" placeholder="Search by email, Company, or rank..." />
                       <ul id="searchResults" class="dropdown-list"></ul>
                     </div>
                 </div>
@@ -232,92 +243,91 @@
                 <table class="table-content">
                     <thead>
                         <tr>
-                            <th>lastname</th>
-                            <th>firstname</th>
-                            <th>Rank</th>
-                            <th>Email</th>
-                            <th>Account Deletion</th>
+                            <th>Company Name</th>
+                            <th>License</th>
+                            <th>website</th>
+                            <th>Approve</th>
+                            <th>Decline</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
                         </tr>
                         <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
                         </tr>
                         <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
                         </tr>
                         <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
                         </tr>
                         <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
                         </tr>
                         <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
+                            <td data-label="Company">Luis Drum</td>
+                            <td data-label="license">abc-123</td>
+                            <td data-label="website">luisdrumstudio.com</td>
+                            <td><button class="approve-btn">Approve</button></td>
+                            <td><button class="delete-btn">Declne</button></td>
                         </tr>
-                        <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Lastname">Pagcaliwangan</td>
-                            <td data-label="Firstname">Daniel</td>
-                            <td data-label="Rank">Tambay</td>
-                            <td data-label="Email">pagcaliwangan11@gmail.com</td>
-                            <td><button class="delete-btn">Delete</button></td>
-                        </tr>
-                    
                     </tbody>                
                 </table>    
                 <div id="pagination" class="pagination-controls"></div>
@@ -329,7 +339,7 @@
     <script src="script/sidenav.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
     <script>
-        const rowsPerPage = 6;
+        const rowsPerPage =8;
         const table = document.querySelector(".table-content tbody");
         const rows = Array.from(table.querySelectorAll("tr"));
         const paginationContainer = document.getElementById("pagination");
@@ -399,14 +409,13 @@
 
             let matchFound = false;
             allRows.forEach(row => {
-                const firstname = row.querySelector("td[data-label='Firstname']").textContent.toLowerCase();
-                const lastname = row.querySelector("td[data-label='Lastname']").textContent.toLowerCase();
-                const rank = row.querySelector("td[data-label='Rank']").textContent.toLowerCase();
-                const isMatch = firstname.includes(term) || lastname.includes(term) || rank.includes(term);
+                const email = row.querySelector("td[data-label='email']").textContent.toLowerCase();
+                const Company = row.querySelector("td[data-label='Company']").textContent.toLowerCase();
+                const isMatch = email.includes(term) || Company.includes(term) || rank.includes(term);
                 row.style.display = isMatch ? "" : "none";
 
                 if (isMatch) {
-                    const name = `${lastname}, ${firstname} (${rank})`;
+                    const name = `${Company}, ${email}`;
                     const li = document.createElement("li");
                     li.textContent = name;
                     li.addEventListener("click", () => {

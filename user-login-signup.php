@@ -258,6 +258,22 @@
     background-color: blue;
     }
 
+    .forgot-pws{
+        margin-top: 10px;
+    }
+
+    .forgot-pws a{
+        font-size: 13px;
+        color: rgb(17, 95, 203);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .forgot-pws a:hover{
+        text-decoration: underline;
+        color: blue;
+    }
+
     /* RESPONSIVE */
 
     @media only screen and (max-width: 425px) {
@@ -426,11 +442,9 @@
                             <button type="submit">
                                 Sign in
                             </button>
-                            <p>
-                                <b>
-                                    Forgot password?
-                                </b>
-                            </p>
+                            <div class="forgot-pws">
+                                <a href="forgot-pws.php">Forgot password</a>
+                            </div>
                             <p>
                                 <span>
                                     Don't have an account?

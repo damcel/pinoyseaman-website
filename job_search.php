@@ -152,7 +152,7 @@
             $totalPages = ceil($totalJobs / $jobsPerPage);
 
             // Query to fetch jobs with filters for the current page, prioritizing employers by member type
-            $jobQuery = "SELECT j.job_title, j.vessel, j.date_posted, j.code, e.company, e.logo 
+            $jobQuery = "SELECT j.job_title, j.vessel, j.date_posted, j.code, j.contract,e.company, e.logo 
                         FROM jobs j
                         INNER JOIN employer e ON j.company_code = e.company_code
                         $whereSQL
@@ -169,6 +169,7 @@
                     while ($job = $jobResult->fetch_assoc()) {
                         $jobTitle = htmlspecialchars($job['job_title']);
                         $vessel = htmlspecialchars($job['vessel']);
+                        $contract = htmlspecialchars($job['contract']);
                         $datePosted = htmlspecialchars($job['date_posted']);
                         $companyName = htmlspecialchars($job['company']);
                         $logoPath = "company-logo/" . htmlspecialchars($job['logo']);
@@ -187,8 +188,8 @@
                                 
                                 <div class="job-details">
                                     <p class="job-description"><i class="fas fa-ship"></i> <?php echo $vessel; ?></p>
-                                    <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p>
-                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> Contract</p>
+                                    <!-- <p class="job-description"><i class="fa-solid fa-money-bill"></i> Salary</p> -->
+                                    <p class="job-description"><i class="fa-solid fa-calendar"></i> <?php echo $contract; ?></p>
                                 </div>  
                                 
                                 <a href="#" class="company-link"><i class="fas fa-briefcase"></i> <?php echo $companyName; ?></a>

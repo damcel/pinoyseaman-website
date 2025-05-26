@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         </article>
                     `).join('');
-                    if (data.length > 1) {
+                    if (data.length > 5) {
                         // Show only the first card clearly, blur the rest
                         const cards = cardList.querySelectorAll('.applicant-profile-card');
                         cards.forEach((card, idx) => {

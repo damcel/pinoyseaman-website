@@ -19,7 +19,7 @@ if (!isset($_SESSION['employer_email'])) {
 $employerEmail = $_SESSION['employer_email'];
 
 // Fetch company details using the employer's email
-$companyQuery = "SELECT company, email, company_code FROM employer WHERE email = ?";
+$companyQuery = "SELECT company, email, company_code, member_type FROM employer WHERE email = ?";
 $companyStmt = $conn->prepare($companyQuery);
 $companyStmt->bind_param("s", $employerEmail);
 $companyStmt->execute();
@@ -45,12 +45,13 @@ if ($memberType === 'free') {
     $countResult = $countStmt->get_result();
     $countRow = $countResult->fetch_assoc();
     $jobCount = $countRow['job_count'] ?? 0;
+    $countStmt->close();
 
     if ($jobCount >= 3) {
         header("Location: ../employer-dashboard.php?type=error&message=Free members can only post up to 3 jobs. Upgrade to Premium for unlimited postings.");
         exit;
     }
-    $countStmt->close();
+    
 }
 
 // Get the form data

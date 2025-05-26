@@ -220,9 +220,9 @@ $document = $documentsResult->fetch_assoc();
                         <div class="details-section">
                             <h4>Last Employment</h4>
                             <p><strong>Rank:</strong> <?php echo !empty($user['rank']) ? htmlspecialchars($user['rank']) : 'N/A'; ?></p>
-                            <p><strong>Vessel:</strong> N/A</p>
+                            <!-- <p><strong>Vessel:</strong> N/A</p>
                             <p><strong>Type:</strong> N/A</p>
-                            <p><strong>Duration:</strong> N/A</p>
+                            <p><strong>Duration:</strong> N/A</p> -->
                         </div>
                         <button class="edit-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
                             <i class="fa-solid fa-pen-to-square"></i>
@@ -481,12 +481,12 @@ $document = $documentsResult->fetch_assoc();
                                 <select class="form-select" id="rank" name="rank">
                                     <option selected disabled>Select Rank</option>
                                     <?php
-                                    $rankQuery = "SELECT rank_name_shortcut FROM seaman_ranks";
+                                    $rankQuery = "SELECT rank_name, rank_name_shortcut FROM seaman_ranks";
                                     $rankResult = $conn->query($rankQuery);
                                     if ($rankResult->num_rows > 0) {
                                         while ($rank = $rankResult->fetch_assoc()) {
                                             $selected = ($user['rank'] === $rank['rank_name_shortcut']) ? 'selected' : '';
-                                            echo '<option value="' . htmlspecialchars($rank['rank_name_shortcut']) . '" ' . $selected . '>' . htmlspecialchars($rank['rank_name_shortcut']) . '</option>';
+                                            echo '<option value="' . htmlspecialchars($rank['rank_name_shortcut']) . '" ' . $selected . '>' . htmlspecialchars($rank['rank_name']) . ' - ' . htmlspecialchars($rank['rank_name_shortcut']) . '</option>';
                                         }
                                     }
                                     ?>

@@ -376,12 +376,13 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                     ? "Uploads/Seaman/User-Photo/" . htmlspecialchars($applicant['user_photo']) 
                                     : "Uploads/Seaman/User-Photo/Portrait_Placeholder.png"; // Placeholder if no photo
                                 $jobSeekerId = htmlspecialchars($applicant['job_seeker_id']);
+                                $jobCode = htmlspecialchars($applicant['job_code']);
                                 $applicantName = htmlspecialchars($applicant['name']);
                                 $jobTitle = htmlspecialchars($applicant['job_title']);
                                 $dateApplied = date("F j, Y, g:i a", strtotime($applicant['date'])); // Format the date
 
                                 echo "
-                                <div class='applicant-card' data-bs-toggle='modal' data-bs-target='#applicantModal' data-job-seeker-id='$jobSeekerId'>
+                                <div id='applicantProfile' class='applicant-card' data-bs-toggle='modal' data-bs-target='#applicant-profile-modal' data-job-seeker-id='$jobSeekerId'>
                                     <div class='info'>
                                         <img src='$userPhoto' alt='Avatar'>
                                         <div class='details'>
@@ -432,7 +433,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
 
     </main>
 
-    <?php include_once 'show_user_applicant_modal.php'; ?>
+    <?php include_once 'components/show_applicant_profile.php'; ?>
 
     <!-- Edit recent job Modal -->
     <section class="modal fade" id="edit-recent-job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">  

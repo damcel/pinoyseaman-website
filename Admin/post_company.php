@@ -72,8 +72,8 @@ $brevoData = [
     ],
     "to" => [
         [
-            "email" => $email,
-            "name" => $contact
+            "email" => $email
+            // "name" => $contact
         ]
     ],
     "subject" => "Your PinoySeaman.com Account is Verified",

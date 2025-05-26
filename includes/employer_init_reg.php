@@ -82,33 +82,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pdo = null;
         $stmt = null;
 
-        // Send email using PHPMailer
-        $mail = new PHPMailer(true);
+        // Send email using Brevo API
+        $apiKey = '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'; // Replace with your actual API key
 
-        try {
-            
-            $mail->isMail();
+        $emailData = [
+            "sender" => [
+                "name" => "PinoySeaman",
+                "email" => "noreply@pinoyseaman.com"
+            ],
+            "to" => [
+                [
+                    "email" => "admin@pinoyseaman.com",
+                    "name" => "Admin"
+                ]
+            ],
+            "subject" => "New Employer Registration",
+            "htmlContent" => "
+                <html>
+                    <body>
+                        <p>A new Employer has registered on <strong>PinoySeaman</strong>:</p>
+                        <ul>
+                            <li><strong>Company Name:</strong> $companyName</li>
+                            <li><strong>Email:</strong> $companyEmail</li>
+                            <li><strong>Phone:</strong> $companyPhone</li>
+                            <li><strong>Company ID:</strong> $newid</li>
+                            <li><strong>Website:</strong> $companyWebsite</li>
+                        </ul>
+                    </body>
+                </html>"
+        ];
 
-            // Sender and recipient settings
-            $mail->setFrom('noreply@pinoyseaman.com', 'PinoySeaman');
-            $mail->addAddress('admin@pinoyseaman.com');
-            $mail->Subject = 'New Employer Registration';
-            $mail->Body = "
-                <p>A new Employer has registered on PinoySeaman:</p>
-                <p>Company Name : $companyName</p>
-                <p>Email : $companyEmail</p>
-                <p>Phone : $companyPhone</p>
-                <p>Company ID : $newid</p>
-                <p>Website : $companyWebsite</p>";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://api.brevo.com/v3/smtp/email");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "accept: application/json",
+            "api-key: $apiKey",
+            "content-type: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($emailData));
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
-            $mail->send();
-
+        if ($httpCode == 201) {
             header("Location: ../employer-login-signup.php?type=success&message=Registration successful! We are now reviewing your registration. Please wait for admin approval.");
             exit;
-        } catch (Exception $e) {
-            header("Location: ../employer-login-signup.php?type=error&message=Registration successful, but email sending failed: {$mail->ErrorInfo}");
+        } else {
+            header("Location: ../employer-login-signup.php?type=error&message=Registration successful, but email sending failed.");
             exit;
         }
+
     } catch (PDOException $e) {
         header("Location: ../employer-login-signup.php?type=error&message=Error: " . $e->getMessage());
         exit;

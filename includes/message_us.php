@@ -1,10 +1,8 @@
 <?php
 
-// Enable error reporting for debugging (remove in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Check if form is submitted via POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get and sanitize form inputs
     $firstName = trim($_POST['first_name'] ?? '');
@@ -20,6 +18,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!filter_var($senderEmail, FILTER_VALIDATE_EMAIL)) {
         header("Location: ../contact-us.php?type=error&message=Invalid email address.");
+        exit;
+    }
+
+    // Validate reCAPTCHA
+    if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
+        header("Location: ../contact-us.php?type=error&message=Please complete the reCAPTCHA.");
+        exit;
+    }
+
+    $secretKey = '6LfxHEYrAAAAAMGdNwguvozZ3Su4uXrXOtvOmef1';
+    $recaptchaResponse = $_POST['g-recaptcha-response'];
+    $verifyResponse = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$recaptchaResponse}");
+    $responseData = json_decode($verifyResponse);
+
+    if (!$responseData || !$responseData->success) {
+        header("Location: ../contact-us.php?type=error&message=Recaptcha validation failed. Please try again.");
         exit;
     }
 
@@ -40,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         . "This message was sent from the PinoySeaman.com contact us form.";
 
     // Brevo API setup
-    $apiKey = 'YOUR_BREVO_API_KEY'; // Replace with your Brevo API key
+    $apiKey = 'API_KEY_HERE'; // Replace with your Brevo API key
 
     $brevoData = [
         "sender" => [

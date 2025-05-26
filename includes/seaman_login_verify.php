@@ -12,12 +12,12 @@ $job_seeker_id = filter_var(trim($_POST["job_seeker_id"]), FILTER_SANITIZE_EMAIL
 $job_seeker_password = trim($_POST["job_seeker_password"]);
 
 if (empty($job_seeker_id) || empty($job_seeker_password)) {
-    header("Location: ../alert.php?type=error&message=Email and Password are required!");
+    header("Location: ../user-login-signup.php?type=error&message=Email and Password are required!");
     exit;
 }
 
 if (!filter_var($job_seeker_id, FILTER_VALIDATE_EMAIL)) {
-    header("Location: ../alert.php?type=error&message=Invalid email format!");
+    header("Location: ../user-login-signup.php?type=error&message=Invalid email format!");
     exit;
 }
 
@@ -62,10 +62,10 @@ try {
         $action_stmt->bind_param("ss", $job_seeker_id, $ip_address);
         $action_stmt->execute();
 
-        header("Location: ../alert.php?type=error&message=Login failed! Please check your credentials.");
+        header("Location: ../user-login-signup.php?type=error&message=Login failed! Please check your credentials.");
         exit;
     }
 } catch (Exception $e) {
-    header("Location: ../alert.php?type=error&message=An error occurred: " . $e->getMessage());
+    header("Location: ../user-login-signup.php?type=error&message=An error occurred: " . $e->getMessage());
     exit;
 }

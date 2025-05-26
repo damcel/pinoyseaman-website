@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
     <title>Home</title>
     <style>
         /* Alert Styles */
@@ -451,5 +453,23 @@
             history.replaceState(null, '', window.location.pathname);
         }
     </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log('Service Worker Registered', reg))
+      .catch(err => console.error('Service Worker Failed', err));
+  }
+
+  // Optional: Listen for the A2HS prompt
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // You can optionally show your own custom "Add to Home" button
+    console.log('A2HS prompt available');
+    // e.prompt(); // Uncomment to auto prompt (not recommended)
+  });
+</script>
+
 </body>
 </html>

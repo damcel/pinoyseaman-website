@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
     <title>Admin Panel</title>
     <style>
 
@@ -235,7 +236,7 @@
         </section>
 
         <section class="statistics-container">
-            <!-- Chart Container -->
+            <!-- Chart Container --> 
             <div class="chart-count-ctn">
                 <div class="chart-container">
                   <div class="chart-header">

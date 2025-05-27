@@ -167,7 +167,7 @@
             <div class="admin-sidebar">
                 <div class="logo-container">
                     <a href="dashboardjobs.php" class="logo-link">
-                        <img src="pinoyseaman-logo/new-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                        <img src="pinoyseaman-logo/admin-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
                 <button onclick="toggleSidebar()" id="toggle-btn">
@@ -179,25 +179,25 @@
             <ul class="ul-links">
               <li class="menu-title">MENU</li>
               <li class="span-style">
-                <a href="admin-panel-verification.html">
+                <a href="admin-panel-verification.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-user-check"></i><span>EMPLOYER VERIFICATION</span>
                 </a>
               </li>
               <li  class="separator">
-                <a href="admin-panel-seafarer.html">
+                <a href="admin-panel-seafarer.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-users"></i><span>SEAFARER</span>
                 </a>
               </li>
               <li>
-                <a href="admin-panel-employer.html">
+                <a href="admin-panel-employer.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-users-line"></i><span>EMPLOYER</span>
                 </a>
               </li>
               <li class="separator">
-                <a href="#">
+                <a href="admin-panel-statistics.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-chart-simple"></i><span>STATISTICS</span>
                 </a>

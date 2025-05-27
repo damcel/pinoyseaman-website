@@ -49,7 +49,7 @@ header {
 }
 
 .nav-links a {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 500;
     color: #fff;
     text-decoration: none;
@@ -1655,7 +1655,7 @@ footer {
     }
 
     .nav-links a {
-        font-size: 18px;
+        font-size: 13px;
         font-weight: 500;
         color: #fff;
         text-decoration: none;

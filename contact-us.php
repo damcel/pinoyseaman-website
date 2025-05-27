@@ -9,7 +9,7 @@
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Seaman Jobs | Pinoyseaman">
     <meta property="og:image" content="https://www.pinoyseaman.com/index.php/pinoyseaman-logo/logo.png" />
-    <link rel="icon" href="pinoyseaman-logo/anchor.png" type="image/png">
+    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
     <link rel="canonical" href="https://www.pinoyseaman.com/index.php">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
@@ -189,7 +189,7 @@ form button[disabled] {
             <div class="nav-left">
                 <div class="logo-container">
                     <a href="index.php" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                        <img src="pinoyseaman-logo/admin-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
                 <ul class="nav-links">

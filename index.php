@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/main.css">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
     <meta name="theme-color" content="#007bff">
     <title>Home</title>
 
@@ -19,7 +20,7 @@
             <div class="nav-left">
                 <div class="logo-container">
                     <a href="index.php" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo" loading="lazy">
+                        <img src="pinoyseaman-logo/admin-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
                 <ul class="nav-links">

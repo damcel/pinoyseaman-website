@@ -72,7 +72,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/css/bootstrap-select.min.css">
-    
+    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
      <link rel="stylesheet" href="css/dashboard.css">
     <title>Dashboard</title>
  

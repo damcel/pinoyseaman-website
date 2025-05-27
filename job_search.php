@@ -14,7 +14,7 @@
             <div class="nav-left">
                 <div class="logo-container">
                     <a href="index.php" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                        <img src="pinoyseaman-logo/admin-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
                 <ul class="nav-links">

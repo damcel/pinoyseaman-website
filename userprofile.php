@@ -57,6 +57,7 @@ $document = $documentsResult->fetch_assoc();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
     <title>Profile Settings</title>
 </head>
 <body>

@@ -92,6 +92,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
     <title>Applicant List</title>
     <style>
         .modal-overlay {

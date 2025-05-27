@@ -1,3 +1,4 @@
+<?php include 'db.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,7 +62,7 @@
                         <option value="" <?php echo empty($_POST['job_type']) ? 'selected' : ''; ?>>Select job</option>
                         <?php
                         // Include the database connection file
-                        include 'db.php';
+                        
 
                         // Query to fetch jobs from the seaman_jobs table in ascending order
                         $jobQuery = "SELECT DISTINCT job FROM seaman_jobs ORDER BY job ASC";
@@ -107,7 +108,7 @@
                 <h3>
                     <?php
                     // Include the database connection file
-                    include 'db.php';
+                    
 
                     // Query to count total jobs
                     $jobCountQuery = "SELECT COUNT(*) AS total_jobs FROM jobs WHERE expiry >= CURDATE()";
@@ -124,7 +125,7 @@
 
             <?php
             // Include the database connection file
-            include 'db.php';
+            
 
             // Pagination variables
             $jobsPerPage = 10; // Number of jobs per page

@@ -29,63 +29,64 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const editButtons = document.querySelectorAll(".edit-job-btn");
 
-    editButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const jobCode = this.getAttribute("data-job-code");
+// document.addEventListener("DOMContentLoaded", function () {
+//     const editButtons = document.querySelectorAll(".edit-job-btn");
 
-            if (!jobCode) {
-                console.error("Job code is missing.");
-                return;
-            }
+//     editButtons.forEach(button => {
+//         button.addEventListener("click", function () {
+//             const jobCode = this.getAttribute("data-job-code");
 
-            // Fetch job details via AJAX
-            fetch(`includes/get_job_details.php?job_code=${jobCode}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error(data.error);
-                        return;
-                    }
-                    // Populate the modal with job details
-                    document.getElementById("editJobTitle").value = data.job_title;
-                    document.getElementById("editRank").value = data.rank;
-                    document.getElementById("editContractLength").value = data.contract;
-                    document.getElementById("editVesselType").value = data.vessel;
-                    document.getElementById("editJobRequirements").value = data.requirements;
-                    document.getElementById("editJobDescription").value = data.job_description;
-                    document.getElementById("editJobCode").value = data.code; // Hidden input for job ID
+//             if (!jobCode) {
+//                 console.error("Job code is missing.");
+//                 return;
+//             }
 
-                    // Pre-select dropdown values
-                    const jobTitleSelect = document.getElementById("editJobTitle");
-                    const rankSelect = document.getElementById("editRank");
-                    const vesselTypeSelect = document.getElementById("editVesselType");
+//             // Fetch job details via AJAX
+//             fetch(`includes/get_job_details.php?job_code=${jobCode}`)
+//                 .then(response => response.json())
+//                 .then(data => {
+//                     if (data.error) {
+//                         console.error(data.error);
+//                         return;
+//                     }
+//                     // Populate the modal with job details
+//                     document.getElementById("editJobTitle").value = data.job_title;
+//                     document.getElementById("editRank").value = data.rank;
+//                     document.getElementById("editContractLength").value = data.contract;
+//                     document.getElementById("editVesselType").value = data.vessel;
+//                     document.getElementById("editJobRequirements").value = data.requirements;
+//                     document.getElementById("editJobDescription").value = data.job_description;
+//                     document.getElementById("editJobCode").value = data.code; // Hidden input for job ID
 
-                    Array.from(jobTitleSelect.options).forEach(option => {
-                        if (option.value === data.job_title) {
-                            option.selected = true;
-                        }
-                    });
+//                     // Pre-select dropdown values
+//                     const jobTitleSelect = document.getElementById("editJobTitle");
+//                     const rankSelect = document.getElementById("editRank");
+//                     const vesselTypeSelect = document.getElementById("editVesselType");
 
-                    Array.from(rankSelect.options).forEach(option => {
-                        if (option.value === data.rank) {
-                            option.selected = true;
-                        }
-                    });
+//                     Array.from(jobTitleSelect.options).forEach(option => {
+//                         if (option.value === data.job_title) {
+//                             option.selected = true;
+//                         }
+//                     });
 
-                    Array.from(vesselTypeSelect.options).forEach(option => {
-                        if (option.value === data.vessel) {
-                            option.selected = true;
-                        }
-                    });
-                })
-                .catch(error => console.error("Error fetching job details:", error));
-        });
-    });
+//                     Array.from(rankSelect.options).forEach(option => {
+//                         if (option.value === data.rank) {
+//                             option.selected = true;
+//                         }
+//                     });
 
-});
+//                     Array.from(vesselTypeSelect.options).forEach(option => {
+//                         if (option.value === data.vessel) {
+//                             option.selected = true;
+//                         }
+//                     });
+//                 })
+//                 .catch(error => console.error("Error fetching job details:", error));
+//         });
+//     });
+
+// });
 
 document.addEventListener("DOMContentLoaded", function () {
     const applicantCards = document.querySelectorAll(".applicant-card");

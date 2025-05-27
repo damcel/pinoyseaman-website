@@ -1,37 +1,15 @@
+<?php include 'db.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#007bff">
     <title>Home</title>
-    <style>
-        /* Alert Styles */
-        .alert {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background-color: #4caf50; /* Green for success */
-            color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s, visibility 0.5s;
-            z-index: 1000;
-        }
-        .alert.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        .alert.error {
-            background-color: #f44336; /* Red for error */
-        }
-    </style>
+
 </head>
 <body>
     <!-- Alert Container -->
@@ -72,7 +50,7 @@
     <section class="bg-container">
         <div class="top-section">
             <section>
-                <figcaption class="motto">TRABAHONG SEAMAN, ISANG CLICK NALANG</figcaption>
+                <h1 class="motto">TRABAHONG SEAMAN, ISANG CLICK NALANG</h1>
             </section>
             <section class="container">
                     <div class="header-form">
@@ -156,7 +134,7 @@
                     Total: 
                     <?php
                     // Include the database connection file
-                    include 'db.php';
+                    
 
                     // Query to count total users in the job_seeker table
                     $sql = "SELECT COUNT(*) AS total_users FROM job_seeker";
@@ -179,7 +157,7 @@
                     Total: 
                     <?php
                     // Include the database connection file
-                    include 'db.php';
+                    
 
                     // Query to count total users in the job_seeker table
                     $sql = "SELECT COUNT(*) AS total_employers FROM employer WHERE verify = 'y'";
@@ -202,7 +180,7 @@
                     Total: 
                     <?php
                     // Include the database connection file
-                    include 'db.php';
+                    
 
                     // Query to count total jobs where expiry is not less than today's date
                     $sql = "SELECT COUNT(*) AS total_jobs FROM jobs WHERE expiry >= CURDATE()";
@@ -236,7 +214,7 @@
                 <div class="company-track">
                     <?php
                     // Include the database connection file
-                    include 'db.php';
+                    
 
                     // Query to get all featured companies
                     $sql = "SELECT company_code, company, company_profile, logo
@@ -259,7 +237,7 @@
                             ?>
                             <div class="company-card">
                                 <div class="employer-profile-container">
-                                    <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Company image">
+                                    <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Company image" loading="lazy">
                                 </div>
                                 <div class="company-card-content">
                                     <h3><strong><?php echo htmlspecialchars($company_name); ?></strong></h3>
@@ -287,13 +265,15 @@
                 <?php
 
                 // Include the database connection file
-                include 'db.php';
+                
 
                 // Query to get all featured companies
-                $sql = "SELECT e.company_code, e.company, e.logo, j.job_title, j.vessel
-                        FROM employer e
-                        INNER JOIN jobs j ON e.company_code = j.company_code
-                        WHERE j.expiry >= CURDATE() AND e.verify = 'y' AND (e.member_type = 'Plan1' OR e.member_type = 'Plan2' OR e.member_type = 'Plan3' OR e.member_type = 'Plan4')";
+                $sql = "SELECT e.company_code, e.company, e.logo, j.job_title, j.vessel, j.company_code
+                    FROM employer e
+                    INNER JOIN jobs j ON e.company_code = j.company_code
+                    WHERE j.expiry >= CURDATE()
+                    AND e.verify = 'y'
+                    AND e.member_type != 'FREE'";
                 $result = $conn->query($sql);
 
                 if ($result && $result->num_rows > 0) {
@@ -315,7 +295,7 @@
                             <div class="urgent-jobs-container">
                                 <div class="company-info">
                                     <div class="company-jobs-img">
-                                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Company image">
+                                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Company image" loading="lazy">
                                     </div>
                                     <div class="company-jobs-content">
                                         <h2><?php echo htmlspecialchars($job_title) ?></h2>
@@ -344,13 +324,14 @@
 
         <?php
         // Include the database connection file
-        include 'db.php';
+        
 
         // Query to get all featured companies
         $sql = "SELECT e.company_code, ca.ads_url
                 FROM employer e
                 INNER JOIN company_ads ca ON e.company_code = ca.company_code
-                WHERE e.verify = 'y' AND (e.member_type = 'Plan1' OR e.member_type = 'Plan2' OR e.member_type = 'Plan3' OR e.member_type = 'Plan4')";
+                WHERE e.verify = 'y' 
+                AND e.member_type != 'FREE'";
         $result = $conn->query($sql);
 
         if ($result && $result->num_rows > 0) {
@@ -366,7 +347,7 @@
                 }
                 ?>
                 
-                    <div class="ads-card"><a href=""><img src="<?php echo htmlspecialchars($ads_path); ?>" alt="ads"></a></div>
+                    <div class="ads-card"><a href=""><img src="<?php echo htmlspecialchars($ads_path); ?>" alt="ads" loading="lazy"></a></div>
                 
                 <?php
             }
@@ -428,7 +409,7 @@
     </footer>   
     <script src="script/company-arrow.js"></script>
     <script src="script/nav-hover-effect.js"></script>
-    <script src="script/ads-carousel.js"></script>
+    <!-- <script src="script/ads-carousel.js"></script> -->
     <script>
         // Function to show alert
         function showAlert(message, type = 'success') {
@@ -454,22 +435,22 @@
         }
     </script>
     <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(reg => console.log('Service Worker Registered', reg))
-      .catch(err => console.error('Service Worker Failed', err));
-  }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+            .then(reg => console.log('Service Worker Registered', reg))
+            .catch(err => console.error('Service Worker Failed', err));
+        }
 
-  // Optional: Listen for the A2HS prompt
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // You can optionally show your own custom "Add to Home" button
-    console.log('A2HS prompt available');
-    // e.prompt(); // Uncomment to auto prompt (not recommended)
-  });
-</script>
+        // Optional: Listen for the A2HS prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // You can optionally show your own custom "Add to Home" button
+            console.log('A2HS prompt available');
+            // e.prompt(); // Uncomment to auto prompt (not recommended)
+        });
+    </script>
 
 </body>
 </html>

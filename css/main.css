@@ -185,10 +185,11 @@ header {
     gap: 25px;
     align-items: center;
     background-image: url('../pinoyseaman-logo/HeroImage.png');
-    background-repeat: no-repeat; /* Prevents repetition */
-    background-size: cover; /* Ensures the image covers the entire container */
-    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; 
+    background-size: cover;
+    background-position: center;
 }
+
 
 /* Form Container */
 .container {
@@ -1243,7 +1244,7 @@ dd {
     font-size: 20px;
 }
 
-figcaption {
+h1 .motto {
     display: flex;
     justify-content: flex-end; /* Aligns the link to the right */
     padding: 10px; /* Adds some spacing */
@@ -2013,3 +2014,25 @@ footer {
     }
 }
 
+        /* Alert Styles */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: #4caf50; /* Green for success */
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+            z-index: 1000;
+        }
+        .alert.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .alert.error {
+            background-color: #f44336; /* Red for error */
+        }

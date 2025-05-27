@@ -384,7 +384,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                                 echo "
                                 <div id='applicantProfile' class='applicant-card' data-bs-toggle='modal' data-bs-target='#applicant-profile-modal' data-job-seeker-id='$jobSeekerId'>
                                     <div class='info'>
-                                        <img src='$userPhoto' alt='Avatar'>
+                                        <img src='$userPhoto' alt='Avatar' loading='lazy'>
                                         <div class='details'>
                                             <div class='name-time'>
                                                 <p class='name'>$applicantName</p>

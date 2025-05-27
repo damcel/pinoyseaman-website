@@ -323,6 +323,21 @@
 
     /* ----------- log in sign up back button END ------------------- */
 
+    .forgot-pws{
+        margin-top: 10px;
+    }
+
+    .forgot-pws a{
+        font-size: 13px;
+        color: rgb(17, 95, 203);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .forgot-pws a:hover{
+        text-decoration: underline;
+        color: blue;
+    }
 
     /* RESPONSIVE */
 
@@ -464,11 +479,9 @@
                             <button type="submit">
                                 Sign in
                             </button>
-                            <p>
-                                <b>
-                                    Forgot password?
-                                </b>
-                            </p>
+                            <div class="forgot-pws">
+                                <a href="forgot-pws-employer.php">Forgot password</a>
+                            </div>
                             <p>
                                 <span>
                                     Don't have an account?

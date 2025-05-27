@@ -258,6 +258,22 @@
     background-color: blue;
     }
 
+<<<<<<< HEAD
+    .forgot-pws{
+        margin-top: 10px;
+    }
+
+    .forgot-pws a{
+        font-size: 13px;
+        color: rgb(17, 95, 203);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .forgot-pws a:hover{
+        text-decoration: underline;
+        color: blue;
+=======
         /* Modal Styles */
     .modal {
         position: fixed;
@@ -336,6 +352,7 @@
 
     .modal.error .modal-content h3 {
         color: #f44336;
+>>>>>>> 4f9f0af6f879e02a2d85ff36307c6875228f7b2c
     }
 
     /* RESPONSIVE */
@@ -506,11 +523,9 @@
                             <button type="submit">
                                 Sign in
                             </button>
-                            <p>
-                                <b>
-                                    Forgot password?
-                                </b>
-                            </p>
+                            <div class="forgot-pws">
+                                <a href="forgot-pws.php">Forgot password</a>
+                            </div>
                             <p>
                                 <span>
                                     Don't have an account?

@@ -270,6 +270,21 @@
     }
 
     /* ----------- log in sign up back button END ------------------- */
+    .forgot-pws{
+        margin-top: 10px;
+    }
+
+    .forgot-pws a{
+        font-size: 13px;
+        color: rgb(17, 95, 203);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .forgot-pws a:hover{
+        text-decoration: underline;
+        color: blue;
+    }
 
     /* RESPONSIVE */
 
@@ -468,11 +483,9 @@
                             <button onclick="window.location.href='dashboardjobs.php'">
                                 Sign in
                             </button>
-                            <p>
-                                <b>
-                                    Forgot password?
-                                </b>
-                            </p>
+                            <div class="forgot-pws">
+                                <a href="forgot-pws.html">Forgot password</a>
+                            </div>
                             <p>
                                 <span>
                                     Don't have an account?
@@ -521,7 +534,9 @@
             </div>
             <!-- END CONTENT SECTION -->
         </div>
+
     </main>
+ 
     <script>
         let container = document.getElementById('container')
 

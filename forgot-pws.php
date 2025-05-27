@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Contact Us</title>
+    <title>Seagarer Forgot Password</title>
 
     <style>
 
@@ -22,68 +22,27 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 80px auto;
+    margin: 100px auto;
     flex-wrap: wrap;
-}
-        .contact-container {
-  display: flex;
-  min-height: 80vh;
-  border: 1px solid gray;
-  border-radius: 10px;
-}
-
-.contact-info {
-  flex: 1;
-  background: #0d82e7;
-  color: #fff;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-
-.contact-info h2 {
-  font-size: 28px;
-  margin-bottom: 15px;
-}
-
-.contact-info p {
-  margin-bottom: 30px;
-  line-height: 1.6;
-}
-
-.info-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
-}
-
-.info-item i {
-  font-size: 20px;
-  margin-right: 15px;
-  width: 25px;
-  text-align: center;
 }
 
 .contact-form {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+  background-color: white;
+  border-radius: 10px;
   flex: 2;
-  background: #fff;
-  padding: 50px 60px;
+  padding: 20px 60px;
+  min-width: 400px;
+  min-height: 200px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .contact-form h2 {
   font-size: 28px;
-  margin-bottom: 25px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: black;
 }
 
-form .form-row {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-}
 
 .form-group {
   flex: 1;
@@ -125,13 +84,7 @@ form button {
 }
 
 form button:hover {
-  background: #08569a;
-}
-
-.form-group textarea {
-  min-height: 60px;
-  overflow: hidden;
-  transition: height 0.2s ease;
+  background: #1c64a3;
 }
 
     </style>
@@ -171,55 +124,16 @@ form button:hover {
 <main>
     
     <section class="contact-ctn">
-        <div class="contact-container">
-            <div class="contact-info">
-              <h2>Let's get in touch</h2>
-              <p>
-                Philippine's longest running online jobseeker platform.
-              </p>
-              <div class="info-item">
-                <i class="fas fa-location-dot"></i>
-                <span><strong>Address</strong> <br>Scandic Palace Realty Inc., Emilia, Makati, Metro Manila</span>
-              </div>
-              <div class="info-item">
-                <i class="fas fa-phone"></i>
-                <span><strong>Phone</strong><br> 09452733184</span>
-              </div>
-              <div class="info-item">
-                <i class="fas fa-paper-plane"></i>
-                <span><strong>Email</strong> <br>filoseaman@gmail.com</span>
-              </div>
-              <div class="info-item">
-                <i class="fas fa-globe"></i>
-                <span><strong>Website </strong> <br>pinoyseaman.com</span>
-              </div>
-            </div>
-        
             <div class="contact-form">
-              <h2>Get in touch</h2>
+              <h2>Forgot Password?</h2>
               <form>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" placeholder="Name">
-                  </div>
-                  <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" placeholder="Name">
-                  </div>
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" placeholder="Email">
-                </div>
-                <div class="form-group">
-                  <label>Message</label>
-                  <textarea id="message" placeholder="Thankyou pinoyseaman......" oninput="autoGrow(this)"></textarea>
-                </div>
-                <button type="submit">Send Message</button>
+                    <div class="form-group">
+                        <label>Send Password to my Email</label>
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                <button type="submit">Retrieved Password</button>
               </form>
             </div>
-          </div>
     </section>
 
 </main>
@@ -253,11 +167,5 @@ form button:hover {
         </div>
     </footer>   
     <script src="script/nav-hover-effect.js"></script>
-    <script>
-        function autoGrow(textarea) {
-          textarea.style.height = 'auto';
-          textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
-    </script>  
 </body>
 </html>

@@ -6,6 +6,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get client IP address
+    $ip_address = $_SERVER['REMOTE_ADDR'];
 
     // Retrieving form data
     $first_name = trim($_POST["firstname"]);
@@ -43,6 +45,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         require_once "../db.php";
+
+        // Check if IP has already registered today
+        $ipCheckQuery = "SELECT COUNT(*) FROM action 
+                        WHERE action = 'Seaman Initial Registration' 
+                        AND ip = ? 
+                        AND date = CURDATE()";
+        $ipCheckStmt = $conn->prepare($ipCheckQuery);
+        $ipCheckStmt->bind_param("s", $ip_address);
+        $ipCheckStmt->execute();
+        $ipCheckStmt->bind_result($ipRegistrationsToday);
+        $ipCheckStmt->fetch();
+        $ipCheckStmt->close();
+
+        if ($ipRegistrationsToday > 0) {
+            header("Location: ../user-login-signup.php?type=error&message=Only one registration per IP address is allowed per day.");
+            exit;
+        }
 
         // Check if email already exists
         $checkQuery = "SELECT COUNT(*) FROM job_seeker WHERE email = ?";

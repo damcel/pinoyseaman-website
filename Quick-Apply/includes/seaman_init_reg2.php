@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $logStmt->execute([$currentDate, "Seaman Quick Apply Registration", $email, $ipAddress, $currentTime]);
 
         // === BREVO API SENDING ===
-        $apiKey = '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'; // Replace with your Brevo v3 API Key
+        $apiKey = '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'; // Replace with your Brevo v3 API Key
         $senderEmail = 'noreply@pinoyseaman.com';
         $senderName = 'PinoySeaman';
 

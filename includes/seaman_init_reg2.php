@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $actionStmt->close();
 
         // Send email using Brevo API
-        $apiKey = 'YOUR_BREVO_API_KEY'; // Replace with your Brevo API key
+        $apiKey = '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'; // Replace with your Brevo API key
 
         // Email to user
         $userData = [

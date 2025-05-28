@@ -4,8 +4,8 @@ error_reporting(E_ALL);
 error_reporting (E_STRICT);
 
 $dsn = "mysql:host=127.0.0.1;dbname=pinoysea_pinoyseaman";
-$dbusername = "root";
-$dbpassword = "";
+$dbusername = "pinoysea_manadmi";
+$dbpassword = "j03ld3xs@m";
 date_default_timezone_set('Asia/Manila');
 $datenow = date("Y-m-d");
 $today = date("Y-m-d");

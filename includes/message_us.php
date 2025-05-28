@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         . "This message was sent from the PinoySeaman.com contact us form.";
 
     // Brevo API setup
-    $apiKey = 'API_KEY_HERE'; // Replace with your Brevo API key
+    $apiKey = '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'; // Replace with your Brevo API key
 
     $brevoData = [
         "sender" => [

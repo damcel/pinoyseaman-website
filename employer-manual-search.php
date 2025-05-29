@@ -75,6 +75,69 @@
   pointer-events: none;
 }
 
+#pagination-jobposted {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#pagination-jobposted .pagination-btn {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 16px;
+  color: #333;
+}
+
+#pagination-jobposted .pagination-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+
+#pageNumbers-jobposted {
+  display: flex;
+  gap: 8px; /* controls spacing between page numbers */
+  align-items: center;
+  justify-content: center;
+}
+
+#pagination-jobposted .page-number {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 16px;
+  color: #333;
+}
+
+#pagination-jobposted .page-number:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+
+#pagination-jobposted .page-number.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+
 /* Make table responsive on small screens */
 @media (max-width: 768px) {
 
@@ -268,8 +331,66 @@
                                     </td>
                                     <td data-label="information" class="view-applicant-btn"><button>view</button></td>
                                 </tr>
+
+                                <tr class="job-posted">
+                                    <td data-label="Fullname">daniel</td>
+                                    <td data-label="Rank">Messman</td>
+                                    <td data-label="Experience" class="experience-cell">
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
+                                    </td>
+                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Fullname">daniel</td>
+                                    <td data-label="Rank">Messman</td>
+                                    <td data-label="Experience" class="experience-cell">
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
+                                    </td>
+                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Fullname">daniel</td>
+                                    <td data-label="Rank">Messman</td>
+                                    <td data-label="Experience" class="experience-cell">
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
+                                    </td>
+                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Fullname">daniel</td>
+                                    <td data-label="Rank">Messman</td>
+                                    <td data-label="Experience" class="experience-cell">
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
+                                    </td>
+                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Fullname">daniel</td>
+                                    <td data-label="Rank">Messman</td>
+                                    <td data-label="Experience" class="experience-cell">
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
+                                    </td>
+                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                </tr>
+                                <tr class="job-posted">
+                                    <td data-label="Fullname">daniel</td>
+                                    <td data-label="Rank">Messman</td>
+                                    <td data-label="Experience" class="experience-cell">
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
+                                    </td>
+                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                </tr>
                               </tbody>
                             </table>
+                            <div class="pagination-container" id="pagination-jobposted">
+                                <button id="prevPage-jobposted" class="pagination-btn" style="display: none;">
+                                    <i class="fa fa-arrow-left"></i>
+                                </button>
+                                <div id="pageNumbers-jobposted" class="pagination-numbers"></div>
+                                <button id="nextPage-jobposted" class="pagination-btn">
+                                    <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </div>
                           </div>
                         </div>
                       </div>                  
@@ -550,5 +671,65 @@
           });
         });
       </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const rowsPerPage = 10;
+  const table = document.getElementById("projectTable");
+  const tbody = table.querySelector("#tableBody");
+  const rows = tbody.querySelectorAll("tr.job-posted");
+  const totalRows = rows.length;
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
+  let currentPage = 1;
+
+  const prevBtn = document.getElementById("prevPage-jobposted");
+  const nextBtn = document.getElementById("nextPage-jobposted");
+  const pageNumbersContainer = document.getElementById("pageNumbers-jobposted");
+
+  function displayPage(page) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    rows.forEach((row, index) => {
+      row.style.display = (index >= start && index < end) ? "" : "none";
+    });
+
+    currentPage = page;
+    updateButtons();
+    renderPageNumbers();
+  }
+
+  function updateButtons() {
+    prevBtn.style.display = currentPage > 1 ? "inline-flex" : "none";
+    nextBtn.style.display = currentPage < totalPages ? "inline-flex" : "none";
+  }
+
+  function renderPageNumbers() {
+    pageNumbersContainer.innerHTML = "";
+    for (let i = 1; i <= totalPages; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.className = "page-number" + (i === currentPage ? " active" : "");
+      pageBtn.textContent = i;
+      pageBtn.addEventListener("click", () => displayPage(i));
+      pageNumbersContainer.appendChild(pageBtn);
+    }
+  }
+
+  prevBtn.addEventListener("click", function () {
+    if (currentPage > 1) {
+      displayPage(currentPage - 1);
+    }
+  });
+
+  nextBtn.addEventListener("click", function () {
+    if (currentPage < totalPages) {
+      displayPage(currentPage + 1);
+    }
+  });
+
+  displayPage(1); // initial render
+});
+</script>
+
+
 </body>
 </html>

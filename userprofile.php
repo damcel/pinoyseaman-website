@@ -493,6 +493,28 @@ $document = $documentsResult->fetch_assoc();
                                     ?>
                                 </select>
                             </div>
+                            
+                            <!-- JNEWLY ADDED INPUT FIELDS -->
+                            <div class="col-md-4 col-sm-12">
+                                <label for="lastCompany" class="form-label">Last Company</label>
+                                <select class="form-select" id="lastCompany">
+                                    <option selected disabled></option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12">
+                                <label for="lastSalary" class="form-label">Last Salary</label>
+                                <select class="form-select" id="lastSalary">
+                                    <option selected disabled></option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12">
+                                <label for="lastVessel" class="form-label">Last Vessel</label>
+                                <select class="form-select" id="lastVessel">
+                                    <option selected disabled></option>
+                                </select>
+                            </div>
                     
                             <!-- Job Status Row with Smaller Toggleable Buttons -->
                             <!-- <div class="col-md-6 col-sm-12">

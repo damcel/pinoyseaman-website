@@ -300,19 +300,19 @@
                                     <td data-label="Fullname">Donny Pangilinan</td>
                                     <td data-label="Rank">Messman</td>
                                     <td data-label="Experience" class="experience-cell"><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore inventore, impedit fugiat, dolores saepe sapiente quisquam nobis fuga tempore obcaecati laboriosam non iste est iusto libero ipsum! Asperiores, aspernatur fugit!</p></td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">Donny Pangilinan</td>
                                     <td data-label="Rank">Messman</td>
                                     <td data-label="Experience" class="experience-cell"><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore inventore, impedit fugiat, dolores saepe sapiente quisquam nobis fuga tempore obcaecati laboriosam non iste est iusto libero ipsum! Asperiores, aspernatur fugit!</p></td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">Donny Pangilinan</td>
                                     <td data-label="Rank">Messman</td>
                                     <td data-label="Experience" class="experience-cell"><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore inventore, impedit fugiat, dolores saepe sapiente quisquam nobis fuga tempore obcaecati laboriosam non iste est iusto libero ipsum! Asperiores, aspernatur fugit!</p></td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">Donny Pangilinan</td>
@@ -320,7 +320,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
 
                                 <tr class="job-posted">
@@ -329,7 +329,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
 
                                 <tr class="job-posted">
@@ -338,7 +338,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">daniel</td>
@@ -346,7 +346,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">daniel</td>
@@ -354,7 +354,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">daniel</td>
@@ -362,7 +362,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">daniel</td>
@@ -370,7 +370,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                                 <tr class="job-posted">
                                     <td data-label="Fullname">daniel</td>
@@ -378,7 +378,7 @@
                                     <td data-label="Experience" class="experience-cell">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime non et, temporibus ut delectus quae. Eveniet architecto, possimus earum excepturi temporibus laudantium neque doloremque numquam non molestiae! Accusantium, quam facilis!</p>
                                     </td>
-                                    <td data-label="information" class="view-applicant-btn"><button>view</button></td>
+                                    <td data-label="information" class="view-applicant-btn" data-bs-toggle="modal" data-bs-target="#applicant-profile-modal"><button>view</button></td>
                                 </tr>
                               </tbody>
                             </table>

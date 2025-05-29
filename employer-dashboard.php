@@ -308,33 +308,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                       </div>                  
                 </section>
 
-                <!-- <section class="performance-tracker">
-                    <div class="dashboard-card">
-                        <h3>Performance Tracker</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                        <div class="stats-container">
-                        <div class="stat-box">
-                            <strong>100</strong>
-                            <p>Search appearance<br><span class="positive">+100% last 7 days</span></p>
-                        </div>
-                        <div class="stat-box">
-                            <strong>0</strong>
-                            <p>Applicants<br><span class="neutral">0% last 7 days</span></p>
-                        </div>
-                        <div class="stat-box">
-                            <strong>0</strong>
-                            <p>Post Impression<br><span class="negative">-100% last 7 days</span></p>
-                        </div>
-                        <div class="stat-box">
-                            <strong>100</strong>
-                            <p>Job post visitors<br><span class="positive">+100% last 7 days</span></p>
-                        </div>
-                        </div>
-                    </div>
-                </section> -->
-            </div>
-            <div class="currency-date-aside">
-                <aside class="applicant-container">
+                <section class="performance-tracker">
                     <div class="aside-header">
                         <h2>New Applicant</h2>
                         <span class="position-title">Position</span>
@@ -404,28 +378,32 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                             <button type="button">View all<i class="fa-solid fa-angle-down"></i></button>
                         </div>
                     </section>
-                </aside>
-                                             
-                <aside class="calendar-container">
-                    <!-- Footer Section -->
-                    <footer class="page-footer">
-                        <ul class="footer-links">
-                        <li>About us</li>
-                        <li>Our Story</li>
-                        <li>Privacy & Terms</li>
-                        <li>Advertise</li>
-                        <li>Ad Choices</li>
-                        <li>Get in Touch</li>
-                        </ul>
-                        <div class="footer-branding">
-                            <img src="pinoyseaman-logo/alternativeHeaderLogo.png" alt="alternative-logo">
-                            <p>
-                                pinoyseaman.com © 2025
-                            </p>
-                        </div>
-                    </footer>
-                </aside>
+                </section>
 
+                <!-- <section class="performance-tracker">
+                    <div class="dashboard-card">
+                        <h3>Performance Tracker</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                        <div class="stats-container">
+                        <div class="stat-box">
+                            <strong>100</strong>
+                            <p>Search appearance<br><span class="positive">+100% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <p>Applicants<br><span class="neutral">0% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <p>Post Impression<br><span class="negative">-100% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>100</strong>
+                            <p>Job post visitors<br><span class="positive">+100% last 7 days</span></p>
+                        </div>
+                        </div>
+                    </div>
+                </section> -->
             </div>
         </section>
         

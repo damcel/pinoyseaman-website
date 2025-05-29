@@ -175,28 +175,13 @@
     }
 
     .text {
-        margin: 4rem;
+        margin-left: 100px;
         color: var(--white);
     }
-
-    .text h2 {
-        font-size: 3rem;
-        font-weight: 800;
-        margin: 2rem 0;
-        margin-left: 20px;
-        transition: 1s ease-in-out;
-    }
-
     .text p {
         font-weight: 600;
         transition: 1s ease-in-out;
         transition-delay: .2s;
-    }
-
-    .img img {
-        width: 30vw;
-        transition: 1s ease-in-out;
-        transition-delay: .4s;
     }
 
     .text.sign-in h2,
@@ -355,10 +340,61 @@
         color: #f44336;
 
     }
+    .text.sign-in,
+.text.sign-up {
+    z-index: 10;
+    position: relative;
+    margin-top: 1rem;
+    text-align: center; /* Center h2 text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    position: relative;
+    z-index: 10;
+    transition: 1s ease-in-out;
+    margin-top: 1rem; /* spacing from logo */
+}
+
+/* Round logo initially hidden */
+.round-logo {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    z-index: 10;
+    position: relative;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    transform: scale(0);
+    opacity: 0;
+}
+
+/* Show logo only for active section */
+.container.sign-in .text.sign-in .round-logo,
+.container.sign-up .text.sign-up .round-logo {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.round-logo img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 
     /* RESPONSIVE */
 
     @media only screen and (max-width: 425px) {
+
+        .text.sign-up .round-logo,
+    .text.sign-up h2 {
+        display: none;
+    }
 
         .container::before,
         .container.sign-in::before,
@@ -544,23 +580,23 @@
             <!-- CONTENT SECTION -->
             <div class="row content-row">
                 <!-- SIGN IN CONTENT -->
-                <div class="col align-items-center flex-col">
+                <div class="col flex-col">
                     <div class="text sign-in">
-                        <h2>
-                            Welcome Marino
-                        </h2>
-                    </div>
-                    <div class="img sign-in">
-            
+                            <div class="round-logo">
+                                <img src="pinoyseaman-logo/round-logo.png" alt="round-logo">
+                            </div>
+                            <h2>
+                                Welcome Marino
+                            </h2>
                     </div>
                 </div>
                 <!-- END SIGN IN CONTENT -->
                 <!-- SIGN UP CONTENT -->
                 <div class="col align-items-center flex-col">
-                    <div class="img sign-up">
-                    
-                    </div>
                     <div class="text sign-up">
+                        <div class="round-logo">
+                            <img src="pinoyseaman-logo/round-logo.png" alt="round-logo">
+                        </div>
                         <h2>
                             Trabahong Seaman, Isang Click nalang
                         </h2>

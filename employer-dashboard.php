@@ -539,25 +539,15 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <!-- HERE -->
                         
                             <div class="row mb-3">
-                                <?php
-                                // Fetch job titles dynamically
-                                $jobTitles = [];
-                                $jobQuery = "SELECT category, job FROM seaman_jobs"; // Replace 'job_table' with your actual table name
-                                $jobStmt = $conn->prepare($jobQuery);
-                                $jobStmt->execute();
-                                $jobResult = $jobStmt->get_result();
-
-                                while ($jobRow = $jobResult->fetch_assoc()) {
-                                    $jobTitles[] = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
-                                }
-                                ?>
                                 <div class="col">
-                                    <label for="jobPostName" class="form-label">Job Title</label>
-                                    <select class="form-select searchable-select" id="jobPostName" name="jobPostName" data-live-search="true">
+                                    <label for="editJobTitle" class="form-label">Job Title</label>
+                                    <select class="form-select searchable-select" id="editJobTitle" name="editJobTitle">
                                         <option disabled selected>Select job post</option>
-                                        <?php foreach ($jobTitles as $jobTitle): ?>
-                                            <option data-tokens="<?php echo $jobTitle; ?>" value="<?php echo $jobTitle; ?>"><?php echo $jobTitle; ?></option>
-                                        <?php endforeach; ?>
+                                        <option value="Deck Officer">Deck Officer</option>
+                                        <option value="Deck Ratings">Deck Ratings</option>
+                                        <option value="Engine Officer">Engine Officer</option>
+                                        <option value="Engine Ratings">Engine Ratings</option>
+                                        <option value="Kitchen">Kitchen</option>
                                     </select>
                                 </div>
                                 <?php

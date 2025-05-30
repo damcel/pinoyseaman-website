@@ -22,11 +22,17 @@
                 <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
             </a>
             </li>
-            <li class="separator">
+            <li>
             <a href="employer-posting.php">
                 <!-- SVG Icon -->
                 <i class="fa-regular fa-user"></i><span>Job Post</span>
             </a>
+            </li>
+            <li class="separator">
+                <a href="employer-manual-search.php">
+                  <!-- SVG Icon -->
+                  <i class="fa-regular fa-user"></i><span>Manual Search</span>
+                </a>
             </li>
             <!-- <li>
             <a href="employer-analytics.html">

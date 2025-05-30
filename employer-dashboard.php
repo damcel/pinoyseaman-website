@@ -308,33 +308,7 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                       </div>                  
                 </section>
 
-                <!-- <section class="performance-tracker">
-                    <div class="dashboard-card">
-                        <h3>Performance Tracker</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                        <div class="stats-container">
-                        <div class="stat-box">
-                            <strong>100</strong>
-                            <p>Search appearance<br><span class="positive">+100% last 7 days</span></p>
-                        </div>
-                        <div class="stat-box">
-                            <strong>0</strong>
-                            <p>Applicants<br><span class="neutral">0% last 7 days</span></p>
-                        </div>
-                        <div class="stat-box">
-                            <strong>0</strong>
-                            <p>Post Impression<br><span class="negative">-100% last 7 days</span></p>
-                        </div>
-                        <div class="stat-box">
-                            <strong>100</strong>
-                            <p>Job post visitors<br><span class="positive">+100% last 7 days</span></p>
-                        </div>
-                        </div>
-                    </div>
-                </section> -->
-            </div>
-            <div class="currency-date-aside">
-                <aside class="applicant-container">
+                <section class="performance-tracker">
                     <div class="aside-header">
                         <h2>New Applicant</h2>
                         <span class="position-title">Position</span>
@@ -404,28 +378,32 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                             <button type="button">View all<i class="fa-solid fa-angle-down"></i></button>
                         </div>
                     </section>
-                </aside>
-                                             
-                <aside class="calendar-container">
-                    <!-- Footer Section -->
-                    <footer class="page-footer">
-                        <ul class="footer-links">
-                        <li>About us</li>
-                        <li>Our Story</li>
-                        <li>Privacy & Terms</li>
-                        <li>Advertise</li>
-                        <li>Ad Choices</li>
-                        <li>Get in Touch</li>
-                        </ul>
-                        <div class="footer-branding">
-                            <img src="pinoyseaman-logo/alternativeHeaderLogo.png" alt="alternative-logo">
-                            <p>
-                                pinoyseaman.com © 2025
-                            </p>
-                        </div>
-                    </footer>
-                </aside>
+                </section>
 
+                <!-- <section class="performance-tracker">
+                    <div class="dashboard-card">
+                        <h3>Performance Tracker</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                        <div class="stats-container">
+                        <div class="stat-box">
+                            <strong>100</strong>
+                            <p>Search appearance<br><span class="positive">+100% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <p>Applicants<br><span class="neutral">0% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <p>Post Impression<br><span class="negative">-100% last 7 days</span></p>
+                        </div>
+                        <div class="stat-box">
+                            <strong>100</strong>
+                            <p>Job post visitors<br><span class="positive">+100% last 7 days</span></p>
+                        </div>
+                        </div>
+                    </div>
+                </section> -->
             </div>
         </section>
         
@@ -561,25 +539,15 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                         <!-- HERE -->
                         
                             <div class="row mb-3">
-                                <?php
-                                // Fetch job titles dynamically
-                                $jobTitles = [];
-                                $jobQuery = "SELECT category, job FROM seaman_jobs"; // Replace 'job_table' with your actual table name
-                                $jobStmt = $conn->prepare($jobQuery);
-                                $jobStmt->execute();
-                                $jobResult = $jobStmt->get_result();
-
-                                while ($jobRow = $jobResult->fetch_assoc()) {
-                                    $jobTitles[] = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
-                                }
-                                ?>
                                 <div class="col">
-                                    <label for="jobPostName" class="form-label">Job Title</label>
-                                    <select class="form-select searchable-select" id="jobPostName" name="jobPostName" data-live-search="true">
+                                    <label for="editJobTitle" class="form-label">Job Title</label>
+                                    <select class="form-select searchable-select" id="editJobTitle" name="editJobTitle">
                                         <option disabled selected>Select job post</option>
-                                        <?php foreach ($jobTitles as $jobTitle): ?>
-                                            <option data-tokens="<?php echo $jobTitle; ?>" value="<?php echo $jobTitle; ?>"><?php echo $jobTitle; ?></option>
-                                        <?php endforeach; ?>
+                                        <option value="Deck Officer">Deck Officer</option>
+                                        <option value="Deck Ratings">Deck Ratings</option>
+                                        <option value="Engine Officer">Engine Officer</option>
+                                        <option value="Engine Ratings">Engine Ratings</option>
+                                        <option value="Kitchen">Kitchen</option>
                                     </select>
                                 </div>
                                 <?php

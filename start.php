@@ -13,7 +13,7 @@
         <section>
             <div class="logo-start-container">
                 <a href="index.php" class="logo-start-link">
-                    <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    <img src="pinoyseaman-logo/round-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                 </a>
             </div>
             <div class="login-signup">

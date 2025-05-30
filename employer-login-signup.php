@@ -7,7 +7,7 @@
     <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
     <title>Employer Login $ Signup</title>
     <style>
-    :root {
+:root {
     --primary-color: #4EA685;
     --secondary-color: #57B894;
     --black: #000000;
@@ -53,9 +53,7 @@
     }
 
     .align-items-center {
-        display: flex;
         align-items: center;
-        justify-content: center;
         text-align: center;
     }
 
@@ -104,13 +102,39 @@
         border: 0.125rem solid var(--primary-color);
     }
 
+    .input-group input:focus,
+    .input-group select:focus {
+        border-color: var(--input-focus-border);
+    }
+
+    .date-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .date-input {
+        width: 32%;
+        padding: 1rem 3rem;
+        font-size: 1rem;
+        background-color: var(--gray);
+        border-radius: .5rem;
+        border: 0.125rem solid var(--input-border);
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .date-input:focus {
+        border-color: var(--input-focus-border);
+    }
+
+
     .form button {
         cursor: pointer;
         width: 100%;
         padding: .6rem 0;
         border-radius: .5rem;
-        background-color: #d1d6d8;
         border: none;
+        background-color: #d1d6d8;
         color: var(--white);
         font-size: 1.2rem;
         outline: none;
@@ -122,8 +146,11 @@
     }
 
     .flex-col {
+        display: flex;
         flex-direction: column;
+        justify-content: center;
     }
+
 
     .pointer {
         cursor: pointer;
@@ -148,27 +175,13 @@
     }
 
     .text {
-        margin: 4rem;
+        margin-left: 100px;
         color: var(--white);
     }
-
-    .text h2 {
-        font-size: 3rem;
-        font-weight: 800;
-        margin: 2rem 0;
-        transition: 1s ease-in-out;
-    }
-
     .text p {
         font-weight: 600;
         transition: 1s ease-in-out;
         transition-delay: .2s;
-    }
-
-    .img img {
-        width: 30vw;
-        transition: 1s ease-in-out;
-        transition-delay: .4s;
     }
 
     .text.sign-in h2,
@@ -221,8 +234,8 @@
         background-image: linear-gradient(-45deg, blue 0%, red 100%);
     }
 
-     /* Change sign-in button to red */
-     .container.sign-in .form.sign-in button {
+    /* Change sign-in button to red */
+    .container.sign-in .form.sign-in button {
     background-color: red;
     }
 
@@ -231,18 +244,23 @@
     background-color: blue;
     }
 
-    /* ----------- log in sign up back button ------------------- */
-    .back{
-        align-self:flex-end;
-        color: #686a6b;
-        margin-left: 5px;
+
+    .forgot-pws{
+        margin-top: 10px;
     }
 
-    .back:hover{
+    .forgot-pws a{
+        font-size: 13px;
+        color: rgb(17, 95, 203);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .forgot-pws a:hover{
         text-decoration: underline;
+        color: blue;
     }
-
-    /* Modal Styles */
+        /* Modal Styles */
     .modal {
         position: fixed;
         top: 0;
@@ -320,29 +338,63 @@
 
     .modal.error .modal-content h3 {
         color: #f44336;
-    }
 
-    /* ----------- log in sign up back button END ------------------- */
-
-    .forgot-pws{
-        margin-top: 10px;
     }
+    .text.sign-in,
+.text.sign-up {
+    z-index: 10;
+    position: relative;
+    margin-top: 1rem;
+    text-align: center; /* Center h2 text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    .forgot-pws a{
-        font-size: 13px;
-        color: rgb(17, 95, 203);
-        text-decoration: none;
-        cursor: pointer;
-    }
+.text h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    position: relative;
+    z-index: 10;
+    transition: 1s ease-in-out;
+    margin-top: 1rem; /* spacing from logo */
+}
 
-    .forgot-pws a:hover{
-        text-decoration: underline;
-        color: blue;
-    }
+/* Round logo initially hidden */
+.round-logo {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    z-index: 10;
+    position: relative;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    transform: scale(0);
+    opacity: 0;
+}
+
+/* Show logo only for active section */
+.container.sign-in .text.sign-in .round-logo,
+.container.sign-up .text.sign-up .round-logo {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.round-logo img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 
     /* RESPONSIVE */
 
     @media only screen and (max-width: 425px) {
+
+        .text.sign-up .round-logo,
+    .text.sign-up h2 {
+        display: none;
+    }
 
         .container::before,
         .container.sign-in::before,
@@ -409,6 +461,7 @@
             font-size: 2rem;
         }
     }
+    
         
     </style>
 </head>
@@ -505,28 +558,27 @@
             <!-- CONTENT SECTION -->
             <div class="row content-row">
                 <!-- SIGN IN CONTENT -->
-                <div class="col align-items-center flex-col">
+                 <!-- SIGN IN CONTENT -->
+                 <div class="col ">
                     <div class="text sign-in">
-                        <h2>
-                            Welcome Employer
-                        </h2>
-                    </div>
-                    <div class="img sign-in">
-            
-                        
+                            <div class="round-logo">
+                                <img src="pinoyseaman-logo/round-logo.png" alt="round-logo">
+                            </div>
+                            <h2>
+                                Welcome Employer
+                            </h2>
                     </div>
                 </div>
                 <!-- END SIGN IN CONTENT -->
                 <!-- SIGN UP CONTENT -->
                 <div class="col align-items-center flex-col">
-                    <div class="img sign-up">
-                    
-                    </div>
                     <div class="text sign-up">
+                        <div class="round-logo">
+                            <img src="pinoyseaman-logo/round-logo.png" alt="round-logo">
+                        </div>
                         <h2>
-                            Join with us
+                            Trabahong Seaman, Isang Click nalang
                         </h2>
-        
                     </div>
                 </div>
                 <!-- END SIGN UP CONTENT -->

@@ -1,116 +1,72 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const cards = document.querySelectorAll(".applicant-card");
-    const viewAllButton = document.querySelector(".view-all button");
-
-    let isExpanded = false;
-
-    function showLimitedCards() {
-    cards.forEach((card, index) => {
-        card.style.display = index < 4 ? "flex" : "none";
-    });
-    viewAllButton.textContent = "View all →";
-    isExpanded = false;
-    }
-
-    function showAllCards() {
-    cards.forEach(card => {
-        card.style.display = "flex";
-    });
-    viewAllButton.textContent = "View less ↑";
-    isExpanded = true;
-    }
-
-    // Initial state
-    showLimitedCards();
-
-    viewAllButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    isExpanded ? showLimitedCards() : showAllCards();
-    });
-});
-
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     const editButtons = document.querySelectorAll(".edit-job-btn");
-
-//     editButtons.forEach(button => {
-//         button.addEventListener("click", function () {
-//             const jobCode = this.getAttribute("data-job-code");
-
-//             if (!jobCode) {
-//                 console.error("Job code is missing.");
-//                 return;
-//             }
-
-//             // Fetch job details via AJAX
-//             fetch(`includes/get_job_details.php?job_code=${jobCode}`)
-//                 .then(response => response.json())
-//                 .then(data => {
-//                     if (data.error) {
-//                         console.error(data.error);
-//                         return;
-//                     }
-//                     // Populate the modal with job details
-//                     document.getElementById("editJobTitle").value = data.job_title;
-//                     document.getElementById("editRank").value = data.rank;
-//                     document.getElementById("editContractLength").value = data.contract;
-//                     document.getElementById("editVesselType").value = data.vessel;
-//                     document.getElementById("editJobRequirements").value = data.requirements;
-//                     document.getElementById("editJobDescription").value = data.job_description;
-//                     document.getElementById("editJobCode").value = data.code; // Hidden input for job ID
-
-//                     // Pre-select dropdown values
-//                     const jobTitleSelect = document.getElementById("editJobTitle");
-//                     const rankSelect = document.getElementById("editRank");
-//                     const vesselTypeSelect = document.getElementById("editVesselType");
-
-//                     Array.from(jobTitleSelect.options).forEach(option => {
-//                         if (option.value === data.job_title) {
-//                             option.selected = true;
-//                         }
-//                     });
-
-//                     Array.from(rankSelect.options).forEach(option => {
-//                         if (option.value === data.rank) {
-//                             option.selected = true;
-//                         }
-//                     });
-
-//                     Array.from(vesselTypeSelect.options).forEach(option => {
-//                         if (option.value === data.vessel) {
-//                             option.selected = true;
-//                         }
-//                     });
-//                 })
-//                 .catch(error => console.error("Error fetching job details:", error));
-//         });
-//     });
-
-// });
-
 document.addEventListener("DOMContentLoaded", function () {
-    const applicantCards = document.querySelectorAll(".applicant-card");
-    // Delete Job Button Handler
-    const deleteBtn = document.getElementById('deleteJobBtn');
-    const deleteInput = document.getElementById('deleteJobInput');
-    const editForm = document.querySelector('#edit-recent-job form');
 
-    if (deleteBtn && deleteInput && editForm) {
-        deleteBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (confirm("Are you sure you want to delete this job? This action cannot be undone.")) {
-                deleteInput.value = "1";
-                editForm.submit();
+    // Get values from hidden inputs
+    const isFreeMemberInput = document.getElementById('isFreeMember');
+    const displayLimitInput = document.getElementById('displayLimit');
+    
+    const isFreeMember = isFreeMemberInput ? isFreeMemberInput.value === 'true' : false;
+    const displayLimit = displayLimitInput ? parseInt(displayLimitInput.value) : (isFreeMember ? 10 : 25);
+    const rows = document.querySelectorAll("tr.applicant-row");
+
+    // Blur pagination for free members
+    if (isFreeMember) {
+        const paginationContainer = document.getElementById('pagination-jobposted');
+        if (paginationContainer) {
+            paginationContainer.classList.add('free-member-pagination');
+            
+            // Disable all pagination buttons
+            const paginationButtons = paginationContainer.querySelectorAll('.pagination-btn, .page-number');
+            paginationButtons.forEach(button => {
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.5';
+            });
+            
+            // Add upgrade notice
+            const upgradeNotice = document.createElement('div');
+            upgradeNotice.className = 'upgrade-notice-pagination';
+            upgradeNotice.innerHTML = `
+                <div class="upgrade-message">
+                    <i class="fas fa-lock"></i>
+                    Upgrade to premium to access all pages
+                    <a href="membership.php" class="upgrade-link">Upgrade Now</a>
+                </div>
+            `;
+            paginationContainer.appendChild(upgradeNotice);
+        }
+    }
+    
+    function updateRowVisibility() {
+        let visibleCount = 0;
+        
+        rows.forEach((row, index) => {
+            if (isFreeMember) {
+                if (visibleCount < displayLimit) {
+                    row.classList.remove('blurred-row');
+                    row.querySelector('.view-applicant-btn').style.pointerEvents = 'auto';
+                    row.querySelector('.view-applicant-btn button').disabled = false;
+                    visibleCount++;
+                } else {
+                    row.classList.add('blurred-row');
+                    row.querySelector('.view-applicant-btn').style.pointerEvents = 'none';
+                    row.querySelector('.view-applicant-btn button').disabled = true;
+                }
+            } else {
+                row.classList.remove('blurred-row');
+                row.querySelector('.view-applicant-btn').style.pointerEvents = 'auto';
+                row.querySelector('.view-applicant-btn button').disabled = false;
             }
         });
     }
+    
+    // Initial visibility setup
+    updateRowVisibility();
 
-    applicantCards.forEach(card => {
-        card.addEventListener("click", function () {
-            const jobSeekerId = this.getAttribute("data-job-seeker-id");
+
+    document.querySelectorAll('.view-applicant-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const jobSeekerId = this.getAttribute("data-applicant-id");
 
             if (jobSeekerId) {
-
                 // Show the modal loading spinner overlay
                 const spinner = document.getElementById('editJobLoadingSpinner');
                 if (spinner) spinner.style.display = 'flex';
@@ -516,9 +472,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     .catch(() => {
                         if (spinner) spinner.style.display = 'none';
                     });
-            }
-
-            
+            };
         });
     });
+
 });

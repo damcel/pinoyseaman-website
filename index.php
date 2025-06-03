@@ -269,7 +269,7 @@
                 
 
                 // Query to get all featured companies
-                $sql = "SELECT e.company_code, e.company, e.logo, j.job_title, j.vessel, j.company_code
+                $sql = "SELECT e.company_code, e.company, e.logo, j.job_title, j.vessel, j.company_code, j.code
                     FROM employer e
                     INNER JOIN jobs j ON e.company_code = j.company_code
                     WHERE j.expiry >= CURDATE()
@@ -281,6 +281,7 @@
                     while ($row = $result->fetch_assoc()) {
                         $company_name = $row['company'];
                         $company_code = $row['company_code'];
+                        $job_code = $row['code'];
                         $logo = $row['logo'];
                         $job_title = $row['job_title'];
                         $vessel = $row['vessel'];
@@ -305,7 +306,7 @@
                                     </div>
                                 </div>
                                 <div class="company-jobs-btn">
-                                    <button class="jobs-btn">Details & Apply</button>
+                                    <a href="jobs.php?job_id=<?php echo htmlspecialchars($job_code); ?>" class="apply-button">Details & Apply</a>
                                 </div>
                             </div>
                         </section>

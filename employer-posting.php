@@ -37,13 +37,19 @@ if (isset($_GET['type']) && isset($_GET['message'])) {
     $alertType = ($_GET['type'] === 'success') ? 'success' : 'error';
     $message = htmlspecialchars($_GET['message']); // Sanitize the message
     echo "<script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const alertModalMessage = document.getElementById('alertModalMessage');
-            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-            alertModalMessage.textContent = '$message';
-            alertModal.show();
-        });
-    </script>";
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertModalMessage = document.getElementById('alertModalMessage');
+        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        alertModalMessage.textContent = '$message';
+        alertModal.show();
+
+        // Remove URL params after showing modal
+        const url = new URL(window.location.href);
+        url.searchParams.delete('type');
+        url.searchParams.delete('message');
+        window.history.replaceState({}, document.title, url.pathname);
+    });
+</script>";
 }
 
 // Fetch the verification status and job details from the database
@@ -275,47 +281,41 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
                     
                         <div class="row mb-3">
                             <?php
-                            // Fetch job titles dynamically
-                            $jobTitles = [];
-                            $jobQuery = "SELECT category, job FROM seaman_jobs"; // Replace 'job_table' with your actual table name
-                            $jobStmt = $conn->prepare($jobQuery);
-                            $jobStmt->execute();
-                            $jobResult = $jobStmt->get_result();
+                                // Fetch all jobs with their categories
+                                $jobQuery = "SELECT category, job FROM seaman_jobs";
+                                $jobStmt = $conn->prepare($jobQuery);
+                                $jobStmt->execute();
+                                $jobResult = $jobStmt->get_result();
 
-                            while ($jobRow = $jobResult->fetch_assoc()) {
-                                $jobTitles[] = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
-                            }
-                            ?>
-                            <div class="col">
-                                <label for="jobPostName" class="form-label">Job Title</label>
-                                <select class="form-select searchable-select" id="jobPostName" name="jobPostName" data-live-search="true">
-                                    <option disabled selected>Select job post</option>
-                                    <?php foreach ($jobTitles as $jobTitle): ?>
-                                        <option data-tokens="<?php echo $jobTitle; ?>" value="<?php echo $jobTitle; ?>"><?php echo $jobTitle; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <?php
-                            // Fetch job titles dynamically
-                            $rankTitles = [];
-                            $rankQuery = "SELECT rank_name, rank_name_shortcut FROM seaman_ranks"; // Replace 'job_table' with your actual table name
-                            $rankStmt = $conn->prepare($rankQuery);
-                            $rankStmt->execute();
-                            $rankResult = $rankStmt->get_result();
-
-                            while ($rankRow = $rankResult->fetch_assoc()) {
-                                $rankTitles[] = htmlspecialchars($rankRow['rank_name'] . " - " . $rankRow['rank_name_shortcut']);
-                            }
-                            ?>
-                            <div class="col">
-                                <label for="rank" class="form-label">Rank*</label>
-                                <select class="form-select searchable-select" id="rank" name="rank" data-live-search="true">
-                                    <option disabled selected>Select job post</option>
-                                    <?php foreach ($rankTitles as $rankTitle): ?>
-                                        <option data-tokens="<?php echo $rankTitle; ?>" value="<?php echo $rankTitle; ?>"><?php echo $rankTitle; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                                $jobsByCategory = [];
+                                $jobToCategory = [];
+                                while ($jobRow = $jobResult->fetch_assoc()) {
+                                    $category = $jobRow['category'];
+                                    $job = $jobRow['job'];
+                                    $jobsByCategory[$category][] = $job;
+                                    $jobToCategory[$job] = $category; // Map job back to category
+                                }
+                                ?>
+                                
+                                <div class="col">
+                                    <label for="rank" class="form-label">Rank Department</label>
+                                    <select class="form-select" id="rank" name="rank">
+                                        <option disabled selected>Select Department</option>
+                                        <?php foreach (array_keys($jobsByCategory) as $category): ?>
+                                            <option value="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                
+                                <div class="col">
+                                    <label for="jobPostName" class="form-label">Rank/Position</label>
+                                    <select class="form-select" id="jobPostName" name="jobPostName">
+                                        <option disabled selected>Select Rank/Position</option>
+                                        <?php foreach ($jobToCategory as $job => $category): ?>
+                                            <option value="<?= htmlspecialchars($job) ?>"><?= htmlspecialchars($job) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
                             <div class="col">
                                 <label for="contractLength" class="form-label">Contract Length*</label>
                                 <input type="text" class="form-control" id="contractLength" name="contractLength">
@@ -386,44 +386,45 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
 
                 <div class="modal-body">
                     <!-- HERE -->
+                        <?php
+                        // Fetch all jobs with their categories
+                        $jobQuery = "SELECT category, job FROM seaman_jobs";
+                        $jobStmt = $conn->prepare($jobQuery);
+                        $jobStmt->execute();
+                        $jobResult = $jobStmt->get_result();
+
+                        $jobsByCategory = [];
+                        $jobToCategory = [];
+                        while ($jobRow = $jobResult->fetch_assoc()) {
+                            $category = $jobRow['category'];
+                            $job = $jobRow['job'];
+                            $jobsByCategory[$category][] = $job;
+                            $jobToCategory[$job] = $category;
+                        }
+                        ?>
                     
                         <div class="row mb-3">
+                            
+                            <div class="col">
+                                <label for="editRank" class="form-label">Rank Department</label>
+                                <select class="form-select" id="editRank" name="editRank">
+                                    <option disabled selected>Select department</option>
+                                    <?php foreach (array_keys($jobsByCategory) as $category): ?>
+                                        <option value="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
                             <div class="col">
                                 <label for="editJobTitle" class="form-label">Job Title</label>
-                                <select class="form-select searchable-select" id="editJobTitle" name="editJobTitle">
+                                <select class="form-select" id="editJobTitle" name="editJobTitle">
                                     <option disabled selected>Select job post</option>
-                                    <?php
-                                    // Fetch job titles dynamically
-                                    $jobQuery = "SELECT category, job FROM seaman_jobs";
-                                    $jobStmt = $conn->prepare($jobQuery);
-                                    $jobStmt->execute();
-                                    $jobResult = $jobStmt->get_result();
-
-                                    while ($jobRow = $jobResult->fetch_assoc()) {
-                                        $jobTitle = htmlspecialchars($jobRow['category'] . " - " . $jobRow['job']);
-                                        echo "<option value=\"$jobTitle\">$jobTitle</option>";
-                                    }
-                                    ?>
+                                    <?php foreach ($jobToCategory as $job => $category): ?>
+                                        <option value="<?= htmlspecialchars($job) ?>"><?= htmlspecialchars($job) ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="col">
-                                <label for="editRank" class="form-label">Rank*</label>
-                                <select class="form-select searchable-select" id="editRank" name="editRank">
-                                    <option disabled selected>Select rank</option>
-                                    <?php
-                                    // Fetch rank titles dynamically
-                                    $rankQuery = "SELECT rank_name, rank_name_shortcut FROM seaman_ranks";
-                                    $rankStmt = $conn->prepare($rankQuery);
-                                    $rankStmt->execute();
-                                    $rankResult = $rankStmt->get_result();
 
-                                    while ($rankRow = $rankResult->fetch_assoc()) {
-                                        $rankTitle = htmlspecialchars($rankRow['rank_name'] . " - " . $rankRow['rank_name_shortcut']);
-                                        echo "<option value=\"$rankTitle\">$rankTitle</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
                             <div class="col">
                                 <label for="editContractLength" class="form-label">Contract Length*</label>
                                 <input type="text" class="form-control" id="editContractLength" name="editContractLength">
@@ -494,6 +495,91 @@ $logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
     <script src="script/employer_job_posting.js"></script>
     <!-- <script src="script/employer_dashboard.js"></script> -->
+
+    <script>
+    const jobsByCategory = <?php echo json_encode($jobsByCategory); ?>;
+    const jobToCategory = <?php echo json_encode($jobToCategory); ?>;
+
+    const rankSelect = document.getElementById('rank');
+    const jobSelect = document.getElementById('jobPostName');
+
+    // Populate Rank/Position when Rank Department is selected
+    rankSelect.addEventListener('change', function () {
+        const selectedCategory = this.value;
+
+        // Reset job select
+        jobSelect.innerHTML = '<option disabled selected>Select job post</option>';
+
+        if (jobsByCategory[selectedCategory]) {
+            jobsByCategory[selectedCategory].forEach(job => {
+                const option = document.createElement('option');
+                option.value = job;
+                option.textContent = job;
+                jobSelect.appendChild(option);
+            });
+        }
+    });
+
+    // Select Rank Department when Rank/Position is selected
+    jobSelect.addEventListener('change', function () {
+        const selectedJob = this.value;
+        const category = jobToCategory[selectedJob];
+
+        if (category) {
+            rankSelect.value = category;
+
+            // Trigger change event to repopulate job list
+            const event = new Event('change');
+            rankSelect.dispatchEvent(event);
+
+            // Reselect the job
+            jobSelect.value = selectedJob;
+        }
+    });
+</script>
+
+<script>
+    const jobsByCategory = <?= json_encode($jobsByCategory) ?>;
+    const jobToCategory = <?= json_encode($jobToCategory) ?>;
+
+    const editRankSelect = document.getElementById('editRank');
+    const editJobTitleSelect = document.getElementById('editJobTitle');
+
+    editRankSelect.addEventListener('change', function () {
+        const selectedCategory = this.value;
+
+        editJobTitleSelect.innerHTML = '<option disabled selected>Select job post</option>';
+        if (jobsByCategory[selectedCategory]) {
+            jobsByCategory[selectedCategory].forEach(job => {
+                const option = document.createElement('option');
+                option.value = job;
+                option.textContent = job;
+                editJobTitleSelect.appendChild(option);
+            });
+        }
+    });
+
+    editJobTitleSelect.addEventListener('change', function () {
+        const selectedJob = this.value;
+        if (jobToCategory[selectedJob]) {
+            editRankSelect.value = jobToCategory[selectedJob];
+        }
+    });
+
+    // Optional: Populate with current values when modal is shown
+    document.getElementById('edit-recent-job').addEventListener('show.bs.modal', function () {
+        const selectedJob = editJobTitleSelect.value;
+        if (selectedJob && jobToCategory[selectedJob]) {
+            editRankSelect.value = jobToCategory[selectedJob];
+
+            // Trigger change to repopulate job list
+            editRankSelect.dispatchEvent(new Event('change'));
+
+            // Re-select job if needed
+            editJobTitleSelect.value = selectedJob;
+        }
+    });
+</script>
     
 </body>
 </html>

@@ -178,11 +178,18 @@
             padding: 10px; /* Reapply spacing inside if needed */
         }
 
-        .btn-primary{
-            padding: 5px;
-            margin: 0;
-            align-items: center;
+        .custom-edit-btn {
+            background-color: #0d6efd; /* Bootstrap's primary blue */
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease;
         }
+
+        .custom-edit-btn:hover {
+            background-color: #6c757d; /* Bootstrap's secondary gray */
+            color: #fff;
+        }
+
     </style>
 </head>
 <body>
@@ -270,9 +277,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
@@ -282,9 +295,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
@@ -294,9 +313,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
@@ -306,9 +331,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
@@ -318,9 +349,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
@@ -330,9 +367,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
@@ -342,9 +385,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
@@ -354,9 +403,15 @@
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration" class="duration-td">
-                                <h6>3 months</h6>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">3 months</h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>

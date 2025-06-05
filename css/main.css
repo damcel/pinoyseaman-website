@@ -1548,12 +1548,16 @@ footer {
 
 .footer-container {
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
     align-items: flex-start;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
     flex-wrap: wrap;
+}
+
+.footer-container img{
+    width: 200px;
 }
 
 .footer-section {
@@ -1586,10 +1590,6 @@ footer {
 
 .footer-section img{
     width: 50%;
-}
-
-.brand{
-    margin-top: 18px;
 }
 
 .brand h2 {

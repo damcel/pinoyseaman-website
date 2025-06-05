@@ -260,7 +260,7 @@
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Password</th>
-                            <th>Premium Duration</th>
+                            <th>Member Type</th>
                             <th>Account Deletion</th>
                         </tr>
                     </thead>
@@ -374,27 +374,36 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="planDuration" class="form-label">Choose Duration</label>
-                                <select class="form-select" id="planDuration">
-                                    <option disabled selected>Select duration</option>
+                        <form action="" method="POST">
+                            <!-- Billing Type -->
+                            <div class="mb-4">
+                                <label for="planDuration" class="form-label fw-semibold">Billing Type</label>
+                                <select class="form-select border-primary shadow-sm" id="planDuration" name="plan_duration" required>
+                                    <option disabled selected value="">Select billing type</option>
                                     <option value="monthly">Per Month</option>
                                     <option value="yearly">Per Year</option>
                                 </select>
+                                <div class="form-text">Choose whether the plan bills monthly or yearly.</div>
                             </div>
-                            <div class="mb-3">
-                                <label for="price" class="form-label">Set Price</label>
-                                <input type="number" class="form-control" id="price" placeholder="Enter price for selected duration">
+
+                            <!-- Duration Count -->
+                            <div class="mb-4">
+                                <label for="durationCount" class="form-label fw-semibold">Number of Billing Cycles</label>
+                                <select class="form-select border-primary shadow-sm" id="durationCount" name="duration_count" required>
+                                    <option disabled selected value="">Select duration</option>
+                                </select>
+                                <div class="form-text">This depends on the billing type you selected above.</div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary w-100 py-2">Submit</button>
                             </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Save Settings</button>
                     </div>
                 </div>
             </div>
         </section>
+
 
     </main>
 
@@ -494,6 +503,27 @@
 
         if (matchFound) {
             searchResults.style.display = "block";
+        }
+    });
+</script>
+
+<script>
+    const planDuration = document.getElementById('planDuration');
+    const durationCount = document.getElementById('durationCount');
+
+    planDuration.addEventListener('change', function () {
+        const type = this.value; // 'monthly' or 'yearly'
+        const label = type === 'monthly' ? 'Month' : 'Year';
+        
+        // Clear existing options
+        durationCount.innerHTML = '<option disabled selected value="">Select duration</option>';
+
+        // Populate new options
+        for (let i = 1; i <= 12; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${i} ${label}${i > 1 ? 's' : ''}`;
+            durationCount.appendChild(option);
         }
     });
 </script>

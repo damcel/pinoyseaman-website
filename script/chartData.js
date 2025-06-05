@@ -1,188 +1,155 @@
-const monthlyData = [100, 180, 300, 110, 350, 280, 190, 200, 260, 290, 240, 120];
-        const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      
-        const barChart = document.getElementById('barChart');
-        const viewSelector = document.getElementById('viewSelector');
-        const dataTable = document.getElementById('dataTable').querySelector('tbody');
-        const dayPageSelector = document.getElementById('dayPageSelector');
-        const tableContainer = document.querySelector('.table-container');
-      
-        let currentView = 'month';
-        let selectedMonthIndex = new Date().getMonth();
-        let currentPage = 0;
-      
-        const allDailyData = Array.from({ length: 12 }, (_, month) => {
-          const days = new Date(new Date().getFullYear(), month + 1, 0).getDate();
-          return Array.from({ length: days }, () => Math.floor(Math.random() * 400 + 50));
-        });
-      
-        function renderMonthDropdown() {
-          dayPageSelector.innerHTML = '';
-          const currentMonth = new Date().getMonth();
-          for (let i = 0; i <= currentMonth; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = monthsShort[i];
-            if (i === currentMonth) option.selected = true;
-            dayPageSelector.appendChild(option);
-          }
-          dayPageSelector.style.display = 'inline-block';
-        }
-      
-        function renderPaginationButtons(totalItems) {
-          let paginationDiv = document.getElementById('paginationButtons');
-          if (!paginationDiv) {
-            paginationDiv = document.createElement('div');
-            paginationDiv.id = 'paginationButtons';
-            paginationDiv.style.marginTop = '10px';
-            paginationDiv.style.textAlign = 'center';
-            tableContainer.appendChild(paginationDiv);
-          }
-      
-          paginationDiv.innerHTML = '';
-      
-          const totalPages = Math.ceil(totalItems / 10);
-      
-          const prevBtn = document.createElement('button');
-          prevBtn.innerHTML = '&#8592;';
-          prevBtn.disabled = currentPage === 0;
-          prevBtn.onclick = () => {
-            if (currentPage > 0) {
-              currentPage--;
-              renderTable(selectedMonthIndex, currentPage);
-            }
-          };
-      
-          const nextBtn = document.createElement('button');
-          nextBtn.innerHTML = '&#8594;';
-          nextBtn.disabled = currentPage >= totalPages - 1;
-          nextBtn.onclick = () => {
-            if (currentPage < totalPages - 1) {
-              currentPage++;
-              renderTable(selectedMonthIndex, currentPage);
-            }
-          };
-      
-          paginationDiv.appendChild(prevBtn);
-          paginationDiv.appendChild(document.createTextNode(` Page ${currentPage + 1} of ${totalPages} `));
-          paginationDiv.appendChild(nextBtn);
-        }
-      
-        function renderBars(view = 'month') {
-            if (!barChart) return;
-            barChart.innerHTML = '';
-            const today = new Date();
-            const currentMonth = today.getMonth();
-          
-            if (view === 'month') {
-              for (let i = 0; i < 12; i++) {
-                const barGroup = document.createElement('div');
-                barGroup.className = 'bar-group';
-          
-                if (i <= currentMonth) {
-                  const value = monthlyData[i];
-                  const bar = document.createElement('div');
-                  bar.className = 'bar';
-                  bar.style.height = `${(value / 400) * 100 + 50}px`;
-                  barGroup.appendChild(bar);
-                }
-          
-                const label = document.createElement('div');
-                label.className = 'label';
-                label.textContent = monthsShort[i];
-                barGroup.appendChild(label);
-          
-                barChart.appendChild(barGroup);
-              }
-            } else {
-              const data = allDailyData[selectedMonthIndex];
-              const isCurrentMonth = selectedMonthIndex === today.getMonth();
-              const currentDay = today.getDate();
-          
-              data.forEach((value, i) => {
-                const day = i + 1;
-          
-                if ((isCurrentMonth && day < currentDay) || (!isCurrentMonth)) {
-                  const barGroup = document.createElement('div');
-                  barGroup.className = 'bar-group';
-          
-                  const bar = document.createElement('div');
-                  bar.className = 'bar';
-                  bar.style.height = `${(value / 400) * 100 + 50}px`;
-          
-                  // ✅ Tooltip on hover
-                  bar.title = `${value} applicant${value !== 1 ? 's' : ''} on Day ${day}`;
-          
-                  const label = document.createElement('div');
-                  label.className = 'label';
-                  label.textContent = day.toString();
-          
-                  barGroup.appendChild(bar);
-                  barGroup.appendChild(label);
-                  barChart.appendChild(barGroup);
-                }
-              });
-            }
-          }
-      
-        function renderTable(monthIndex, page = 0) {
-          const monthData = allDailyData[monthIndex];
-          dataTable.innerHTML = '';
-      
-          const today = new Date();
-          const isCurrentMonth = monthIndex === today.getMonth();
-          const daysInMonth = monthData.length;
-          const startDayIndex = isCurrentMonth ? today.getDate() - 1 : daysInMonth - 1;
-      
-          const dayIndices = [];
-          for (let i = startDayIndex; i >= 0; i--) {
-            dayIndices.push(i);
-          }
-      
-          const start = page * 9;
-          const end = Math.min(start + 9, dayIndices.length);
-      
-          for (let i = start; i < end; i++) {
-            const dayIndex = dayIndices[i];
-            const row = document.createElement('tr');
-            const dateCell = document.createElement('td');
-            const monthCell = document.createElement('td');
-            const valueCell = document.createElement('td');
-      
-            dateCell.textContent = (dayIndex + 1).toString();
-            monthCell.textContent = monthsShort[monthIndex];
-            valueCell.textContent = monthData[dayIndex];
-      
-            row.appendChild(dateCell);
-            row.appendChild(monthCell);
-            row.appendChild(valueCell);
-            dataTable.appendChild(row);
-          }
-      
-          renderPaginationButtons(dayIndices.length);
-        }
-      
-        viewSelector?.addEventListener('change', (e) => {
-          const selectedView = e.target.value;
-          currentView = selectedView;
-          if (selectedView === 'month') {
-            document.getElementById('paginationButtons')?.remove();
-            renderBars('month');
-            renderTable(new Date().getMonth(), 0);
-          } else {
-            renderBars('day');
-            renderTable(selectedMonthIndex, 0);
-          }
-        });
-      
-        dayPageSelector.addEventListener('change', (e) => {
-          selectedMonthIndex = parseInt(e.target.value);
-          currentPage = 0;
-          renderBars(currentView);
-          renderTable(selectedMonthIndex, currentPage);
-        });
-      
-        // Initial load
-        renderMonthDropdown();
-        renderBars('month');
-        renderTable(new Date().getMonth(), 0);
+const dayPageSelector = document.getElementById('dayPageSelector');
+const yearPageSelector = document.getElementById('yearPageSelector');
+const viewSelector = document.getElementById('viewSelector');
+const dataTable = document.querySelector('#dataTable tbody');
+const barChart = document.getElementById('barChart');
+
+let currentPage = 1;
+const rowsPerPage = 7;
+
+const today = new Date();
+let selectedMonthIndex = today.getMonth() + 1; // Jan = 1
+let selectedYear = today.getFullYear();
+let dailyData = [];
+
+function populateMonthDropdown() {
+  dayPageSelector.innerHTML = '';
+  for (let i = 0; i < 12; i++) {
+    const opt = document.createElement('option');
+    opt.value = i + 1;
+    opt.textContent = new Date(0, i).toLocaleString('default', { month: 'short' });
+    if (i + 1 === selectedMonthIndex) opt.selected = true;
+    dayPageSelector.appendChild(opt);
+  }
+}
+
+function populateYearDropdown() {
+  const currentYear = today.getFullYear();
+  for (let y = currentYear; y >= currentYear - 5; y--) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    if (y === selectedYear) opt.selected = true;
+    yearPageSelector.appendChild(opt);
+  }
+}
+
+function fetchDailyData(month, year) {
+  fetch(`get_daily_counts.php?month=${month}&year=${year}`)
+    .then(res => res.json())
+    .then(data => {
+      dailyData = data;
+      currentPage = 1;
+      renderBarChart();
+      renderTable();
+    });
+}
+
+function renderBarChart() {
+  barChart.innerHTML = '';
+  const daysInMonth = new Date(selectedYear, selectedMonthIndex, 0).getDate();
+  const dataMap = new Map(dailyData.map(item => [item.reg_date, parseInt(item.count)]));
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${selectedYear}-${String(selectedMonthIndex).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const count = dataMap.get(dateStr) || 0;
+
+    if (selectedYear === today.getFullYear() && selectedMonthIndex === today.getMonth() + 1 && d >= today.getDate()) {
+      break;
+    }
+
+    const barGroup = document.createElement('div');
+    barGroup.className = 'bar-group';
+
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = `${(count / 10) * 20}px`; // Adjust as needed
+    bar.title = `${count} applicant(s) on Day ${d}`;
+
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = d;
+
+    barGroup.appendChild(bar);
+    barGroup.appendChild(label);
+    barChart.appendChild(barGroup);
+  }
+}
+
+function renderTable() {
+  const dataMap = new Map(dailyData.map(item => [item.reg_date, parseInt(item.count)]));
+  const daysInMonth = new Date(selectedYear, selectedMonthIndex, 0).getDate();
+  const data = [];
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${selectedYear}-${String(selectedMonthIndex).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const count = dataMap.get(dateStr) || 0;
+
+    if (selectedYear === today.getFullYear() && selectedMonthIndex === today.getMonth() + 1 && d >= today.getDate()) {
+      break;
+    }
+
+    data.push({
+      date: dateStr,
+      day: new Date(dateStr).toLocaleString('default', { weekday: 'short' }),
+      count: count
+    });
+  }
+
+  // Reverse to show newest first
+  data.reverse();
+
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedData = data.slice(start, end);
+
+  dataTable.innerHTML = '';
+  paginatedData.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${row.date}</td>
+      <td>${row.day}</td>
+      <td>${row.count}</td>
+    `;
+    dataTable.appendChild(tr);
+  });
+
+  updatePaginationControls(data.length);
+}
+
+function updatePaginationControls(totalRows) {
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
+  document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById('prevPage').disabled = currentPage === 1;
+  document.getElementById('nextPage').disabled = currentPage === totalPages;
+}
+
+document.getElementById('prevPage').addEventListener('click', () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable();
+  }
+});
+
+document.getElementById('nextPage').addEventListener('click', () => {
+  const totalPages = Math.ceil(dailyData.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTable();
+  }
+});
+
+
+// Initial population and listeners
+populateMonthDropdown();
+populateYearDropdown();
+fetchDailyData(selectedMonthIndex, selectedYear);
+
+dayPageSelector.addEventListener('change', (e) => {
+  selectedMonthIndex = parseInt(e.target.value);
+  fetchDailyData(selectedMonthIndex, selectedYear);
+});
+yearPageSelector.addEventListener('change', (e) => {
+  selectedYear = parseInt(e.target.value);
+  fetchDailyData(selectedMonthIndex, selectedYear);
+});

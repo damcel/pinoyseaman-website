@@ -1,3 +1,9 @@
+<?php
+session_start();
+include 'connect.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,178 +11,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="css/admin-panel-statistics.css">
+    <link rel="icon" href="../Pinoyseaman.ico" type="image/x-icon"> 
     <title>Admin Panel</title>
+
     <style>
-
-        .statistics-container{
-  margin: min(60px, 7%);
-	margin-top: min(30px, 7%);
-	flex-wrap: wrap; /* Allows wrapping when the screen is too small */
-}
-
-        .header-ctn{
-            background-color: #FEFEFE;
-            display: flex;
-            justify-content: flex-end;
-            padding: 15px 60px 15px 60px;
-            align-items: center;
-            position: relative;
-            border-bottom: 1px solid #DAE3F8;
-        }
-
-        .admin-panel-ctn{
-            background-color: #fefefe;
-            border-radius: 8px;
-            padding: 15px;
-            width: 100%;
-            height: 500px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .span-style span{
-            font-size: 14px;
-        }
-
-        .admin-sidebar {
-        height: 60px;
-        display: flex;
-        align-items: center;
-        padding: 5px;
-        box-sizing: border-box;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-        }
-
-        .chart-count-ctn {
+      .pagination-controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
-  margin-top: 30px;
-}
-
-.chart-container, .table-container {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  font-family: sans-serif;
-}
-
-.chart-container {
-  flex: 2;
-  width: 300px;
-  height: fit-content;
-}
-
-.table-container {
-  flex: 1;
-  min-width: 300px;
-  overflow-x: auto;
-}
-
-.chart-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-bottom: 10px;
+  margin-top: 10px;
+  gap: 10px;
 }
 
-.chart-header h3, .table-title {
-  margin: 0;
-  font-size: 18px;
-}
-
-.chart-select {
-  border: none;
-  background: transparent;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.bar-chart {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  height: 450px;
-  padding: 10px 0;
-  overflow-x: auto;
-}
-
-.bar-group {
-  text-align: center;
-  flex: 0 0 auto;
-  width: 40px;
-  margin: 0 2px;
-}
-
-.bar {
-  margin: 0 auto;
-  border-radius: 10px;
-  background: linear-gradient(to top, #3b82f6, #60a5fa);
-  box-shadow: 0px 2px 10px rgba(59, 130, 246, 0.3);
-  transition: height 0.3s ease;
-}
-
-.label {
-  margin-top: 8px;
-  font-size: 11px;
-  color: #444;
-  white-space: nowrap;
-}
-
-/* Table Styles */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  color: #333;
-}
-
-.data-table th,
-.data-table td {
-  padding: 10px 12px;
-  text-align: center;
-}
-
-.data-table th {
-  background-color: #f0f4ff;
-  color: #1e40af;
-}
-
-.data-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.header-table{
-    display: flex;
-    justify-content: space-between;
-}
-
-.drop-table {
-    border: none;
-    background: transparent;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-#paginationButtons button {
-  padding: 6px 12px;
-  font-size: 16px;
-  background: #eee;
-  border: 1px solid #ccc;
-  margin: 0 5px;
-  cursor: pointer;
-}
-#paginationButtons button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.pagination-controls button {
+  padding: 5px 10px;
 }
 
     </style>
+
 </head>
 <body>
     <aside id="sidebar">
@@ -184,7 +38,7 @@
             <div class="admin-sidebar">
                 <div class="logo-container">
                     <a href="dashboardjobs.php" class="logo-link">
-                        <img src="pinoyseaman-logo/admin-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                        <img src="../pinoyseaman-logo/admin-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
                     </a>
                 </div>
                 <button onclick="toggleSidebar()" id="toggle-btn">
@@ -256,12 +110,13 @@
                     <div class="header-table">
                         <h3 class="table-title">Newly Registered User</h3>
                         <select id="dayPageSelector" class="drop-table"></select>
+                        <select id="yearPageSelector" class="drop-table"></select>
                     </div>
                   <table class="data-table" id="dataTable">
                     <thead>
                       <tr>
                         <th>Date</th>
-                        <th>Month</th>
+                        <th>Day</th>
                         <th>Applicant</th>
                       </tr>
                     </thead>
@@ -269,14 +124,19 @@
                       <!-- JS inserts data here -->
                     </tbody>
                   </table>
+                  <div class="pagination-controls">
+                      <button id="prevPage">Previous</button>
+                      <span id="pageInfo">Page 1</span>
+                      <button id="nextPage">Next</button>
+                  </div>
                 </div>
               </div>
           </section>
 
     </main>
 
-    <script src="script/sidenav.js"></script>
-    <script src="script/profile-dropdown-menu.js"></script>
-    <script src="script/chartData.js"></script>
+    <script src="../script/sidenav.js"></script>
+    <script src="../script/profile-dropdown-menu.js"></script>
+    <script src="../script/chartData.js"></script>
 </body>
 </html>

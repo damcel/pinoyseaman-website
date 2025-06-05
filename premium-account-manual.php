@@ -156,108 +156,182 @@
   color: #333;
 }
 
-.payment-details {
-    background: #f9f9f9;
+/* ===== Payment Layout Section ===== */
+.payment-section .payment-container {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.invoice-box {
+/* ===== Left: How To Pay Box ===== */
+.how-to-pay-box {
+  flex: 1 1 60%;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.payment-steps {
+  list-style: decimal inside;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  padding-left: 0;
+}
+
+.payment-steps a.bank-link {
+  color: #000;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.email-link {
+  color: #000;
+  text-decoration: underline;
+}
+
+.payment-steps ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.payment-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 2rem;
+}
+
+.payment-icons .icon {
+  width: 130px;
+  height: auto;
+}
+
+/* ===== Right: Purchase Summary Box ===== */
+.purchase-summary-box {
+  flex: 1 1 35%;
+}
+
+.summary-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+}
+
+.summary-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.summary-item,
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.summary-item.bold {
+  font-weight: bold;
+}
+
+.summary-total {
+  border-top: 1px solid #e0e0e0;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  font-weight: bold;
+}
+
+.total-price {
+  font-size: 1.2rem;
+  color: #000;
+}
+
+.order-status-btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #1db954;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-status-btn:hover {
+  background-color: #1aa34a;
+}
+
+.pending-box {
     background: #fff;
-    padding: 2rem;
-    border: 1px solid #eee;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #333;
-}
-.header {
-    position: relative;
-    width: 100%;
-}
-
-.paid-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #5cb85c;
-    color: white;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    transform: rotate(45deg) translate(40%, -40%);
-    transform-origin: top right;
-    width: 150px;
+    border-radius: 10px;
+    padding: 40px 20px;
     text-align: center;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .pending-title {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .pending-text {
     font-size: 16px;
-    z-index: 10;
-}
+    color: #333;
+  }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 2rem; /* this pushes the logo + info DOWN so it won't get covered */
-}
-
-.logo img {
-    max-width: 250px;
-    height: auto;
-}
-
-.company-info {
-    text-align: right;
-}
-
-
-.invoice-info {
-    margin-top: 2rem;
-    background: #f2f2f2;
-    padding: 1rem;
-}
-
-.billed-to {
-    margin-top: 2rem;
-}
-
-.item-table, .transaction-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1.5rem;
-}
-
-.item-table th, .item-table td,
-.transaction-table th, .transaction-table td {
-    border: 1px solid #ddd;
-    padding: 0.75rem;
-}
-
-.item-table th, .transaction-table th {
-    background: #f7f7f7;
-    font-weight: bold;
-}
-
-.summary{
-    background: #fafafa;
-    text-align: right;
-}
-
-.total td {
-    font-weight: bold;
-}
-
-.transaction-history {
-    margin-top: 2rem;
-}
-
-.footer-note {
-    margin-top: 2rem;
+  .approved-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 40px 20px;
     text-align: center;
-    font-size: 12px;
-    color: #999;
-}
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  }
 
-.total-amount{
-    text-align: left;
-}
+  .check-icon {
+    font-size: 64px;
+    color: #28a745;
+    margin-bottom: 15px;
+  }
+
+  .approved-text {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .approved-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .approved-btn:hover {
+    background-color: #218838;
+  }
+
     </style>
 </head>
 <body>
@@ -292,13 +366,7 @@
                 </a>
               </li>
               <li>
-                <a href="employer-analytics.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="account-plan.html">
+                <a href="account-plan.php">
                   <!-- SVG Icon -->
                   <i class="fa-regular fa-building"></i><span>Premium Plan</span>
                 </a>
@@ -332,7 +400,7 @@
                 <!-- Dropdown Menu -->
                 <div class="dropdown" id="dropdownMenu">
                     <a href="userprofile.php" class="prfl">Profile Settings</a>
-                    <a href="index.html">Logout</a>
+                    <a href="index.php">Logout</a>
                 </div>
             </div>
         </section>
@@ -345,12 +413,12 @@
                                 <span class="circle">&#10003;</span>
                                 <span class="label">Subscription</span>
                             </li>
-                            <li class="step completed"> <!-- THIS IS FOR PAYMENT -->
+                            <li class="step active"> <!-- THIS IS FOR PAYMENT -->
                                 <span class="circle"><i class="fa-solid fa-hourglass-half"></i></span>
                                 <span class="label">Payment</span>
                             </li>
-                            <li class="step active"> <!-- THIS IS FOR CONFIRM -->
-                                <span class="circle">&#10003;</span>
+                            <li class="step"> <!-- THIS IS FOR CONFIRM -->
+                                <span class="circle"></span>
                                 <span class="label">Confirm</span>
                             </li>
                         </ul>
@@ -358,92 +426,57 @@
                 </div>
             </section>
         
-            <section class="job-list payment-details">
-                <article class="invoice-box">
-                    <div class="header">
-                        <div class="paid-badge">PAID</div>
-                    
-                        <div class="header-content">
-                            <div class="logo">
-                                <img src="pinoyseaman-logo/alternativeHeaderLogo.png" alt="pinoyseaman-logo">
-                            </div>
-                            <div class="company-info">
-                                <h2>Pinoy Seaman</h2>
-                                <p>Makati City<br>Philippines</p>
-                            </div>
+            <section class="job-list payment-section">
+                <article class="payment-container">
+                    <div class="how-to-pay-box">
+                        <!-- THIS IS for how to payment box on the left -->
+                        <h2 class="section-title">How to pay?</h2>
+                        <ol class="payment-steps">
+                            <li>
+                                Click here <strong><a href="#" class="bank-link" data-bs-toggle="modal" data-bs-target="#bank-account">PinoySeamanBankDetails</a></strong> to redirect
+                                to the Bank details for manual payment.
+                            </li>
+                            <li>
+                                Send the payment thru the bank that is given on the link.
+                            </li>
+                            <li>
+                                Send the Screenshot of payment via PinoySeaman Email.
+                                <ul>
+                                    <li>Email: <a href="mailto:pinoyseaman@pinoyseaman.com" class="email-link">pinoyseaman@pinoyseaman.com</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                Wait for 1–3 working days for status approval.
+                            </li>
+                        </ol>
+                        <div class="payment-icons">
+                            <img src="icons/document-check.png" alt="Security Icon" class="icon" />
+                            <img src="icons/mail-check.png" alt="Email Icon" class="icon" />
+                            <img src="icons/approved.png" alt="Approved Stamp" class="icon" />
                         </div>
                     </div>
-            
-                    <div class="invoice-info">
-                        <h3>Invoice #32020</h3>
-                        <p><strong>Invoice Date:</strong> Sunday, February 9th, 2025</p>
-                        <p><strong>Due Date:</strong> Sunday, February 23rd, 2025</p>
-                    </div>
-            
-                    <div class="billed-to">
-                        <h4>Invoiced To</h4>
-                        <p>pagcaliwangan11@gmail.com</p>
-                        <p>Makati, Philippines</p>
-                    </div>
-            
-                    <table class="item-table">
-                        <thead>
-                            <tr>
-                                <th>Description</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Unlimited Plan - pinoyseaman.com (02/23/2025 - 02/22/2026)</td>
-                                <td>₱3900.00</td>
-                            </tr>
-                            <tr>
-                                <td>Domain Renewal - pinoyseaman.com - 1 Year/s (02/23/2025 - 02/22/2026)</td>
-                                <td>₱750.00</td>
-                            </tr>
-                            <tr class="summary">
-                                <td><strong>Sub Total</strong></td>
-                                <td class="total-amount"><strong>₱4650.00</strong></td>
-                            </tr>
-                            <tr class="summary">
-                                <td><strong>Credit</strong></td>
-                                <td class="total-amount"><strong>₱0.00</strong></td>
-                            </tr>
-                            <tr class="summary total">
-                                <td><strong>Total</strong></td>
-                                <td class="total-amount"><strong>₱4650.00</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-            
-                    <div class="transaction-history">
-                        <h4>Transactions</h4>
-                        <table class="transaction-table">
-                            <thead>
-                                <tr>
-                                    <th>Transaction Date</th>
-                                    <th>Gateway</th>
-                                    <th>Transaction ID</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Monday, February 10th, 2025</td>
-                                    <td>Bank Transfer</td>
-                                    <td>BDO-02102025</td>
-                                    <td>₱4650.00</td>
-                                </tr>
-                                <tr class="summary">
-                                    <td colspan="3"><strong>Balance</strong></td>
-                                    <td class="total-amount"><strong>₱0.00</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
+        
+                    <div class="purchase-summary-box">
+                        <!-- THIS IS for purchase summary on the right-->
+                        <div class="summary-card">
+                            <h3 class="summary-title">Purchase Summary</h3>
+                            <div class="summary-item">
+                                <span>Product name</span>
+                                <span>Price</span>
+                            </div>
+                            <div class="summary-item bold">
+                                <span>Professional tier</span>
+                                <span>$799.99</span>
+                            </div>
+                            <div class="summary-total">
+                                <span>Total:</span>
+                                <span class="total-price">$799.99</span>
+                            </div>
+                            <button class="order-status-btn" data-bs-toggle="modal" data-bs-target="#payment-status">View your order status</button>
+                        </div>
                     </div>
                 </article>
-            </section>            
+            </section>
         </section>        
     </main>
 
@@ -470,11 +503,41 @@
       </div>
     </div>
   </section>
-  
+
+  <section class="modal fade" id="payment-status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="approved-box">
+            <div class="check-icon">
+              ✓
+            </div>
+            <p class="approved-text">Subscription Success</p>
+            <a href="manual-payment-receipt.php" class="approved-btn">Continue</a>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR PENDING
+  <section class="modal fade" id="payment-status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="pending-box">
+            <h2 class="pending-title">PENDING...</h2>
+            <p class="pending-text">Pending Status.</p>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  -->
 
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
     <script src="script/currency-calendar.js"></script>
+    <!-- Bootstrap JS with Popper (near the end of body) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

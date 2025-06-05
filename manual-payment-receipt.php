@@ -292,13 +292,7 @@
                 </a>
               </li>
               <li>
-                <a href="employer-analytics.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="account-plan.html">
+                <a href="account-plan.php">
                   <!-- SVG Icon -->
                   <i class="fa-regular fa-building"></i><span>Premium Plan</span>
                 </a>
@@ -332,7 +326,7 @@
                 <!-- Dropdown Menu -->
                 <div class="dropdown" id="dropdownMenu">
                     <a href="userprofile.php" class="prfl">Profile Settings</a>
-                    <a href="index.html">Logout</a>
+                    <a href="index.php">Logout</a>
                 </div>
             </div>
         </section>

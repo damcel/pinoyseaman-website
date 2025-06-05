@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
     <title>Admin Panel</title>
@@ -160,6 +161,28 @@
         .dropdown-list li:hover {
             background-color: #e6f0ff;
         }
+
+        h6{
+            margin: 0;
+        }
+
+
+        .duration-td {
+            display: flex;
+            gap: 15px;
+            border: none;
+            padding: 0; /* Optional: match rest of the table styling */
+        }
+        .duration-td h6,
+        .duration-td .btn {
+            padding: 10px; /* Reapply spacing inside if needed */
+        }
+
+        .btn-primary{
+            padding: 5px;
+            margin: 0;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -242,98 +265,135 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                    <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
+
                         <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
+
                         <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
+
                         <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
+
                         <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3 months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
+
                         <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
+
                         <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
+
                         <tr>
                             <td data-label="Company">Luis Drum Studio</td>
                             <td data-label="Phone">09452733164</td>
                             <td data-label="Email">luisbelga@gmail.com</td>
                             <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
-                            <td><button class="delete-btn">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Company">Luis Drum Studio</td>
-                            <td data-label="Phone">09452733164</td>
-                            <td data-label="Email">luisbelga@gmail.com</td>
-                            <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
-                            <td><button class="delete-btn">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Company">Luis Drum Studio</td>
-                            <td data-label="Phone">09452733164</td>
-                            <td data-label="Email">luisbelga@gmail.com</td>
-                            <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
-                            <td><button class="delete-btn">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Company">Luis Drum Studio</td>
-                            <td data-label="Phone">09452733164</td>
-                            <td data-label="Email">luisbelga@gmail.com</td>
-                            <td data-label="password">Tambay</td>
-                            <td data-label="Premium-duration">3months</td>
+                            <td data-label="Premium-duration" class="duration-td">
+                                <h6>3 months</h6>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
                             <td><button class="delete-btn">Delete</button></td>
                         </tr>
                     </tbody>                
                 </table>    
                 <div id="pagination" class="pagination-controls"></div>
             </div>      
+        </section>
+
+        <section class="modal fade" id="premiumPlanModal" tabindex="-1" aria-labelledby="premiumPlanModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="premiumPlanModalLabel">Premium Plan Duration Settings</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="planDuration" class="form-label">Choose Duration</label>
+                                <select class="form-select" id="planDuration">
+                                    <option disabled selected>Select duration</option>
+                                    <option value="monthly">Per Month</option>
+                                    <option value="yearly">Per Year</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Set Price</label>
+                                <input type="number" class="form-control" id="price" placeholder="Enter price for selected duration">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Save Settings</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -395,52 +455,50 @@
         displayRows(1);
       </script>
       <script>
-        const searchInput = document.getElementById("searchInput");
-        const searchResults = document.getElementById("searchResults");
-        const allRows = document.querySelectorAll(".table-content tbody tr");
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    const allRows = document.querySelectorAll(".table-content tbody tr");
 
-        searchInput.addEventListener("input", function () {
-            const term = this.value.toLowerCase();
-            searchResults.innerHTML = "";
-            searchResults.style.display = "none";
+    searchInput.addEventListener("input", function () {
+        const term = this.value.toLowerCase();
+        searchResults.innerHTML = "";
+        searchResults.style.display = "none";
 
-            if (term.length === 0) {
-                allRows.forEach(row => row.style.display = "");
-                return;
-            }
+        if (term.length === 0) {
+            allRows.forEach(row => row.style.display = "");
+            return;
+        }
 
-            let matchFound = false;
-            allRows.forEach(row => {
-                const email = row.querySelector("td[data-label='email']").textContent.toLowerCase();
-                const Company = row.querySelector("td[data-label='Company']").textContent.toLowerCase();
-                const isMatch = email.includes(term) || Company.includes(term) || rank.includes(term);
-                row.style.display = isMatch ? "" : "none";
+        let matchFound = false;
 
-                if (isMatch) {
-                    const name = `${Company}, ${email}`;
-                    const li = document.createElement("li");
-                    li.textContent = name;
-                    li.addEventListener("click", () => {
-                        searchInput.value = name;
-                        searchResults.style.display = "none";
-                        allRows.forEach(r => r.style.display = r === row ? "" : "none");
-                    });
-                    searchResults.appendChild(li);
-                    matchFound = true;
-                }
-            });
+        allRows.forEach(row => {
+            const email = row.querySelector("td[data-label='Email']").textContent.toLowerCase();
+            const company = row.querySelector("td[data-label='Company']").textContent.toLowerCase();
 
-            if (matchFound) {
-                searchResults.style.display = "block";
+            const isMatch = email.includes(term) || company.includes(term);
+
+            row.style.display = isMatch ? "" : "none";
+
+            if (isMatch) {
+                matchFound = true;
+                const name = `${company}, ${email}`;
+                const li = document.createElement("li");
+                li.textContent = name;
+                li.addEventListener("click", () => {
+                    searchInput.value = name;
+                    searchResults.style.display = "none";
+                });
+                searchResults.appendChild(li);
             }
         });
 
-        document.addEventListener("click", (e) => {
-            if (!e.target.closest(".search-wrapper")) {
-                searchResults.style.display = "none";
-            }
-        });
-    </script>
+        if (matchFound) {
+            searchResults.style.display = "block";
+        }
+    });
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
       
 </body>
 </html>

@@ -315,13 +315,7 @@
                 </a>
               </li>
               <li>
-                <a href="employer-analytics.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="account-plan.html">
+                <a href="account-plan.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
                 </a>
@@ -413,7 +407,7 @@
                       </ul>
                     </div>
                     <div>
-                        <button class="action-button" onclick="window.location.href='premium-account-manual.html';">
+                        <button class="action-button" onclick="window.location.href='premium-account-manual.php';">
                             Subscribe now
                         </button>
                       <p class="note">No credit card required</p>

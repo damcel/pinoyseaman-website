@@ -234,6 +234,10 @@
       color: #ccc;
     }
 
+    .discount{
+      color: yellow;
+    }
+
     @media (max-width: 1024px) {
   .job-list {
     grid-template-columns: 1fr;
@@ -315,13 +319,7 @@
                 </a>
               </li>
               <li>
-                <a href="employer-analytics.html">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-business-time"></i><span>Analytics</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="account-plan.html">
+                <a href="account-plan.php">
                   <!-- SVG Icon -->
                   <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
                 </a>
@@ -381,39 +379,40 @@
                   <div class="pricing-box">
                     <div>
                       <div class="plan-header">Monthly</div>
-                      <div class="price">₱10,000<span>Subscription per Month</span></div>
+                      <div class="price">₱20,000<span>Subscription per Month</span></div>
                       <ul class="features">
-                        <li class="inactive"><span class="icon">✖</span> Access to All Features</li>
-                        <li><span class="icon">✔</span> Limit to 5 Seafarer to search directly</li>
-                        <li class="inactive"><span class="icon">✖</span> Features Company Badge</li>
-                        <li class="inactive"><span class="icon">✖</span> Can post up to 5 Job openings</li>
-                        <li class="inactive"><span class="icon">✖</span> Notification via email</li>
-                        <li class="inactive"><span class="icon">✖</span> Priority job listings</li>
-                        <li class="inactive"><span class="icon">✖</span> Ads free</li>
+                          <li><span class="icon">✔</span> Access to All Features</li>
+                          <li><span class="icon">✔</span> Unlimited search to top rank seafarers directly</li>
+                          <li><span class="icon">✔</span> Features Company Badge</li>
+                          <li><span class="icon">✔</span> Unlimited Job Posting</li>
+                          <li><span class="icon">✔</span> Notification via email</li>
+                          <li><span class="icon">✔</span> Priority job listings</li>
                       </ul>
                     </div>
                     <div>
-                      <div class="action-button">Subscribe Now</div>
+                      <button class="action-button" onclick="window.location.href='premium-account-manual.php';">
+                            Subscribe now
+                        </button>
                       <p class="note">No credit card required</p>
                     </div>
                   </div>
           
                   <div class="pricing-box premium">
                     <div>
-                      <div class="plan-header-annually">Annually</div>
-                      <div class="price">₱118,000<span>Subscription Annully</span></div>
+                      <div class="plan-header-annually">1 year package</div>
+                      <div class="price">₱120,000<span>Subscription Annully</span></div>
                       <ul class="features">
+                        <li class="discount"><span class="icon">✔</span>50% Discount</li>
                         <li><span class="icon">✔</span> Access to All Features</li>
                         <li><span class="icon">✔</span> Unlimited search to top rank seafarers directly</li>
                         <li><span class="icon">✔</span> Features Company Badge</li>
-                        <li><span class="icon">✔</span> Can post up to 30 Job openings</li>
+                        <li><span class="icon">✔</span> Unlimited Job Posting</li>
                         <li><span class="icon">✔</span> Notification via email</li>
                         <li><span class="icon">✔</span> Priority job listings</li>
-                        <li><span class="icon">✔</span> Ads free</li>
                       </ul>
                     </div>
                     <div>
-                        <button class="action-button" onclick="window.location.href='premium-account-manual.html';">
+                        <button class="action-button" onclick="window.location.href='premium-account-manual.php';">
                             Subscribe now
                         </button>
                       <p class="note">No credit card required</p>

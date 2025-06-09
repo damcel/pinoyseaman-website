@@ -4,12 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Find maritime jobs and opportunities for Filipino seafarers.">
+    <title>Pinoy Seaman Job Portal</title>
+
+    <!-- Open Graph Meta Tags (for social sharing) -->
+    <meta property="og:title" content="Pinoy Seaman Job Portal" />
+    <meta property="og:description" content="Find maritime jobs and opportunities for Filipino seafarers." />
+    <meta property="og:image" content="https://pinoyseaman.com/pinoyseaman-logo/round-logo.png?v=2" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://pinoyseaman.com/" />
+    <meta property="og:type" content="website" />
+
+    <!-- App and UI -->
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon"> 
+    <link rel="icon" href="Pinoyseaman.ico" type="image/x-icon">
     <meta name="theme-color" content="#007bff">
-    <title>Home</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/main.css">
 
 </head>
 <body>
@@ -324,40 +340,6 @@
     <section class="ads-section">
     <div class="ads-container">
 
-        <?php
-        // Include the database connection file
-        
-
-        // Query to get all featured companies
-        $sql = "SELECT e.company_code, ca.ads_url
-                FROM employer e
-                INNER JOIN company_ads ca ON e.company_code = ca.company_code
-                WHERE e.verify = 'y' 
-                AND e.member_type != 'FREE'";
-        $result = $conn->query($sql);
-
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $company_code = $row['company_code'];
-                $ads_url = $row['ads_url'];
-
-                $ads_path = "company-ads/" . $ads_url;
-
-                // Check if the logo file exists, otherwise use the placeholder
-                if (!file_exists($ads_path) || empty($ads_path)) {
-                    $ads_path = "company-ads/ads-placeholder.png";
-                }
-                ?>
-                
-                    <div class="ads-card"><a href=""><img src="<?php echo htmlspecialchars($ads_path); ?>" alt="ads" loading="lazy"></a></div>
-                
-                <?php
-            }
-        } else {
-            echo "<p>No featured companies available at the moment.</p>";
-        }
-
-        ?>
 
         </div>
 
@@ -383,15 +365,18 @@
 
     <footer>
         <div class="footer-container">
-            <div class="footer-section brand">
-                <h2>Pinoy<span>Seaman</span></h2>
+            <div class="brand">
+                <div class="footer-container">
+                    <a href="index.php" class="logo-link">
+                        <img src="pinoyseaman-logo/admin-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
+                    </a>
+                </div>
                 <p>© 2023 pinoyseaman. All rights reserved.</p>
             </div>
             <div class="footer-section contact">
                 <h3>Get in Touch</h3>
                 <p>Emilia Str, Makati City</p>
                 <p>filoseaman@gmail.com</p>
-                <p>Phone number: (123) 456 78 90</p>
             </div>
             <div class="footer-section links">
                 <h3>Learn More</h3>

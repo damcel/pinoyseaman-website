@@ -118,7 +118,7 @@
                     </a>
 
                     <!-- Notification Card -->
-                    <a href="account-plan.html" class="display-card notification">
+                    <a href="#" class="display-card notification" data-bs-toggle="modal" data-bs-target="#premiumPlanModal">
                         <div class="icon"><i class="fa-solid fa-address-card"></i></div>
                         <div class="text">
                             <div class="title-notif">Account Plan</div>
@@ -653,6 +653,37 @@
                 </div>
             </div>
         </section>
+
+        <section class="modal fade" id="premiumPlanModal" tabindex="-1" aria-labelledby="premiumPlanModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="premiumPlanModalLabel">Premium Plan Duration Settings</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="planDuration" class="form-label">Choose Duration</label>
+                                <select class="form-select" id="planDuration">
+                                    <option disabled selected>Select duration</option>
+                                    <option value="monthly">Per Month</option>
+                                    <option value="yearly">Per Year</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Set Price</label>
+                                <input type="number" class="form-control" id="price" placeholder="Enter price for selected duration">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
 
         <script>
             document.addEventListener("DOMContentLoaded", () => {

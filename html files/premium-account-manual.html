@@ -277,6 +277,61 @@
   background-color: #1aa34a;
 }
 
+.pending-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .pending-title {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .pending-text {
+    font-size: 16px;
+    color: #333;
+  }
+
+  .approved-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .check-icon {
+    font-size: 64px;
+    color: #28a745;
+    margin-bottom: 15px;
+  }
+
+  .approved-text {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .approved-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .approved-btn:hover {
+    background-color: #218838;
+  }
+
     </style>
 </head>
 <body>
@@ -365,11 +420,11 @@
                                 <span class="label">Subscription</span>
                             </li>
                             <li class="step active"> <!-- THIS IS FOR PAYMENT -->
-                                <a href="premium-account-manual.html"><span class="circle"><i class="fa-solid fa-hourglass-half"></i></span></a>
+                                <span class="circle"><i class="fa-solid fa-hourglass-half"></i></span>
                                 <span class="label">Payment</span>
                             </li>
                             <li class="step"> <!-- THIS IS FOR CONFIRM -->
-                                <a href="manual-payment-receipt.html"><span class="circle"></span></a>
+                                <span class="circle"></span>
                                 <span class="label">Confirm</span>
                             </li>
                         </ul>
@@ -423,7 +478,7 @@
                                 <span>Total:</span>
                                 <span class="total-price">$799.99</span>
                             </div>
-                            <button class="order-status-btn">View your order status</button>
+                            <button class="order-status-btn" data-bs-toggle="modal" data-bs-target="#payment-status">View your order status</button>
                         </div>
                     </div>
                 </article>
@@ -454,7 +509,34 @@
       </div>
     </div>
   </section>
-  
+
+  <section class="modal fade" id="payment-status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="approved-box">
+            <div class="check-icon">
+              ✓
+            </div>
+            <p class="approved-text">Subscription Success</p>
+            <a href="manual-payment-receipt.html" class="approved-btn">Continue</a>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR PENDING
+  <section class="modal fade" id="payment-status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="pending-box">
+            <h2 class="pending-title">PENDING...</h2>
+            <p class="pending-text">Pending Status.</p>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  -->
 
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>

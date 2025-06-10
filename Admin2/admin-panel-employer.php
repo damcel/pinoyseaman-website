@@ -5,24 +5,24 @@ include 'connect.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Fetch employer records with pagination
-$query = "SELECT company_code, company, email, phone, secret, member_type FROM employer WHERE verify = 'y'
-        ORDER BY date_registered DESC";
-$result = mysqli_query($link, $query);
-?>
+// Fetch all employers with member_type 'y'
+$sql = "SELECT company, phone, email, secret, member_type FROM employer WHERE verify = 'y' ORDER BY date_registered DESC";
+$result = mysqli_query($link, $sql);
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="css/admin-panel-employer.css">
     <link rel="icon" href="../Pinoyseaman.ico" type="image/x-icon"> 
     <title>Admin Panel</title>
-    
+
 </head>
 <body>
     <aside id="sidebar">
@@ -100,38 +100,79 @@ $result = mysqli_query($link, $query);
                             <th>Email</th>
                             <th>Password</th>
                             <th>Member Type</th>
-                            <th>Premium Duration</th>
                             <th>Account Deletion</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = mysqli_fetch_assoc($result)) : ?>
-                            <tr>
-                                <td data-label="Company"><?= htmlspecialchars($row['company']) ?></td>
-                                <td data-label="Phone"><?= htmlspecialchars($row['phone']) ?></td>
-                                <td data-label="Email"><?= htmlspecialchars($row['email']) ?></td>
-                                <td data-label="password"><?= htmlspecialchars($row['secret']) ?></td>
-                                <td data-label="Member-type"><?= htmlspecialchars($row['member_type']) ?></td>
-                                <td data-label="Premium-duration">TBA</td> <!-- Replace with actual duration if you store it -->
-                                <td>
-                                    <form action="delete_employer.php" method="post" onsubmit="return confirm('Are you sure you want to delete this employer?');">
-                                        <input type="hidden" name="company_code" value="<?= htmlspecialchars($row['company_code']) ?>">
-                                        <button type="submit" class="delete-btn">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
+                    <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                        <tr>
+                            <td data-label="Company"><?php echo htmlspecialchars($row['company']); ?></td>
+                            <td data-label="Phone"><?php echo htmlspecialchars($row['phone']); ?></td>
+                            <td data-label="Email"><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td data-label="password"><?php echo htmlspecialchars($row['secret']); ?></td>
+                            <td data-label="Premium-duration" class="duration-td d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0"><?php echo htmlspecialchars($row['member_type']); ?></h6>
+                                <button 
+                                    class="btn btn-sm custom-edit-btn ms-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#premiumPlanModal" 
+                                    title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                            </td>
+                            <td><button class="delete-btn">Delete</button></td>
+                        </tr>
+                    <?php endwhile; ?>
                     </tbody>
-           
+            
                 </table>    
                 <div id="pagination" class="pagination-controls"></div>
             </div>      
         </section>
 
+        <section class="modal fade" id="premiumPlanModal" tabindex="-1" aria-labelledby="premiumPlanModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="premiumPlanModalLabel">Premium Plan Duration Settings</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                            <!-- Billing Type -->
+                            <div class="mb-4">
+                                <label for="planDuration" class="form-label fw-semibold">Billing Type</label>
+                                <select class="form-select border-primary shadow-sm" id="planDuration" name="plan_duration" required>
+                                    <option disabled selected value="">Select billing type</option>
+                                    <option value="monthly">Per Month</option>
+                                    <option value="yearly">Per Year</option>
+                                </select>
+                                <div class="form-text">Choose whether the plan bills monthly or yearly.</div>
+                            </div>
+
+                            <!-- Duration Count -->
+                            <div class="mb-4">
+                                <label for="durationCount" class="form-label fw-semibold">Number of Billing Cycles</label>
+                                <select class="form-select border-primary shadow-sm" id="durationCount" name="duration_count" required>
+                                    <option disabled selected value="">Select duration</option>
+                                </select>
+                                <div class="form-text">This depends on the billing type you selected above.</div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary w-100 py-2">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
     </main>
 
-    <script src="../script/sidenav.js"></script>
-    <script src="../script/profile-dropdown-menu.js"></script>
+    <script src="script/sidenav.js"></script>
+    <script src="script/profile-dropdown-menu.js"></script>
     <script>
         const rowsPerPage =8;
         const table = document.querySelector(".table-content tbody");
@@ -154,102 +195,104 @@ $result = mysqli_query($link, $query);
         }
       
         function updatePaginationUI() {
-    paginationContainer.innerHTML = "";
-
-    // Previous Button
-    if (currentPage > 1) {
-        const prevBtn = document.createElement("button");
-        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
-        prevBtn.addEventListener("click", () => displayRows(currentPage - 1));
-        paginationContainer.appendChild(prevBtn);
-    }
-
-    const maxVisiblePages = 5; // Current ± 1, first & last
-    const ellipsis = document.createElement("span");
-    ellipsis.textContent = "...";
-    ellipsis.className = "ellipsis";
-
-    for (let i = 1; i <= pageCount; i++) {
-        if (
-            i === 1 || 
-            i === pageCount || 
-            i === currentPage || 
-            i === currentPage - 1 || 
-            i === currentPage + 1
-        ) {
+          paginationContainer.innerHTML = "";
+      
+          // ← Previous Arrow (only if currentPage > 1)
+          if (currentPage > 1) {
+            const prevBtn = document.createElement("button");
+            prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            prevBtn.addEventListener("click", () => displayRows(currentPage - 1));
+            paginationContainer.appendChild(prevBtn);
+          }
+      
+          // Page Number Buttons
+          for (let i = 1; i <= pageCount; i++) {
             const btn = document.createElement("button");
             btn.textContent = i;
             if (i === currentPage) btn.classList.add("active");
+      
             btn.addEventListener("click", () => displayRows(i));
             paginationContainer.appendChild(btn);
-        } else if (
-            (i === 2 && currentPage > 3) || 
-            (i === pageCount - 1 && currentPage < pageCount - 2)
-        ) {
-            paginationContainer.appendChild(ellipsis.cloneNode(true));
+          }
+      
+          // → Next Arrow (only if not on last page)
+          if (currentPage < pageCount) {
+            const nextBtn = document.createElement("button");
+            nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            nextBtn.addEventListener("click", () => displayRows(currentPage + 1));
+            paginationContainer.appendChild(nextBtn);
+          }
         }
-    }
-
-    // Next Button
-    if (currentPage < pageCount) {
-        const nextBtn = document.createElement("button");
-        nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-        nextBtn.addEventListener("click", () => displayRows(currentPage + 1));
-        paginationContainer.appendChild(nextBtn);
-    }
-}
-
       
         // Initialize on load
         displayRows(1);
-    </script>
-    <script>
-        const searchInput = document.getElementById("searchInput");
-        const searchResults = document.getElementById("searchResults");
-        const allRows = document.querySelectorAll(".table-content tbody tr");
+      </script>
+      <script>
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    const allRows = document.querySelectorAll(".table-content tbody tr");
 
-        searchInput.addEventListener("input", function () {
-            const term = this.value.toLowerCase();
-            searchResults.innerHTML = "";
-            searchResults.style.display = "none";
+    searchInput.addEventListener("input", function () {
+        const term = this.value.toLowerCase();
+        searchResults.innerHTML = "";
+        searchResults.style.display = "none";
 
-            if (term.length === 0) {
-                allRows.forEach(row => row.style.display = "");
-                return;
-            }
+        if (term.length === 0) {
+            allRows.forEach(row => row.style.display = "");
+            return;
+        }
 
-            let matchFound = false;
-            allRows.forEach(row => {
-                const email = row.querySelector("td[data-label='email']").textContent.toLowerCase();
-                const Company = row.querySelector("td[data-label='Company']").textContent.toLowerCase();
-                const isMatch = email.includes(term) || Company.includes(term) || rank.includes(term);
-                row.style.display = isMatch ? "" : "none";
+        let matchFound = false;
 
-                if (isMatch) {
-                    const name = `${Company}, ${email}`;
-                    const li = document.createElement("li");
-                    li.textContent = name;
-                    li.addEventListener("click", () => {
-                        searchInput.value = name;
-                        searchResults.style.display = "none";
-                        allRows.forEach(r => r.style.display = r === row ? "" : "none");
-                    });
-                    searchResults.appendChild(li);
-                    matchFound = true;
-                }
-            });
+        allRows.forEach(row => {
+            const email = row.querySelector("td[data-label='Email']").textContent.toLowerCase();
+            const company = row.querySelector("td[data-label='Company']").textContent.toLowerCase();
 
-            if (matchFound) {
-                searchResults.style.display = "block";
+            const isMatch = email.includes(term) || company.includes(term);
+
+            row.style.display = isMatch ? "" : "none";
+
+            if (isMatch) {
+                matchFound = true;
+                const name = `${company}, ${email}`;
+                const li = document.createElement("li");
+                li.textContent = name;
+                li.addEventListener("click", () => {
+                    searchInput.value = name;
+                    searchResults.style.display = "none";
+                });
+                searchResults.appendChild(li);
             }
         });
 
-        document.addEventListener("click", (e) => {
-            if (!e.target.closest(".search-wrapper")) {
-                searchResults.style.display = "none";
-            }
-        });
-    </script>
+        if (matchFound) {
+            searchResults.style.display = "block";
+        }
+    });
+</script>
+
+<script>
+    const planDuration = document.getElementById('planDuration');
+    const durationCount = document.getElementById('durationCount');
+
+    planDuration.addEventListener('change', function () {
+        const type = this.value; // 'monthly' or 'yearly'
+        const label = type === 'monthly' ? 'Month' : 'Year';
+        
+        // Clear existing options
+        durationCount.innerHTML = '<option disabled selected value="">Select duration</option>';
+
+        // Populate new options
+        for (let i = 1; i <= 12; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${i} ${label}${i > 1 ? 's' : ''}`;
+            durationCount.appendChild(option);
+        }
+    });
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
       
 </body>
 </html>

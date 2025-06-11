@@ -6,8 +6,38 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Fetch all employers with member_type 'y'
-$sql = "SELECT company, phone, email, secret, member_type FROM employer WHERE verify = 'y' ORDER BY date_registered DESC";
+$sql = "SELECT company_code, company, phone, email, secret, member_type FROM employer WHERE verify = 'y' ORDER BY date_registered DESC";
 $result = mysqli_query($link, $sql);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_code'], $_POST['plan_duration'], $_POST['duration_count'])) {
+    $company_code = mysqli_real_escape_string($link, $_POST['company_code']);
+    $billing_type = mysqli_real_escape_string($link, $_POST['plan_duration']);
+    $duration = (int) $_POST['duration_count'];
+
+    $interval = $billing_type === 'monthly' ? '1 MONTH' : '1 YEAR';
+    $today = date('Y-m-d');
+
+    $interval = $billing_type === 'monthly' ? 'month' : ($billing_type === 'yearly' ? 'year' : '');
+    $current_due_date = date('Y-m-d'); // Start from today
+
+    for ($i = 0; $i < $duration; $i++) {
+        $status = $i === 0 ? 'paid' : 'unpaid';
+
+        $insert = "INSERT INTO billing (company_code, billing_type, duration, billing_cycle, status, due_date)
+                VALUES ('$company_code', '$billing_type', '$duration', '".($i+1)."', '$status', '$current_due_date')";
+        mysqli_query($link, $insert);
+
+        $current_due_date = date('Y-m-d', strtotime("+1 $interval", strtotime($current_due_date)));
+    }
+
+    // Update member_type to PREMIUM
+    $update = "UPDATE employer SET member_type = 'PREMIUM' WHERE company_code = '$company_code'";
+    mysqli_query($link, $update);
+
+    echo "<script>window.location.href = window.location.href;</script>"; // Refresh to reflect changes
+    exit;
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -105,7 +135,7 @@ $result = mysqli_query($link, $sql);
                     </thead>
                     <tbody>
                     <?php while ($row = mysqli_fetch_assoc($result)) : ?>
-                        <tr>
+                        <tr data-company-code="<?php echo htmlspecialchars($row['company_code']); ?>">
                             <td data-label="Company"><?php echo htmlspecialchars($row['company']); ?></td>
                             <td data-label="Phone"><?php echo htmlspecialchars($row['phone']); ?></td>
                             <td data-label="Email"><?php echo htmlspecialchars($row['email']); ?></td>
@@ -139,6 +169,8 @@ $result = mysqli_query($link, $sql);
                     </div>
                     <div class="modal-body">
                         <form action="" method="POST">
+                            <input type="hidden" name="company_code" id="companyCodeInput">
+
                             <!-- Billing Type -->
                             <div class="mb-4">
                                 <label for="planDuration" class="form-label fw-semibold">Billing Type</label>
@@ -173,6 +205,74 @@ $result = mysqli_query($link, $sql);
 
     <script src="script/sidenav.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const table = document.querySelector(".table-content tbody");
+    const rows = Array.from(table.querySelectorAll("tr"));
+    const rowsPerPage = 10;
+    const pagination = document.getElementById("pagination");
+
+    let currentPage = 1;
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    function showPage(page) {
+        currentPage = page;
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        rows.forEach((row, index) => {
+            row.style.display = index >= start && index < end ? "" : "none";
+        });
+
+        renderPagination();
+    }
+
+    function renderPagination() {
+        pagination.innerHTML = "";
+
+        const createButton = (label, page) => {
+            const btn = document.createElement("button");
+            btn.textContent = label;
+            btn.className = "btn btn-sm btn-outline-primary mx-1";
+            if (page === currentPage) {
+                btn.classList.add("active");
+            }
+            btn.addEventListener("click", () => showPage(page));
+            return btn;
+        };
+
+        const addEllipsis = () => {
+            const span = document.createElement("span");
+            span.textContent = "...";
+            span.className = "mx-1 text-muted";
+            pagination.appendChild(span);
+        };
+
+        // First Page
+        if (currentPage > 2) {
+            pagination.appendChild(createButton("1", 1));
+            if (currentPage > 3) addEllipsis();
+        }
+
+        // Middle Pages
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+            if (i > 0 && i <= totalPages) {
+                pagination.appendChild(createButton(i, i));
+            }
+        }
+
+        // Last Page
+        if (currentPage < totalPages - 1) {
+            if (currentPage < totalPages - 2) addEllipsis();
+            pagination.appendChild(createButton(totalPages, totalPages));
+        }
+    }
+
+    // Initial page load
+    showPage(currentPage);
+});
+</script>
+
     <script>
         const rowsPerPage =8;
         const table = document.querySelector(".table-content tbody");
@@ -289,6 +389,15 @@ $result = mysqli_query($link, $sql);
             option.textContent = `${i} ${label}${i > 1 ? 's' : ''}`;
             durationCount.appendChild(option);
         }
+    });
+</script>
+<script>
+    document.querySelectorAll('.custom-edit-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const tr = this.closest('tr');
+            const companyCode = tr.getAttribute('data-company-code');
+            document.getElementById('companyCodeInput').value = companyCode;
+        });
     });
 </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>

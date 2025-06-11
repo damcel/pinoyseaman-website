@@ -437,16 +437,21 @@
                                 to the Bank details for manual payment.
                             </li>
                             <li>
-                                Send the payment thru the bank that is given on the link.
+                                Send the payment thru the bank that is given bank details.
                             </li>
                             <li>
-                                Send the Screenshot of payment via PinoySeaman Email.
+                                Send the Screenshot of payment via PinoySeaman Email or upload the screenshot/image of the receipt.
                                 <ul>
                                     <li>Email: <a href="mailto:pinoyseaman@pinoyseaman.com" class="email-link">pinoyseaman@pinoyseaman.com</a></li>
                                 </ul>
                             </li>
                             <li>
-                                Wait for 1–3 working days for status approval.
+                                Wait for 10 to 15 minutes for status approval.
+                            </li>
+                            <li>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                    <i class="fa-solid fa-upload"></i> Upload Screenshot
+                                </button>
                             </li>
                         </ol>
                         <div class="payment-icons">
@@ -532,10 +537,36 @@
 
   -->
 
+    <!-- Upload Screenshot Modal with Paste Support -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form class="modal-content" method="POST" action="upload-screenshot.php" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Upload Screenshot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="uploadArea">
+                    <div class="mb-3">
+                    <label for="screenshotUpload" class="form-label">Choose or Paste an Image (Ctrl+V):</label>
+                    <input type="file" class="form-control" id="screenshotUpload" name="screenshot" accept="image/*" required>
+                    </div>
+                    <div id="uploadPreview" class="text-center mt-3 text-muted">No image uploaded yet</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Upload</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>
     <script src="script/profile-dropdown-menu.js"></script>
     <script src="script/currency-calendar.js"></script>
+    <script src="script/upload-receipt.js"></script>
     <!-- Bootstrap JS with Popper (near the end of body) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>

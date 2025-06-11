@@ -39,14 +39,14 @@
                 
                 <i class="fa-solid fa-business-time"></i><span>Analytics</span>
             </a>
-            </li>
-            <li class="separator">
-            <a href="account-plan.html">
+            </li> -->
+            <!-- <li class="separator"> -->
+            <a href="account-plan.php">
                 
                 <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
             </a>
             </li>
-            <div id="progress-main-container" class="progress-main-container">
+            <!-- <div id="progress-main-container" class="progress-main-container">
                 <div class="complete-percentage">
                     <p>Complete your profile</p>
                 </div>

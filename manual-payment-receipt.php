@@ -1,3 +1,120 @@
+<?php
+session_name("employerSession");
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: employer-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['employer_email'])) {
+    // Redirect to the login page with an error message
+    header("Location: employer-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Check if there is a success or error message
+if (isset($_GET['type']) && isset($_GET['message'])) {
+    $alertType = ($_GET['type'] === 'success') ? 'success' : 'error';
+    $message = htmlspecialchars($_GET['message']); // Sanitize the message
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertModalMessage = document.getElementById('alertModalMessage');
+        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        alertModalMessage.textContent = '$message';
+        alertModal.show();
+
+        // Remove URL params after showing modal
+        const url = new URL(window.location.href);
+        url.searchParams.delete('type');
+        url.searchParams.delete('message');
+        window.history.replaceState({}, document.title, url.pathname);
+    });
+</script>";
+}
+
+// Fetch the verification status from the database
+$employerEmail = $_SESSION['employer_email'];
+$query = "SELECT * FROM employer WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $employerEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$verifyStatus = $row['verify'] ?? 'n'; 
+$isVerified = ($verifyStatus === 'y');
+
+$logoFilename = $row['logo'] ?? '';
+$logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename) 
+    ? "company-logo/" . htmlspecialchars($logoFilename) 
+    : "company-logo/Logo-placeholder.png";
+
+
+$invoiceNumber = htmlspecialchars($row['code']);
+$companyEmail = htmlspecialchars($row['email']);
+
+// At the top of manual-payment-receipt.php, after the existing PHP code:
+
+// Get the selected plan from session or URL
+$selectedPlan = $_GET['plan'] ?? $_SESSION['selected_plan'] ?? 'none';
+$_SESSION['selected_plan'] = $selectedPlan;
+
+$planDetails = [
+    'monthly' => [
+        'name' => 'Monthly Subscription', 
+        'price' => 20000,
+        'description' => 'Monthly Plan - pinoyseaman.com'
+    ],
+    'yearly' => [
+        'name' => '1 Year Package (50% Discount)', 
+        'price' => 120000,
+        'description' => '1 Year Plan - pinoyseaman.com'
+    ],
+];
+
+$productName = $planDetails[$selectedPlan]['name'] ?? 'No Plan Selected';
+$productPrice = $planDetails[$selectedPlan]['price'];
+$productDescription = $planDetails[$selectedPlan]['description'] ?? '';
+
+// Generate dates for the invoice
+$currentDate = new DateTime();
+$invoiceDate = $currentDate->format('l, F jS, Y');
+
+if ($selectedPlan === 'yearly') {
+    $endDate = clone $currentDate;
+    $endDate->add(new DateInterval('P1Y')); // Add 1 year
+    $dateRange = $currentDate->format('m/d/Y') . ' - ' . $endDate->format('m/d/Y');
+    $description = "1 Year Plan - pinoyseaman.com ($dateRange)";
+} else {
+    // Default to monthly if not yearly
+    $endDate = clone $currentDate;
+    $endDate->add(new DateInterval('P1M')); // Add 1 month
+    $dateRange = $currentDate->format('m/d/Y') . ' - ' . $endDate->format('m/d/Y');
+    $description = "Monthly Plan - pinoyseaman.com ($dateRange)";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,313 +123,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/manual-payment-receipt.css">
     <title>Account Plan</title>
-
-    <style>
-        /* ===== General Container Styles ===== */
-.profile-setup-container {
-  font-family: 'Arial', sans-serif;
-  padding: 2rem;
-  background-color: #f9f9f9;
-}
-.premium-account-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.premium-account .progress-steps {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  padding: 0 1rem;
-  margin: 0 auto;
-  list-style: none;
-}
-
-.premium-account .progress-steps::before {
-  content: "";
-  position: absolute;
-  top: 14px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: #ddd;
-  z-index: 0;
-}
-
-.premium-account .progress-steps .step {
-    position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  z-index: 1;
-  flex: 1;
-}
-
-.premium-account .progress-steps .step:first-child {
-  left: -60px;
-}
-
-.premium-account .progress-steps .step:last-child {
-  right: -50px;
-}
-
-.premium-account .progress-steps .step .circle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  color: #000;
-  z-index: 1;
-}
-
-.premium-account .progress-steps .step.completed .circle {
-  border-color: #000;
-  color: #000;
-}
-
-.premium-account .progress-steps .step.active .circle {
-  border-color: #000;
-  color: #000;
-}
-
-.premium-account .progress-steps .step .label {
-  margin-top: 0.3rem;
-  font-size: 0.8rem;
-  color: #333;
-  white-space: nowrap;
-}
-
-.premium-account a{
-    text-decoration: none;
-    color: black;
-}
-
-
-
-/* ===== Progress Steps Styling ===== */
-.progress-steps {
-  display: flex;
-  list-style: none;
-  gap: 4rem;
-  padding: 0;
-  position: relative;
-}
-
-.progress-steps::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 1.8rem;
-  right: 1.8rem;
-  height: 2px;
-  background-color: #ccc;
-  z-index: 0;
-}
-
-.step {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 1;
-}
-
-.step .circle {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.step.completed .circle {
-  background-color: #fff;
-  border-color: #000;
-  color: #000;
-}
-
-.step.active .circle {
-  background-color: #000;
-  border-color: #000;
-}
-
-.step .label {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: #333;
-}
-
-.payment-details {
-    background: #f9f9f9;
-}
-
-.invoice-box {
-    background: #fff;
-    padding: 2rem;
-    border: 1px solid #eee;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #333;
-}
-.header {
-    position: relative;
-    width: 100%;
-}
-
-.paid-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #5cb85c;
-    color: white;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    transform: rotate(45deg) translate(40%, -40%);
-    transform-origin: top right;
-    width: 150px;
-    text-align: center;
-    font-size: 16px;
-    z-index: 10;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 2rem; /* this pushes the logo + info DOWN so it won't get covered */
-}
-
-.logo img {
-    max-width: 250px;
-    height: auto;
-}
-
-.company-info {
-    text-align: right;
-}
-
-
-.invoice-info {
-    margin-top: 2rem;
-    background: #f2f2f2;
-    padding: 1rem;
-}
-
-.billed-to {
-    margin-top: 2rem;
-}
-
-.item-table, .transaction-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1.5rem;
-}
-
-.item-table th, .item-table td,
-.transaction-table th, .transaction-table td {
-    border: 1px solid #ddd;
-    padding: 0.75rem;
-}
-
-.item-table th, .transaction-table th {
-    background: #f7f7f7;
-    font-weight: bold;
-}
-
-.summary{
-    background: #fafafa;
-    text-align: right;
-}
-
-.total td {
-    font-weight: bold;
-}
-
-.transaction-history {
-    margin-top: 2rem;
-}
-
-.footer-note {
-    margin-top: 2rem;
-    text-align: center;
-    font-size: 12px;
-    color: #999;
-}
-
-.total-amount{
-    text-align: left;
-}
-    </style>
 </head>
 <body>
-    <aside id="sidebar">
-        <nav class="sidebar-nav">
-            <div class="sidebar-header">
-                <div class="logo-container">
-                    <a href="dashboardjobs.php" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
-                    </a>
-                </div>
-                <button onclick="toggleSidebar()" id="toggle-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
-                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
-                    </svg>
-                </button>
-            </div>
-            <ul class="ul-links">
-                <div class="company-profile-card">
-                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-                </div>
-              <li>
-                <a href="employer-dashboard.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="employer-posting.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-user"></i><span>Job Post</span>
-                </a>
-              </li>
-              <li>
-                <a href="account-plan.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-building"></i><span>Premium Plan</span>
-                </a>
-              </li>
-                <div id="progress-main-container" class="progress-main-container">
-                  <div class="complete-percentage">
-                      <p>Complete your profile</p>
-                  </div>
-                  <div class="progress-container">
-                      <div class="progress-bar" id="progress-bar"></div>
-                      <p id="progress-text">0% Completed</p>
-                      <div class="incomplete-container">
-                          <h3>Incomplete Fields:</h3>
-                          <ul id="missing-fields"></ul>
-                      </div>
-                  </div>
-                </div>
-            </ul>
-        </nav>
-    </aside>
+
+    <!-- Sidebar -->
+    <?php include 'components/employer_aside.php'; ?>
 
     <main class="dashboard-container">
         <section class="header-container">
@@ -355,7 +172,7 @@
             <section class="job-list payment-details">
                 <article class="invoice-box">
                     <div class="header">
-                        <div class="paid-badge">PAID</div>
+                        <div class="paid-badge bg-warning text-dark">PENDING</div>
                     
                         <div class="header-content">
                             <div class="logo">
@@ -369,15 +186,13 @@
                     </div>
             
                     <div class="invoice-info">
-                        <h3>Invoice #32020</h3>
+                        <h3>Invoice #<?= $invoiceNumber ?></h3>
                         <p><strong>Invoice Date:</strong> Sunday, February 9th, 2025</p>
-                        <p><strong>Due Date:</strong> Sunday, February 23rd, 2025</p>
                     </div>
             
                     <div class="billed-to">
                         <h4>Invoiced To</h4>
-                        <p>pagcaliwangan11@gmail.com</p>
-                        <p>Makati, Philippines</p>
+                        <p><?= $companyEmail ?></p>
                     </div>
             
                     <table class="item-table">
@@ -389,29 +204,21 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Unlimited Plan - pinoyseaman.com (02/23/2025 - 02/22/2026)</td>
-                                <td>₱3900.00</td>
-                            </tr>
-                            <tr>
-                                <td>Domain Renewal - pinoyseaman.com - 1 Year/s (02/23/2025 - 02/22/2026)</td>
-                                <td>₱750.00</td>
+                                <td><?= htmlspecialchars($description) ?></td>
+                                <td>₱<?= number_format($productPrice) ?></td>
                             </tr>
                             <tr class="summary">
                                 <td><strong>Sub Total</strong></td>
-                                <td class="total-amount"><strong>₱4650.00</strong></td>
-                            </tr>
-                            <tr class="summary">
-                                <td><strong>Credit</strong></td>
-                                <td class="total-amount"><strong>₱0.00</strong></td>
+                                <td class="total-amount"><strong>₱<?= number_format($productPrice) ?></strong></td>
                             </tr>
                             <tr class="summary total">
                                 <td><strong>Total</strong></td>
-                                <td class="total-amount"><strong>₱4650.00</strong></td>
+                                <td class="total-amount"><strong>₱<?= number_format($productPrice) ?></strong></td>
                             </tr>
                         </tbody>
                     </table>
             
-                    <div class="transaction-history">
+                    <!-- <div class="transaction-history">
                         <h4>Transactions</h4>
                         <table class="transaction-table">
                             <thead>
@@ -435,7 +242,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
                 </article>
             </section>            
         </section>        

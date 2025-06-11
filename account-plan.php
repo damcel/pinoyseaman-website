@@ -1,3 +1,75 @@
+<?php
+session_name("employerSession");
+session_start(); // Start the session
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: employer-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['employer_email'])) {
+    // Redirect to the login page with an error message
+    header("Location: employer-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Check if there is a success or error message
+if (isset($_GET['type']) && isset($_GET['message'])) {
+    $alertType = ($_GET['type'] === 'success') ? 'success' : 'error';
+    $message = htmlspecialchars($_GET['message']); // Sanitize the message
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertModalMessage = document.getElementById('alertModalMessage');
+        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        alertModalMessage.textContent = '$message';
+        alertModal.show();
+
+        // Remove URL params after showing modal
+        const url = new URL(window.location.href);
+        url.searchParams.delete('type');
+        url.searchParams.delete('message');
+        window.history.replaceState({}, document.title, url.pathname);
+    });
+</script>";
+}
+
+// Fetch the verification status from the database
+$employerEmail = $_SESSION['employer_email'];
+$query = "SELECT * FROM employer WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $employerEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$verifyStatus = $row['verify'] ?? 'n'; 
+$isVerified = ($verifyStatus === 'y');
+
+$logoFilename = $row['logo'] ?? '';
+$logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename) 
+    ? "company-logo/" . htmlspecialchars($logoFilename) 
+    : "company-logo/Logo-placeholder.png";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,341 +77,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/account-plan.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <title>Account Plan</title>
-    <style>
-         .account-plan-tab-container {
-      text-align: right;
-      margin-bottom: 2rem;
-    }
-
-    .account-plan-tab ul {
-      list-style: none;
-      display: inline-flex;
-      padding: 0;
-      margin: 0;
-      background: #1e2142;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .account-plan-tab ul li {
-    padding: 0.75rem 1.5rem;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    }
-
-    .account-plan-tab ul li:hover {
-    background-color: #ffffff;
-    transform: scale(1.05);
-    color: #1e2142;
-    }
-
-    .account-plan-tab ul li:nth-child(3) {
-      background-color: #fff;
-      color: #000;
-      font-weight: bold;
-      position: relative;
-    }
-
-    .account-plan-tab ul li:nth-child(3)::after {
-      content: 'Save 25%';
-      position: absolute;
-      top: -6px;
-      right: -8px;
-      background-color: gold;
-      color: #000;
-      font-size: 0.75rem;
-      padding: 0.2rem 10px;
-      border-radius: 5px;
-    }
-
-    .job-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-
-    .intro-section {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .intro-header h2 {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      color: white;
-    }
-
-    .highlight {
-      background: yellow;
-      color: #0f1123;
-      padding: 0 0.3rem;
-      border-radius: 5px;
-    }
-
-    .intro-subtext{
-    text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    color: #e4dede;
-
-    }
-
-    .free-plan-promo {
-      background-color: #fff;
-      color: #000;
-      padding: 1rem;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .free-plan-promo strong {
-      font-size: 1.2rem;
-    }
-
-    .free-plan-promo div {
-      margin-top: 1rem;
-      background-color: #ffd700;
-      padding: 0.5rem 1rem;
-      border: none;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .pricing-cards {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .pricing-box {
-      flex: 1;
-      background-color: #fff;
-      color: #000;
-      padding: 23px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .pricing-box.premium {
-      background-color: #001064;
-      color: #fff;
-    }
-
-    .pricing-box,
-.pricing-box.premium {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.pricing-box:hover,
-.pricing-box.premium:hover {
-  transform: scale(1.03);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.action-button,
-.premium .action-button {
-    border-style: none;
-  display: inline-block;
-  text-decoration: none;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.premium .action-button:hover {
-  background-color: #e6c200;
-  transform: scale(1.05);
-}
-
-    .plan-header {
-      font-size: 0.9rem;
-      font-weight: bold;
-      background-color: #e0e0e0;
-      color: #000;
-      padding: 0.25rem 0.75rem;
-      border-radius: 5px;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-  
-      .plan-header-annually {
-        font-size: 0.9rem;
-      font-weight: bold;
-      background-color: #ffd700;
-      color: #000;
-      padding: 0.25rem 0.75rem;
-      border-radius: 5px;
-      display: inline-block;
-      margin-bottom: 1rem;
-      color: #001064;
-    }
-
-    .price {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin: 1rem 0;
-    }
-
-    .price span {
-      font-size: 1rem;
-      display: block;
-      font-weight: normal;
-    }
-
-    .features {
-      list-style: none;
-      padding: 0;
-      margin: 1rem 0;
-    }
-
-    .features li {
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .features li span.icon {
-      font-weight: bold;
-    }
-
-    .features li.inactive span.icon {
-      color: red;
-    }
-
-    .action-button {
-      background-color: #000;
-      color: white;
-      padding: 0.75rem;
-      text-align: center;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .premium .action-button {
-      background-color: #ffd700;
-      color: #000;
-    }
-
-    .note {
-      font-size: 0.75rem;
-      text-align: center;
-      margin-top: 0.5rem;
-      color: #ccc;
-    }
-
-    .discount{
-      color: yellow;
-    }
-
-    @media (max-width: 1024px) {
-  .job-list {
-    grid-template-columns: 1fr;
-  }
-
-  .pricing-cards {
-    flex-direction: column;
-  }
-
-  .account-plan-tab-container {
-    text-align: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .intro-header h2 {
-    font-size: 2rem;
-  }
-
-  .price {
-    font-size: 2rem;
-  }
-
-  .account-plan-tab ul li {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .free-plan-promo strong {
-    font-size: 1rem;
-  }
-
-  .free-plan-promo div {
-    width: 100%;
-  }
-
-  .action-button,
-  .premium .action-button {
-    width: 100%;
-    padding: 0.75rem;
-  }
-
-  .pricing-box,
-  .pricing-box.premium {
-    padding: 1.5rem;
-  }
-}
-    </style>
 </head>
 <body>
-    <aside id="sidebar">
-        <nav class="sidebar-nav">
-            <div class="sidebar-header">
-                <div class="logo-container">
-                    <a href="dashboardjobs.php" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
-                    </a>
-                </div>
-                <button onclick="toggleSidebar()" id="toggle-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
-                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
-                    </svg>
-                </button>
-            </div>
-            <ul class="ul-links">
-                <div class="company-profile-card">
-                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-                </div>
-              <li>
-                <a href="employer-dashboard.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="employer-posting.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-user"></i><span>Job Post</span>
-                </a>
-              </li>
-              <li>
-                <a href="account-plan.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-rocket"></i><span>Premium Plan</span>
-                </a>
-              </li>
-                <div id="progress-main-container" class="progress-main-container">
-                  <div class="complete-percentage">
-                      <p>Complete your profile</p>
-                  </div>
-                  <div class="progress-container">
-                      <div class="progress-bar" id="progress-bar"></div>
-                      <p id="progress-text">0% Completed</p>
-                      <div class="incomplete-container">
-                          <h3>Incomplete Fields:</h3>
-                          <ul id="missing-fields"></ul>
-                      </div>
-                  </div>
-                </div>
-            </ul>
-        </nav>
-    </aside>
+
+    <!-- Sidebar -->
+    <?php include 'components/employer_aside.php'; ?>
 
     <main class="dashboard-container">
         <section class="header-container">
@@ -390,9 +135,10 @@
                       </ul>
                     </div>
                     <div>
-                      <button class="action-button" onclick="window.location.href='premium-account-manual.php';">
-                            Subscribe now
-                        </button>
+                      <!-- Monthly Plan -->
+                      <button class="action-button" onclick="window.location.href='premium-account-manual.php?plan=monthly';">
+                          Subscribe now
+                      </button>
                       <p class="note">No credit card required</p>
                     </div>
                   </div>
@@ -412,7 +158,8 @@
                       </ul>
                     </div>
                     <div>
-                        <button class="action-button" onclick="window.location.href='premium-account-manual.php';">
+                        <!-- Yearly Plan -->
+                        <button class="action-button" onclick="window.location.href='premium-account-manual.php?plan=yearly';">
                             Subscribe now
                         </button>
                       <p class="note">No credit card required</p>

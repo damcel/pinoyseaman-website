@@ -1,3 +1,87 @@
+<?php
+session_name("employerSession");
+session_start(); // Start the session
+
+$selectedPlan = $_GET['plan'] ?? 'none';
+$_SESSION['selected_plan'] = $selectedPlan;
+
+$planDetails = [
+    'monthly' => ['name' => 'Monthly Subscription', 'price' => 20000],
+    'yearly' => ['name' => '1 Year Package (50% Discount)', 'price' => 120000],
+];
+
+$productName = $planDetails[$selectedPlan]['name'] ?? 'No Plan Selected';
+$productPrice = $planDetails[$selectedPlan]['price'] ?? 0;
+
+
+// Set session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeoutDuration = 1800; // 30 minutes
+
+// Check if the session timeout is set
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeoutDuration) {
+    // If the session has timed out, destroy the session and redirect to login
+    session_unset();
+    session_destroy();
+    header("Location: employer-login-signup.php?type=error&message=Session timed out. Please log in again.");
+    exit;
+}
+
+// Update the last activity time
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Prevent caching of the page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Check if the user is logged in
+if (!isset($_SESSION['employer_email'])) {
+    // Redirect to the login page with an error message
+    header("Location: employer-login-signup.php?type=error&message=You must log in to access this page.");
+    exit;
+}
+
+// Include the database connection file
+include 'db.php';
+
+// Check if there is a success or error message
+if (isset($_GET['type']) && isset($_GET['message'])) {
+    $alertType = ($_GET['type'] === 'success') ? 'success' : 'error';
+    $message = htmlspecialchars($_GET['message']); // Sanitize the message
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertModalMessage = document.getElementById('alertModalMessage');
+        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        alertModalMessage.textContent = '$message';
+        alertModal.show();
+
+        // Remove URL params after showing modal
+        const url = new URL(window.location.href);
+        url.searchParams.delete('type');
+        url.searchParams.delete('message');
+        window.history.replaceState({}, document.title, url.pathname);
+    });
+</script>";
+}
+
+// Fetch the verification status from the database
+$employerEmail = $_SESSION['employer_email'];
+$query = "SELECT * FROM employer WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $employerEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$verifyStatus = $row['verify'] ?? 'n'; 
+$isVerified = ($verifyStatus === 'y');
+
+$logoFilename = $row['logo'] ?? '';
+$logoPath = !empty($logoFilename) && file_exists("company-logo/" . $logoFilename) 
+    ? "company-logo/" . htmlspecialchars($logoFilename) 
+    : "company-logo/Logo-placeholder.png";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,388 +89,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/premium-account-manual.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <title>Account Plan</title>
 
-    <style>
-        /* ===== General Container Styles ===== */
-.profile-setup-container {
-  font-family: 'Arial', sans-serif;
-  padding: 2rem;
-  background-color: #f9f9f9;
-}
-.premium-account-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.premium-account .progress-steps {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  padding: 0 1rem;
-  margin: 0 auto;
-  list-style: none;
-}
-
-.premium-account .progress-steps::before {
-  content: "";
-  position: absolute;
-  top: 14px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: #ddd;
-  z-index: 0;
-}
-
-.premium-account .progress-steps .step {
-    position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  z-index: 1;
-  flex: 1;
-}
-
-.premium-account .progress-steps .step:first-child {
-  left: -60px;
-}
-
-.premium-account .progress-steps .step:last-child {
-  right: -50px;
-}
-
-.premium-account .progress-steps .step .circle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  color: #000;
-  z-index: 1;
-}
-
-.premium-account .progress-steps .step.completed .circle {
-  border-color: #000;
-  color: #000;
-}
-
-.premium-account .progress-steps .step.active .circle {
-  border-color: #000;
-  color: #000;
-}
-
-.premium-account .progress-steps .step .label {
-  margin-top: 0.3rem;
-  font-size: 0.8rem;
-  color: #333;
-  white-space: nowrap;
-}
-
-.premium-account a{
-    text-decoration: none;
-    color: black;
-}
-
-
-
-/* ===== Progress Steps Styling ===== */
-.progress-steps {
-  display: flex;
-  list-style: none;
-  gap: 4rem;
-  padding: 0;
-  position: relative;
-}
-
-.progress-steps::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 1.8rem;
-  right: 1.8rem;
-  height: 2px;
-  background-color: #ccc;
-  z-index: 0;
-}
-
-.step {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 1;
-}
-
-.step .circle {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.step.completed .circle {
-  background-color: #fff;
-  border-color: #000;
-  color: #000;
-}
-
-.step.active .circle {
-  background-color: #000;
-  border-color: #000;
-}
-
-.step .label {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: #333;
-}
-
-/* ===== Payment Layout Section ===== */
-.payment-section .payment-container {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-/* ===== Left: How To Pay Box ===== */
-.how-to-pay-box {
-  flex: 1 1 60%;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.payment-steps {
-  list-style: decimal inside;
-  font-size: 1rem;
-  color: #333;
-  line-height: 1.6;
-  padding-left: 0;
-}
-
-.payment-steps a.bank-link {
-  color: #000;
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-.email-link {
-  color: #000;
-  text-decoration: underline;
-}
-
-.payment-steps ul {
-  list-style: disc;
-  padding-left: 1.5rem;
-  margin-top: 0.5rem;
-}
-
-.payment-icons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-  gap: 2rem;
-}
-
-.payment-icons .icon {
-  width: 130px;
-  height: auto;
-}
-
-/* ===== Right: Purchase Summary Box ===== */
-.purchase-summary-box {
-  flex: 1 1 35%;
-}
-
-.summary-card {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 1.5rem;
-}
-
-.summary-title {
-  font-weight: bold;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
-
-.summary-item,
-.summary-total {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  font-size: 0.95rem;
-}
-
-.summary-item.bold {
-  font-weight: bold;
-}
-
-.summary-total {
-  border-top: 1px solid #e0e0e0;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  font-weight: bold;
-}
-
-.total-price {
-  font-size: 1.2rem;
-  color: #000;
-}
-
-.order-status-btn {
-  margin-top: 1.5rem;
-  width: 100%;
-  padding: 0.75rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #1db954;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.order-status-btn:hover {
-  background-color: #1aa34a;
-}
-
-.pending-box {
-    background: #fff;
-    border-radius: 10px;
-    padding: 40px 20px;
-    text-align: center;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .pending-title {
-    font-weight: bold;
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-
-  .pending-text {
-    font-size: 16px;
-    color: #333;
-  }
-
-  .approved-box {
-    background: #fff;
-    border-radius: 10px;
-    padding: 40px 20px;
-    text-align: center;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .check-icon {
-    font-size: 64px;
-    color: #28a745;
-    margin-bottom: 15px;
-  }
-
-  .approved-text {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 20px;
-  }
-
-  .approved-btn {
-    display: inline-block;
-    padding: 10px 25px;
-    background-color: #28a745;
-    color: white;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-  }
-
-  .approved-btn:hover {
-    background-color: #218838;
-  }
-
-    </style>
 </head>
 <body>
-    <aside id="sidebar">
-        <nav class="sidebar-nav">
-            <div class="sidebar-header">
-                <div class="logo-container">
-                    <a href="dashboardjobs.php" class="logo-link">
-                        <img src="pinoyseaman-logo/pinoyseaman-logo.png" alt="pinoyseaman-logo" id="sidebar-logo">
-                    </a>
-                </div>
-                <button onclick="toggleSidebar()" id="toggle-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0B1C33">
-                        <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
-                    </svg>
-                </button>
-            </div>
-            <ul class="ul-links">
-                <div class="company-profile-card">
-                  <img src="company-logo/scanmar_big.jpg" alt="company-logo">
-                </div>
-              <li>
-                <a href="employer-dashboard.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-solid fa-briefcase"></i><span>Dashboard</span>
-                </a>
-              </li>
-              <li class="separator">
-                <a href="employer-posting.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-user"></i><span>Job Post</span>
-                </a>
-              </li>
-              <li>
-                <a href="account-plan.php">
-                  <!-- SVG Icon -->
-                  <i class="fa-regular fa-building"></i><span>Premium Plan</span>
-                </a>
-              </li>
-                <div id="progress-main-container" class="progress-main-container">
-                  <div class="complete-percentage">
-                      <p>Complete your profile</p>
-                  </div>
-                  <div class="progress-container">
-                      <div class="progress-bar" id="progress-bar"></div>
-                      <p id="progress-text">0% Completed</p>
-                      <div class="incomplete-container">
-                          <h3>Incomplete Fields:</h3>
-                          <ul id="missing-fields"></ul>
-                      </div>
-                  </div>
-                </div>
-            </ul>
-        </nav>
-    </aside>
+
+    <!-- Sidebar -->
+    <?php include 'components/employer_aside.php'; ?>
 
     <main class="dashboard-container">
         <section class="header-container">
@@ -442,16 +153,11 @@
                             <li>
                                 Send the Screenshot of payment via PinoySeaman Email or upload the screenshot/image of the receipt.
                                 <ul>
-                                    <li>Email: <a href="mailto:pinoyseaman@pinoyseaman.com" class="email-link">pinoyseaman@pinoyseaman.com</a></li>
+                                    <li>Email: <a href="mailto:admin@pinoyseaman.com" class="email-link">admin@pinoyseaman.com</a></li>
                                 </ul>
                             </li>
                             <li>
                                 Wait for 10 to 15 minutes for status approval.
-                            </li>
-                            <li>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                                    <i class="fa-solid fa-upload"></i> Upload Screenshot
-                                </button>
                             </li>
                         </ol>
                         <div class="payment-icons">
@@ -470,12 +176,12 @@
                                 <span>Price</span>
                             </div>
                             <div class="summary-item bold">
-                                <span>Professional tier</span>
-                                <span>$799.99</span>
+                                <span><?= htmlspecialchars($productName) ?></span>
+                                <span>₱<?= number_format($productPrice, 2) ?></span>
                             </div>
                             <div class="summary-total">
                                 <span>Total:</span>
-                                <span class="total-price">$799.99</span>
+                                <span class="total-price">₱<?= number_format($productPrice, 2) ?></span>
                             </div>
                             <button class="order-status-btn" data-bs-toggle="modal" data-bs-target="#payment-status">View your order status</button>
                         </div>
@@ -517,50 +223,11 @@
               ✓
             </div>
             <p class="approved-text">Subscription Success</p>
-            <a href="manual-payment-receipt.php" class="approved-btn">Continue</a>
+            <a href="#" id="continueBtn" class="approved-btn">Continue</a>
           </div>
       </div>
     </div>
   </section>
-
-  <!-- FOR PENDING
-  <section class="modal fade" id="payment-status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="pending-box">
-            <h2 class="pending-title">PENDING...</h2>
-            <p class="pending-text">Pending Status.</p>
-          </div>
-      </div>
-    </div>
-  </section>
-
-  -->
-
-    <!-- Upload Screenshot Modal with Paste Support -->
-        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <form class="modal-content" method="POST" action="upload-screenshot.php" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel">Upload Screenshot</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="uploadArea">
-                    <div class="mb-3">
-                    <label for="screenshotUpload" class="form-label">Choose or Paste an Image (Ctrl+V):</label>
-                    <input type="file" class="form-control" id="screenshotUpload" name="screenshot" accept="image/*" required>
-                    </div>
-                    <div id="uploadPreview" class="text-center mt-3 text-muted">No image uploaded yet</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Upload</button>
-                </div>
-                </form>
-            </div>
-        </div>
-
-
-
 
     <script src="script/sidenav.js"></script>
     <script src="script/progress-bar.js"></script>
@@ -570,5 +237,29 @@
     <!-- Bootstrap JS with Popper (near the end of body) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+
+<script>
+    const selectedPlan = "<?= $selectedPlan ?>";
+
+    document.getElementById('continueBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch('send_subscription_email.php?plan=' + selectedPlan, {
+            method: 'POST',
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Email status:", data);
+            window.location.href = 'manual-payment-receipt.php'; // Redirect afterwards
+        })
+        .catch(error => {
+            console.error("Error sending email:", error);
+            window.location.href = 'manual-payment-receipt.php'; // Proceed anyway
+        });
+    });
+</script>
+
+
+
 </body>
 </html>
